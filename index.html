@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALGO GROUP · Management System</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2210%22%20fill%3D%22%23f0ebe0%22%2F%3E%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22%23276600%22%20d%3D%22M21%204%20L1%2052%20L41%2052%20Z%20M21%2022%20L34%2049%20L8%2049%20Z%22%2F%3E%3Cpath%20d%3D%22M59%2017%20A19%2019%200%201%200%2059%2048%22%20fill%3D%22none%22%20stroke%3D%22%23276600%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2228%22%20width%3D%2220%22%20height%3D%227%22%20fill%3D%22%23276600%22%2F%3E%3C%2Fsvg%3E">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/YOUR_USERNAME/algo-group-dashboard/main/favicon.png">
+<!-- Fallback SVG favicon if image not uploaded yet -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23f0ebe0'/%3E%3Cpath fill-rule='evenodd' fill='%23276600' d='M21 4 L1 52 L41 52 Z M21 22 L34 49 L8 49 Z'/%3E%3Cpath d='M59 17 A19 19 0 1 0 59 48' fill='none' stroke='%23276600' stroke-width='7' stroke-linecap='round'/%3E%3Crect x='40' y='28' width='20' height='7' fill='%23276600'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 /* Leaflet dark tiles override */
@@ -432,16 +434,22 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="lb"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="gl"></div></div>
   <div class="lcard">
     <div style="display:flex;align-items:center;gap:13px;margin-bottom:28px">
-      <svg width="60" height="44" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ALGO GROUP">
-        <path fill-rule="evenodd" fill="#DAF1DE"
-          d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
-        <path d="M268 50 A57 57 0 1 0 268 104"
-          fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
+      <img
+        src="https://raw.githubusercontent.com/YOUR_USERNAME/algo-group-dashboard/main/logo-white.png"
+        width="60" height="44"
+        alt="ALGO GROUP"
+        style="object-fit:contain;filter:drop-shadow(0 0 10px rgba(34,197,94,.3))"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+      >
+      <!-- SVG fallback (shows if image not found) -->
+      <svg style="display:none" width="60" height="44" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" fill="#DAF1DE" d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
+        <path d="M268 50 A57 57 0 1 0 268 104" fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
         <rect x="212" y="68" width="48" height="18" fill="#DAF1DE"/>
       </svg>
       <div>
         <div style="font-size:20px;font-weight:600;color:#fff;letter-spacing:.04em">ALGO GROUP</div>
-        <div style="font-size:10px;color:#8EB69B;opacity:.6;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
+        <div style="font-size:10px;color:#4ade80;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
       </div>
     </div>
     <label class="ll">Corporate email</label>
@@ -458,11 +466,17 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
 <div id="app" style="display:none">
 <aside class="sidebar">
   <div class="lwrap">
-    <svg width="44" height="32" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ALGO GROUP">
-      <path fill-rule="evenodd" fill="#DAF1DE"
-        d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
-      <path d="M268 50 A57 57 0 1 0 268 104"
-        fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
+    <img
+      src="https://raw.githubusercontent.com/YOUR_USERNAME/algo-group-dashboard/main/logo-white.png"
+      width="44" height="32"
+      alt="ALGO GROUP"
+      style="object-fit:contain;flex-shrink:0"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+    >
+    <!-- SVG fallback -->
+    <svg style="display:none;flex-shrink:0" width="44" height="32" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" fill="#DAF1DE" d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
+      <path d="M268 50 A57 57 0 1 0 268 104" fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
       <rect x="212" y="68" width="48" height="18" fill="#DAF1DE"/>
     </svg>
     <div><div class="lt">ALGO GROUP</div><div class="ld">algogroup.us</div></div>
