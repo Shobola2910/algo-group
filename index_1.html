@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALGO GROUP · Management System</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2210%22%20fill%3D%22%23f0ebe0%22%2F%3E%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22%23276600%22%20d%3D%22M21%204%20L1%2052%20L41%2052%20Z%20M21%2022%20L34%2049%20L8%2049%20Z%22%2F%3E%3Cpath%20d%3D%22M59%2017%20A19%2019%200%201%200%2059%2048%22%20fill%3D%22none%22%20stroke%3D%22%23276600%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2228%22%20width%3D%2220%22%20height%3D%227%22%20fill%3D%22%23276600%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* Leaflet dark tiles override */
+.leaflet-container{background:#0d1f16;font-family:'DM Sans',sans-serif}
+.leaflet-tile-pane{filter:brightness(.75) saturate(.4) hue-rotate(100deg)}
+.eld-marker-div{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;border:2px solid;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer;transition:transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.eld-marker-div:hover{transform:scale(1.2)}
+.eld-popup{background:#0d1f16!important;border:1px solid rgba(142,182,155,.3)!important;border-radius:10px!important;color:#DAF1DE!important;font-family:'DM Sans',sans-serif!important}
+.leaflet-popup-content-wrapper{background:#0d1f16;border:1px solid rgba(142,182,155,.3);border-radius:10px;color:#DAF1DE;font-family:'DM Sans',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#0d1f16}
+.leaflet-popup-close-button{color:#8EB69B!important}
+.leaflet-control-zoom a{background:#0d1f16!important;border-color:rgba(142,182,155,.2)!important;color:#8EB69B!important}
+.leaflet-control-attribution{background:rgba(0,0,0,.4)!important;color:rgba(142,182,155,.4)!important;font-size:9px!important}
+</style>
+<style>
+:root{
+  /* Brand greens - richer, matching portal screenshot */
+  --g900:#0a0e0a;--g800:#111a12;--g700:#162518;--g600:#1a3320;
+  --g500:#22c55e;--g400:#16a34a;--g300:#4ade80;--g200:#86efac;--g100:#dcfce7;--g50:#f0fdf4;
+  --white:#161d17;--surf:#0d1410;
+  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.14);
+  --sh1:0 1px 4px rgba(0,0,0,.3);--sh2:0 6px 22px rgba(0,0,0,.5);
+  --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sw:220px;--hh:58px;
+  /* Sidebar always dark */
+  --sb-bg:#0d1410;--sb-bdr:rgba(34,197,94,.08);
+  --accent:#22c55e;--accent-dim:rgba(34,197,94,.15);--accent-glow:rgba(34,197,94,.3);
+}
+/* Default (light) mode */
+html:not(.dark){
+  --surf:#f9fafb;--white:#fff;
+  --bdr:rgba(22,163,74,.14);--bdr2:rgba(22,163,74,.18);
+  --sh1:0 1px 4px rgba(0,0,0,.07);--sh2:0 6px 22px rgba(0,0,0,.1);
+  --g900:#052e09;--g800:#064d10;--g700:#15803d;
+}
+html:not(.dark) body{color:#052e09}
+html:not(.dark) .sidebar{background:#0d1410}
+html:not(.dark) .main{background:#f9fafb}
+html:not(.dark) .card{background:#fff}
+html:not(.dark) .sc{background:#fff}
+html:not(.dark) tbody td{color:#111}
+html:not(.dark) .ct{color:#052e09}
+html:not(.dark) .topbar{background:rgba(249,250,251,.94)}
+html:not(.dark) .pgt{color:#052e09}
+/* Dark mode - default (app starts dark like screenshot) */
+html.dark{
+  --surf:#0d1410;--white:#121a13;--g50:#0f1f11;
+  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.13);
+  --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
+}
+/* ─── DARK MODE ─── */
+html.dark{
+  --surf:#0d1410;--white:#121a13;--g50:#0f1f11;
+  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.13);
+  --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
+}
+html.dark body{color:#dcfce7}
+html.dark .main{background:#0d1410}
+html.dark .sc{background:#121a13;border-color:rgba(34,197,94,.13)}
+html.dark .sc::before{opacity:.06}
+html.dark .sv{color:#dcfce7}
+html.dark .sl{color:#4ade80;opacity:.8}
+html.dark .card{background:#121a13;border-color:rgba(34,197,94,.12)}
+html.dark .ch{border-color:rgba(34,197,94,.1)}
+html.dark .ct{color:#dcfce7}
+/* Fix all inline color styles in dark mode */
+html.dark [style*="color:var(--g700)"]{color:#4ade80!important}
+html.dark [style*="color:var(--g800)"]{color:#dcfce7!important}
+html.dark [style*="color:var(--g600)"]{color:#4ade80!important}
+html.dark [style*="color:var(--g900)"]{color:#dcfce7!important}
+html.dark svg text{fill:#dcfce7!important}
+html.dark .topbar{background:rgba(13,20,16,.92);border-bottom-color:rgba(34,197,94,.1)}
+html.dark .pgt{color:#dcfce7}
+html.dark .tpill{background:rgba(34,197,94,.1);color:#4ade80;border-color:rgba(34,197,94,.18)}
+html.dark .btn.bg_{color:#4ade80;border-color:rgba(34,197,94,.2)}
+html.dark .btn.bg_:hover{background:rgba(34,197,94,.1)}
+html.dark tbody tr{border-color:rgba(34,197,94,.1)}
+html.dark tbody tr:hover{background:#0f1f11}
+html.dark tbody td{color:#dcfce7}
+html.dark thead th{background:#0f1f11;color:#4ade80}
+html.dark .am.bot{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
+html.dark .aiinp{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
+html.dark .airow{border-color:rgba(34,197,94,.12)}
+html.dark .fi,.html.dark .fs{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
+html.dark .fi,.html.dark select{background:#0f1f11;color:#dcfce7}
+html.dark .tabs{background:#121a13;border-color:rgba(34,197,94,.13)}
+html.dark .tab{color:#4ade80}
+html.dark .tab:hover:not(.active){background:#0f1f11}
+html.dark .pb{background:rgba(34,197,94,.12)}
+html.dark .ki{border-color:rgba(34,197,94,.1)}
+html.dark .kn{color:#dcfce7}
+html.dark .tl::before{background:rgba(34,197,94,.12)}
+html.dark .tlt{color:#dcfce7}
+html.dark .upl{background:#0f1f11;border-color:rgba(34,197,94,.22)}
+html.dark .sck{background:#0f1f11;border-color:rgba(34,197,94,.12)}
+html.dark .scn{color:#dcfce7}
+html.dark .modcard{background:#0f1f11;border-color:rgba(34,197,94,.12)}
+html.dark .mname{color:#dcfce7}
+html.dark .ctimer{background:#0f1f11;border-color:rgba(34,197,94,.12)}
+html.dark .ctime{color:#dcfce7}
+html.dark .plc{background:#0f1f11;border-color:rgba(34,197,94,.12)}
+html.dark .plcard{background:#121a13;border-color:rgba(34,197,94,.1)}
+html.dark .plcn{color:#dcfce7}
+html.dark .ldr{border-color:rgba(34,197,94,.1)}
+html.dark .ck{border-color:rgba(34,197,94,.1)}
+html.dark .smm{border-color:rgba(34,197,94,.1)}
+html.dark .smmn{color:#dcfce7}
+html.dark .tgmsg{border-color:rgba(34,197,94,.1)}
+html.dark .tgn{color:#dcfce7}
+html.dark .tgt{color:#86efac}
+html.dark .fbox{background:#121a13;border-color:rgba(34,197,94,.12)}
+html.dark .db{opacity:.9}
+html.dark .ibox-green{background:rgba(34,197,94,.1);color:#86efac}
+html.dark .ibox-amber{background:rgba(138,82,0,.15);color:#f5d99b}
+html.dark .ibox-red{background:rgba(139,32,32,.15);color:#f5b9b5}
+html.dark .ibox-blue{background:rgba(26,79,138,.15);color:#b3d7f7}
+html.dark .ibox{color:#dcfce7}
+html.dark .formula-row .fbox{color:#dcfce7}
+html.dark .decay-bar .db{filter:brightness(.85)}
+html.dark .dip{border-color:rgba(34,197,94,.3)}
+/* ─── GLASS THEME TOGGLE ─── */
+.glass-toggle-wrap{
+  position:relative;display:flex;align-items:center;gap:0;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50px;
+  padding:3px;
+  backdrop-filter:blur(16px);
+  box-shadow:0 4px 20px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.15);
+  transition:all .3s ease;
+}
+html.dark .glass-toggle-wrap{
+  background:rgba(0,0,0,.3);
+  border-color:rgba(34,197,94,.2);
+  box-shadow:0 4px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(142,182,155,.1);
+}
+.glass-toggle-option{
+  position:relative;z-index:1;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;cursor:pointer;border:none;background:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);color:var(--g700);
+}
+html.dark .glass-toggle-option{color:var(--g300)}
+.glass-toggle-option:hover{transform:scale(1.12)}
+.glass-toggle-thumb{
+  position:absolute;
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#fff,#f0faf4);
+  box-shadow:0 3px 12px rgba(35,83,71,.25),0 1px 4px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  top:3px;left:3px;
+  pointer-events:none;
+}
+html.dark .glass-toggle-thumb{
+  background:linear-gradient(135deg,#163832,#235347);
+  box-shadow:0 3px 12px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(142,182,155,.2);
+  transform:translateX(34px);
+}
+
+/* ─── FLOATING BUBBLE MENU (bottom-right) ─── */
+.fab-wrap{
+  position:fixed;bottom:28px;right:28px;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.fab-main{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px rgba(35,83,71,.45),0 2px 8px rgba(0,0,0,.2);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  color:#fff;font-size:20px;
+  backdrop-filter:blur(10px);
+}
+.fab-main:hover{transform:scale(1.1) rotate(45deg);box-shadow:0 10px 32px rgba(35,83,71,.6)}
+.fab-main.open{transform:rotate(45deg);background:linear-gradient(135deg,#8b2020,#c0392b)}
+.fab-items{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  pointer-events:none;opacity:0;transform:translateY(16px) scale(.85);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.fab-items.open{pointer-events:all;opacity:1;transform:translateY(0) scale(1)}
+.fab-item{
+  position:relative;display:flex;align-items:center;gap:0;
+}
+.fab-btn{
+  width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  backdrop-filter:blur(16px);
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.fab-btn:hover{transform:scale(1.14)}
+.fab-label{
+  position:absolute;right:52px;
+  background:rgba(5,31,20,.88);
+  border:1px solid rgba(142,182,155,.2);
+  color:#DAF1DE;font-size:12px;font-weight:500;
+  padding:5px 12px;border-radius:20px;white-space:nowrap;
+  backdrop-filter:blur(12px);
+  pointer-events:none;
+  opacity:0;transform:translateX(8px);
+  transition:all .2s ease;
+  font-family:var(--ff);
+}
+.fab-item:hover .fab-label{opacity:1;transform:translateX(0)}
+
+/* stagger animation */
+.fab-items.open .fab-item:nth-child(1){transition-delay:.04s}
+.fab-items.open .fab-item:nth-child(2){transition-delay:.08s}
+.fab-items.open .fab-item:nth-child(3){transition-delay:.12s}
+.fab-items.open .fab-item:nth-child(4){transition-delay:.16s}
+
+/* ─── GLASS TOPBAR ELEMENTS ─── */
+.glass-pill{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;padding:4px 14px;
+  font-size:11.5px;font-weight:500;color:var(--g700);
+  backdrop-filter:blur(10px);
+  box-shadow:0 2px 8px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .2s;
+}
+html.dark .glass-pill{
+  background:rgba(142,182,155,.08);border-color:rgba(142,182,155,.15);color:var(--g300);
+  box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(142,182,155,.08);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:100vh;overflow-x:hidden}
+
+/* ─── LOGIN ─── */
+#loginScreen{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .5s ease}
+#loginScreen.hiding{opacity:0;pointer-events:none}
+.lb{position:absolute;inset:0;background:linear-gradient(135deg,#051F20,#0B2B26,#163832,#235347)}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;animation:bm 8s ease-in-out infinite alternate}
+.b1{width:500px;height:500px;background:#8EB69B;top:-100px;left:-150px}
+.b2{width:400px;height:400px;background:#DAF1DE;bottom:-80px;right:-80px;animation-delay:-3s}
+.b3{width:300px;height:300px;background:#3a7a5c;top:40%;left:40%;animation-delay:-5s}
+@keyframes bm{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.1)}}
+.gl{position:absolute;inset:0;background-image:linear-gradient(rgba(142,182,155,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(142,182,155,.05) 1px,transparent 1px);background-size:48px 48px}
+.lcard{position:relative;z-index:1;background:rgba(11,43,38,.75);border:1px solid rgba(142,182,155,.18);border-radius:22px;padding:40px 36px 36px;width:440px;backdrop-filter:blur(20px);box-shadow:0 32px 80px rgba(0,0,0,.4),inset 0 1px 0 rgba(142,182,155,.1);animation:su .5s cubic-bezier(.22,.68,0,1.2) both}
+@keyframes su{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.ll{font-size:11.5px;font-weight:500;color:rgba(218,241,222,.65);margin-bottom:6px;display:block;letter-spacing:.03em}
+.li{width:100%;padding:11px 14px;border-radius:11px;border:1px solid rgba(142,182,155,.18);background:rgba(255,255,255,.05);color:#fff;font-family:var(--ff);font-size:13.5px;outline:none;transition:all .18s;margin-bottom:14px}
+.li::placeholder{color:rgba(142,182,155,.4)}.li:focus{border-color:rgba(142,182,155,.45);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(142,182,155,.1)}.li.err{border-color:rgba(231,76,60,.5)}
+.lerr{font-size:11.5px;color:#e07070;margin-top:-10px;margin-bottom:12px;display:none}
+.lbtn{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,var(--g500),var(--g400));color:#fff;font-family:var(--ff);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(35,83,71,.4)}
+.lbtn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(35,83,71,.5)}
+
+/* ─── APP ─── */
+#app{display:none;flex:1;min-height:100vh;opacity:0;transition:opacity .4s ease}
+#app.visible{opacity:1}
+
+/* ─── SIDEBAR ─── */
+.sidebar{width:var(--sw);background:#0d1410;min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;border-right:1px solid rgba(142,182,155,.07)}
+.lwrap{padding:18px 18px 16px;border-bottom:1px solid rgba(142,182,155,.08);display:flex;align-items:center;gap:11px}
+.lt{font-size:14.5px;font-weight:600;color:#fff;letter-spacing:.04em}
+.ld{font-size:9px;color:var(--g300);opacity:.55;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.rpill{margin:10px 14px;padding:8px 11px;background:rgba(142,182,155,.07);border:1px solid rgba(142,182,155,.11);border-radius:9px;display:flex;align-items:center;gap:8px}
+.rpdot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;flex-shrink:0;animation:dp 2.5s ease-in-out infinite}
+@keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
+.nwrap{overflow-y:auto;flex:1;padding-bottom:8px}
+.nsec{padding:8px 12px 3px}
+.nsl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(142,182,155,.4);padding:0 9px;margin-bottom:3px;font-weight:500}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:1px;color:rgba(218,241,222,.5);font-size:13px;font-weight:400;border:none;background:none;width:100%;text-align:left}
+.ni:hover{background:rgba(34,197,94,.09);color:#dcfce7;transform:translateX(2px)}
+.ni.active{background:rgba(34,197,94,.14);color:#fff;font-weight:500}
+.ni.active .nd{background:#22c55e;box-shadow:0 0 7px #22c55e}
+.nd{width:5px;height:5px;border-radius:50%;background:rgba(142,182,155,.2);flex-shrink:0;transition:all .15s}
+.nic{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.sbfoot{margin-top:auto;padding:13px 12px;border-top:1px solid rgba(142,182,155,.07)}
+.urow{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;background:rgba(142,182,155,.06);border:1px solid rgba(142,182,155,.09)}
+.uav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;border:1.5px solid rgba(142,182,155,.22)}
+.un{font-size:12px;font-weight:500;color:#fff}.ue{font-size:10px;color:var(--g300);opacity:.65;font-family:var(--fm)}
+.lout{margin-left:auto;background:none;border:none;color:rgba(142,182,155,.4);cursor:pointer;font-size:14px;transition:color .15s}.lout:hover{color:rgba(142,182,155,.9)}
+
+/* ─── MAIN ─── */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:var(--hh);background:rgba(244,253,246,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr2);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:50}
+.pgt{font-size:15px;font-weight:600;color:var(--g800);flex:1}
+.tpill{background:var(--g100);color:var(--g700);font-size:11px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(35,83,71,.13)}
+.btn{padding:8px 16px;border-radius:9px;font-family:var(--ff);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:5px}
+.bp{background:#16a34a;color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.3)}.bp:hover{background:#15803d;transform:translateY(-1px)}
+.bg_{background:transparent;color:var(--g700);border:1px solid var(--bdr)}.bg_:hover{background:var(--g100);border-color:var(--g300)}
+.bsm{font-size:11.5px;padding:5px 12px}
+.content{padding:24px;flex:1}
+.page{display:none;animation:pi .28s ease both}.page.active{display:block}
+@keyframes pi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── COMPONENTS ─── */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:20px}
+.sc{background:#fff;border:1px solid var(--bdr2);border-radius:14px;padding:17px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;box-shadow:var(--sh1);cursor:default}
+.sc:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.sc::before{content:'';position:absolute;top:-15px;right:-15px;width:65px;height:65px;border-radius:50%;background:var(--g100);opacity:.4}
+.sv{font-size:22px;font-weight:600;color:var(--g800);line-height:1;margin-bottom:2px;font-variant-numeric:tabular-nums}
+.sl{font-size:12px;color:var(--g600);opacity:.8}
+.sc-c{font-size:10.5px;font-weight:500;margin-top:6px;padding:2px 7px;border-radius:20px;display:inline-block}
+.cup{background:rgba(34,197,94,.12);color:#22c55e}.cdn{background:#fdecea;color:#8b2020}
+.card{background:#fff;border:1px solid var(--bdr2);border-radius:14px;box-shadow:var(--sh1);overflow:hidden;transition:box-shadow .2s}.card:hover{box-shadow:var(--sh2)}
+.ch{padding:15px 19px 12px;border-bottom:1px solid var(--bdr2);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ct{font-size:13.5px;font-weight:600;color:var(--g800)}.cb{padding:17px 19px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.07em;padding:9px 13px;background:var(--g50);text-align:left;white-space:nowrap}
+thead th:first-child{border-radius:7px 0 0 7px}thead th:last-child{border-radius:0 7px 7px 0}
+tbody tr{border-bottom:1px solid var(--bdr2);transition:background .12s}.tbody tr:hover{background:var(--g50)}tbody tr:last-child{border-bottom:none}
+tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
+.badge{font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px;display:inline-block;white-space:nowrap}
+.bg{background:#e0f5e9;color:#1a6b3a;border:1px solid #b6e8c5}
+.bo{background:#fff4e0;color:#8a5200;border:1px solid #f5d99b}
+.br{background:#fdecea;color:#8b2020;border:1px solid #f5b9b5}
+.bb{background:#e3f2fd;color:#1a4f8a;border:1px solid #b3d7f7}
+.bn{background:#f0f0ef;color:#5a5a58;border:1px solid #d8d8d6}
+.bpu{background:#f3e8ff;color:#6b21a8;border:1px solid #d8b4fe}
+.bcy{background:#e0f7f7;color:#0e6b6b;border:1px solid #a3d8d8}
+.pb{height:5px;background:var(--g100);border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:10px;transition:width .5s}
+.ki{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr2)}.ki:last-child{border-bottom:none}
+.kinf{flex:1}.kn{font-size:13px;font-weight:500;color:var(--g800);margin-bottom:4px}.km{font-size:11px;color:var(--g600);opacity:.72}
+.kv{font-size:14px;font-weight:600;color:var(--g700);font-family:var(--fm);min-width:44px;text-align:right}
+.tabs{display:flex;gap:3px;background:#fff;padding:3px;border-radius:10px;border:1px solid var(--bdr2);width:fit-content;margin-bottom:18px;box-shadow:var(--sh1)}
+.tab{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--g600);font-family:var(--ff);transition:all .13s}
+.tab.active{background:var(--g600);color:#fff}.tab:hover:not(.active){background:var(--g50)}
+.tl{display:flex;gap:12px;padding-bottom:16px;position:relative}.tl:not(:last-child)::before{content:'';position:absolute;left:13px;top:28px;width:1px;bottom:0;background:var(--bdr2)}
+.tld{width:26px;height:26px;border-radius:50%;background:var(--g100);border:2px solid var(--g300);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.tlt{font-size:13px;font-weight:500;color:var(--g800);margin-bottom:2px}.tlm{font-size:11.5px;color:var(--g600);opacity:.7}
+/* AI CHAT */
+.aiwrap{display:flex;flex-direction:column;height:440px}
+.aimsgs{flex:1;overflow-y:auto;padding:2px 0;scroll-behavior:smooth}
+.am{padding:11px 14px;border-radius:12px;font-size:13px;line-height:1.6;margin-bottom:8px;max-width:88%;word-break:break-word}
+.am.bot{background:var(--g50);color:var(--g800);border:1px solid rgba(142,182,155,.22);border-bottom-left-radius:4px}
+.am.user{background:var(--g600);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.am.think{background:var(--g50);color:var(--g600);border:1px dashed rgba(142,182,155,.35);font-style:italic;font-size:12px}
+.airow{display:flex;gap:8px;margin-top:11px;padding-top:11px;border-top:1px solid var(--bdr2)}
+.aiinp{flex:1;padding:10px 13px;border:1px solid var(--bdr);border-radius:9px;font-family:var(--ff);font-size:13px;color:var(--g800);background:#fff;outline:none;resize:none;transition:border-color .14s,box-shadow .14s}
+.aiinp:focus{border-color:var(--g400);box-shadow:0 0 0 3px rgba(58,122,92,.1)}
+.aisend{padding:10px 17px;border-radius:9px;background:#16a34a;color:#fff;font-family:var(--ff);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:all .14s}
+.aisend:hover{background:#15803d}.aisend:disabled{opacity:.5;cursor:not-allowed}
+/* UPLOAD */
+.upl{border:2px dashed rgba(142,182,155,.35);border-radius:12px;padding:26px;text-align:center;cursor:pointer;background:var(--g50);transition:all .17s}.upl:hover,.upl.drag{border-color:var(--g400);background:rgba(142,182,155,.07)}
+.upl input{display:none}
+/* FORM */
+.fg{margin-bottom:13px}.fl{font-size:12px;font-weight:500;color:var(--g700);margin-bottom:5px;display:block}
+.fi,.fs{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:9px;font-family:var(--ff);font-size:13px;color:var(--g800);background:#fff;outline:none;transition:border-color .14s,box-shadow .14s}
+.fi:focus,.fs:focus{border-color:var(--g400);box-shadow:0 0 0 3px rgba(58,122,92,.1)}
+/* INFO BOX */
+.ibox{border-radius:11px;padding:14px 16px;font-size:13px;line-height:1.55;margin-bottom:14px}
+.ibox-green{background:#e4f7ec;border-left:3px solid #1a6b3a;color:#0d4a28}
+.ibox-amber{background:#fff4e0;border-left:3px solid #8a5200;color:#5a3500}
+.ibox-red{background:#fdecea;border-left:3px solid #8b2020;color:#5a1010}
+.ibox-blue{background:#e3f2fd;border-left:3px solid #1a4f8a;color:#0d3060}
+/* SCORE CARD */
+.sck{background:var(--g50);border:1px solid var(--bdr2);border-radius:12px;padding:16px;text-align:center;transition:all .2s}.sck:hover{border-color:var(--g300);box-shadow:var(--sh1)}
+.scn{font-size:26px;font-weight:600;color:var(--g700);margin:6px 0 2px;font-family:var(--fm)}
+.scl{font-size:11.5px;color:var(--g600)}
+/* MAP */
+.eldmap{background:linear-gradient(135deg,#051F20,#0B2B26,#163832);border-radius:12px;position:relative;overflow:hidden;height:220px}
+.embg{position:absolute;inset:0;opacity:.06;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Ccircle cx='15' cy='15' r='.6' fill='%238EB69B'/%3E%3C/svg%3E") repeat}
+.tdot{position:absolute;width:12px;height:12px;transform:translate(-50%,-50%);cursor:pointer}
+.tdi{width:100%;height:100%;border-radius:50%;background:var(--g300);box-shadow:0 0 0 3px rgba(142,182,155,.25);animation:tp 2.5s ease-in-out infinite;transition:transform .2s}
+.tdot:hover .tdi{transform:scale(1.3)}
+@keyframes tp{0%,100%{box-shadow:0 0 0 3px rgba(142,182,155,.25)}50%{box-shadow:0 0 0 7px rgba(142,182,155,.08)}}
+.tdoff .tdi{background:#e07070;box-shadow:0 0 0 3px rgba(224,112,112,.25);animation:none}
+.tdtip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:rgba(5,31,32,.92);color:#fff;font-size:11px;padding:5px 10px;border-radius:7px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;font-family:var(--fm)}
+.tdot:hover .tdtip{opacity:1}
+/* CALL TIMER */
+.ctimer{text-align:center;padding:22px;border-radius:14px;background:var(--g50);border:1px solid var(--bdr2)}
+.ctime{font-size:48px;font-weight:300;color:var(--g700);font-family:var(--fm);line-height:1;letter-spacing:.04em;transition:all .3s}
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.plc{background:var(--g50);border-radius:11px;padding:12px;border:1px solid var(--bdr2)}
+.plh{font-size:10.5px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between}
+.pln{font-size:10px;background:var(--g600);color:#fff;border-radius:20px;padding:1px 7px}
+.plcard{background:#fff;border-radius:8px;padding:10px;margin-bottom:7px;border:1px solid var(--bdr2);cursor:pointer;transition:all .14s}
+.plcard:hover{border-color:var(--g300);box-shadow:var(--sh1);transform:translateY(-1px)}
+.plcn{font-weight:500;color:var(--g800);font-size:12.5px;margin-bottom:2px}.plcv{font-size:11px;color:var(--g600)}
+/* LDRBOARD */
+.ldr{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr2)}.ldr:last-child{border-bottom:none}
+.ldrn{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ldr1{background:#ffd700;color:#8a5200}.ldr2{background:#c0c0c0;color:#444}.ldr3{background:#cd7f32;color:#4a2800}.ldrd{background:var(--g100);color:var(--g700)}
+/* CHECK */
+.ck{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--bdr2);font-size:13px}.ck:last-child{border-bottom:none}
+.ckb{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--g400);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .14s}
+.ckb.chk{background:var(--g600);border-color:var(--g600)}.ckb.chk::after{content:'✓';color:#fff;font-size:10px;font-weight:700}
+/* SOCIAL */
+.smm{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--bdr2)}.smm:last-child{border-bottom:none}
+.smmi{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.smyt{background:#ffebeb}.smig{background:#fff0f8}
+.smmn{font-size:13px;font-weight:500;color:var(--g800);margin-bottom:3px}.smmv{font-size:11.5px;color:var(--g600)}
+.smnum{font-size:15px;font-weight:600;color:var(--g700);font-family:var(--fm);text-align:right;min-width:60px}
+/* TG */
+.tgmsg{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bdr2)}.tgmsg:last-child{border-bottom:none}
+.tgav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--g600),var(--g400));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.tgn{font-size:12.5px;font-weight:500;color:var(--g800)}.tgt{font-size:12px;color:var(--g700);line-height:1.45;margin-top:2px}.tgtime{font-size:10.5px;color:var(--g600);opacity:.6;font-family:var(--fm);white-space:nowrap}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(142,182,155,.28);border-radius:4px}
+/* FORMULA */
+.formula-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.fbox{background:#fff;border:1px solid var(--bdr2);border-radius:9px;padding:10px 14px;text-align:center;font-size:12px}
+.fop{font-size:18px;font-weight:600;color:var(--g600)}
+/* DECAY */
+.decay-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.db{border-radius:10px;padding:12px;text-align:center}.db-title{font-size:11px;font-weight:600;margin-bottom:4px}.db-val{font-size:20px;font-weight:700;font-family:var(--fm)}
+/* TRAINING */
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.modcard{background:var(--g50);border:1px solid var(--bdr2);border-radius:12px;padding:14px;transition:all .17s;cursor:pointer}
+.modcard:hover{border-color:var(--g300);transform:translateY(-2px);box-shadow:var(--sh1)}
+.modcard.done{border-color:#b6e8c5;background:#e4f7ec}
+.modcard.locked{opacity:.5;cursor:not-allowed}
+.micon{font-size:22px;margin-bottom:8px}.mname{font-size:12.5px;font-weight:500;color:var(--g800);margin-bottom:4px}.mprog{font-size:11px;color:var(--g600)}
+/* DIPLOMA */
+.dip{background:linear-gradient(135deg,#0B2B26,#163832);border:2px solid var(--g300);border-radius:16px;padding:24px;text-align:center;color:#fff}
+.dip-gold{border-color:#ffd700;background:linear-gradient(135deg,#2a1a00,#3a2800)}
+.dip-silver{border-color:#c0c0c0;background:linear-gradient(135deg,#1a1a1a,#2a2a2a)}
+/* RESPONSIVE */
+@media(max-width:900px){.g2{grid-template-columns:1fr}.pipeline{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<!-- ═══ LOGIN ═══ -->
+<div id="loginScreen">
+  <div class="lb"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="gl"></div></div>
+  <div class="lcard">
+    <div style="display:flex;align-items:center;gap:13px;margin-bottom:28px">
+      <svg width="60" height="44" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ALGO GROUP">
+        <path fill-rule="evenodd" fill="#DAF1DE"
+          d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
+        <path d="M268 50 A57 57 0 1 0 268 104"
+          fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
+        <rect x="212" y="68" width="48" height="18" fill="#DAF1DE"/>
+      </svg>
+      <div>
+        <div style="font-size:20px;font-weight:600;color:#fff;letter-spacing:.04em">ALGO GROUP</div>
+        <div style="font-size:10px;color:#8EB69B;opacity:.6;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
+      </div>
+    </div>
+    <label class="ll">Corporate email</label>
+    <input class="li" id="lEmail" type="email" placeholder="user@algogroup.us" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="lerr" id="eErr">Email not found</div>
+    <label class="ll">Parol</label>
+    <input class="li" id="lPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="lerr" id="pErr">Incorrect password</div>
+    <button class="lbtn" onclick="doLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app" style="display:none">
+<aside class="sidebar">
+  <div class="lwrap">
+    <svg width="44" height="32" viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ALGO GROUP">
+      <path fill-rule="evenodd" fill="#DAF1DE"
+        d="M65 7 L4 148 L126 148 Z M65 54 L98 133 L32 133 Z"/>
+      <path d="M268 50 A57 57 0 1 0 268 104"
+        fill="none" stroke="#DAF1DE" stroke-width="18" stroke-linecap="round"/>
+      <rect x="212" y="68" width="48" height="18" fill="#DAF1DE"/>
+    </svg>
+    <div><div class="lt">ALGO GROUP</div><div class="ld">algogroup.us</div></div>
+  </div>
+  <div class="rpill"><div class="rpdot"></div><span id="sRoleL" style="font-size:12px;font-weight:500;color:var(--g100);flex:1">—</span></div>
+  <div class="nwrap" id="navWrap"></div>
+  <div class="sbfoot">
+    <div class="urow">
+      <div class="uav" id="sAvt">AG</div>
+      <div style="flex:1;min-width:0"><div class="un" id="sName">—</div><div class="ue" id="sEmail">—</div></div>
+    </div>
+    <button onclick="doLogout()" style="width:100%;margin-top:8px;padding:11px 14px;border-radius:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-family:var(--ff);font-size:13px;font-weight:500;cursor:pointer;transition:all .17s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseenter="this.style.background='rgba(224,112,112,.2)'" onmouseleave="this.style.background='rgba(224,112,112,.12)'">
+      <span style="font-size:15px">⏏</span> Sign Out
+    </button>
+  </div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <span class="pgt" id="pgTitle">Dashboard</span>
+    <span class="glass-pill" id="pgBadge">Overview</span>
+    <!-- Glass Day/Night Toggle -->
+    <div class="glass-toggle-wrap" title="Toggle dark / light mode" onclick="toggleTheme()">
+      <div class="glass-toggle-thumb" id="toggleThumb"></div>
+      <button class="glass-toggle-option" aria-label="Light mode">☀️</button>
+      <button class="glass-toggle-option" aria-label="Dark mode">🌙</button>
+    </div>
+  </header>
+  <div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="page" id="pg-dashboard">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🚛</span><div class="sv" data-count="142">0</div><div class="sl">Active drivers</div><span class="sc-c cup">↑ 8%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📦</span><div class="sv" data-count="1840">0</div><div class="sl">Monthly trips</div><span class="sc-c cup">↑ 12%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💵</span><div class="sv">$2.4M</div><div class="sl">Monthly revenue</div><span class="sc-c cup">↑ 5.3%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">✅</span><div class="sv">98.2%</div><div class="sl">On-time delivery</div><span class="sc-c cup">↑ 1.2%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🛡️</span><div class="sv" data-count="3">0</div><div class="sl">Incidents (month)</div><span class="sc-c cdn">↓ 2</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⚡</span><div class="sv">6.8mpg</div><div class="sl">Fuel efficiency</div><span class="sc-c cup">↑ 0.3</span></div>
+    </div>
+    <div class="g2 mb20">
+      <div class="card"><div class="ch"><span class="ct">Monthly revenue</span><span class="badge bg">2026</span></div>
+        <div class="cb"><div style="display:flex;align-items:flex-end;gap:6px;height:120px" id="dbChart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px"><span style="font-size:9.5px;color:var(--g600)">Jan</span><span style="font-size:9.5px;color:var(--g600)">Feb</span><span style="font-size:9.5px;color:var(--g600)">Mar</span><span style="font-size:9.5px;color:var(--g600)">Apr</span><span style="font-size:9.5px;color:var(--g600)">May</span></div></div></div>
+      <div class="card"><div class="ch"><span class="ct">Trip status</span></div>
+        <div class="cb" style="display:flex;align-items:center;gap:18px">
+          <svg width="105" height="105" viewBox="0 0 105 105"><circle cx="52" cy="52" r="38" fill="none" stroke="#DAF1DE" stroke-width="14"/><circle cx="52" cy="52" r="38" fill="none" stroke="#235347" stroke-width="14" stroke-dasharray="143 96" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#8EB69B" stroke-width="14" stroke-dasharray="50 189" stroke-dashoffset="-143" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#F4D8D8" stroke-width="14" stroke-dasharray="24 215" stroke-dashoffset="-193" stroke-linecap="round" transform="rotate(-90 52 52)"/><text x="52" y="48" text-anchor="middle" font-size="16" font-weight="600" fill="#0B2B26">60%</text><text x="52" y="60" text-anchor="middle" font-size="8" fill="#235347">Bajarildi</text></svg>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#235347;display:inline-block"></span>Bajarilgan — 60%</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#8EB69B;display:inline-block"></span>In transit — 21%</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#F4D8D8;display:inline-block"></span>Bekor — 10%</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700)"><span style="width:8px;height:8px;border-radius:50%;background:#DAF1DE;display:inline-block"></span>Pending — 9%</div>
+          </div>
+        </div></div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">Recent trips</span><button class="btn bg_ bsm">View all →</button></div>
+      <div class="cb" style="padding:0"><table><thead><tr><th>ID</th><th>Driver</th><th>Route</th><th>Yuk</th><th>Status</th><th>ELD</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:var(--fm);font-size:11px">#AG-2841</td><td>J. Martinez</td><td>LA → Chicago</td><td>24,000 lbs</td><td><span class="badge bg">Delivered</span></td><td><span class="badge bn">OK</span></td></tr>
+          <tr><td style="font-family:var(--fm);font-size:11px">#AG-2840</td><td>R. Johnson</td><td>Dallas → NYC</td><td>18,500 lbs</td><td><span class="badge bb">In transit</span></td><td><span class="badge bg">Live</span></td></tr>
+          <tr><td style="font-family:var(--fm);font-size:11px">#AG-2839</td><td>K. Williams</td><td>Miami → Atlanta</td><td>31,200 lbs</td><td><span class="badge bb">In transit</span></td><td><span class="badge bg">Live</span></td></tr>
+          <tr><td style="font-family:var(--fm);font-size:11px">#AG-2838</td><td>M. Garcia</td><td>Seattle → Denver</td><td>22,000 lbs</td><td><span class="badge bo">Delayed</span></td><td><span class="badge bo">Alert</span></td></tr>
+        </tbody></table></div></div>
+  </div>
+
+  <!-- ELD — Strategic Compliance Command Centre -->
+  <div class="page" id="pg-eld">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🎯</span><div class="sv">96%</div><div class="sl">Compliance Score</div><span class="sc-c cup">Excellent</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🛰️</span><div class="sv" data-count="138">0</div><div class="sl">Active trucks</div><span class="sc-c cdn">4 offline</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⚠️</span><div class="sv" data-count="7">0</div><div class="sl">Violations (month)</div><span class="sc-c cdn">$17.5K risk</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💵</span><div class="sv">$0</div><div class="sl">Fines paid</div><span class="sc-c cup">vs $50K+ avg</span></div>
+    </div>
+    <div class="ibox ibox-green mb16">🚀 <strong>Strategic Compliance Command Centre</strong> — Monitor → Detect & Alert → Report & Resolve sikli faol. Har 60 soniyada yangilanadi.</div>
+    <!-- ELD Connections -->
+    <div class="g2 mb16">
+      <div class="card"><div class="ch"><span class="ct">⚡ Factor ELD</span><span id="factorSt" class="badge bn">Disconnected</span></div>
+        <div class="cb">
+          <div class="fg"><label class="fl">API Token</label><input class="fi" id="factorTok" type="password" placeholder="factor_live_xxxxxxxxxxxx"></div>
+          <div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="connectELD('factor')" style="flex:1">Connect →</button><button class="btn bg_ bsm" onclick="disconnELD('factor')">Disconnect</button></div>
+          <div id="factorInf" style="display:none;margin-top:10px"><span class="badge bg">✓ Factor ELD ulangan</span><div style="font-size:12px;color:var(--g600);margin-top:6px">89 devices · API v2.1 · 60s sync · Samsara compatible</div></div>
+        </div></div>
+      <div class="card"><div class="ch"><span class="ct">🔷 Leader ELD</span><span id="leaderSt" class="badge bn">Disconnected</span></div>
+        <div class="cb">
+          <div class="fg"><label class="fl">API Token</label><input class="fi" id="leaderTok" type="password" placeholder="leader_api_xxxxxxxxxxxx"></div>
+          <div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="connectELD('leader')" style="flex:1">Connect →</button><button class="btn bg_ bsm" onclick="disconnELD('leader')">Disconnect</button></div>
+          <div id="leaderInf" style="display:none;margin-top:10px"><span class="badge bg">✓ Leader ELD ulangan</span><div style="font-size:12px;color:var(--g600);margin-top:6px">53 devices · API v3.0 · 60s sync · Geotab compatible</div></div>
+        </div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch"><span class="ct">🔷 Leader ELD</span><span id="leaderSt" class="badge bn">Disconnected</span></div>
+        <div class="cb">
+          <div class="fg"><label class="fl">API Token</label><input class="fi" id="leaderTok" type="password" placeholder="leader_api_xxxxxxxxxxxx"></div>
+          <div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="connectELD('leader')" style="flex:1">Connect →</button><button class="btn bg_ bsm" onclick="disconnELD('leader')">Disconnect</button></div>
+          <div id="leaderInf" style="display:none;margin-top:10px"><span class="badge bg">✓ Leader ELD Connected</span><div style="font-size:12px;color:var(--g600);margin-top:6px">53 devices · API v3.0 · 60s sync · Geotab compatible</div></div>
+        </div></div>
+      <div class="card"><div class="ch"><span class="ct">🔴 Violation Intelligence</span><button class="btn bg_ bsm" onclick="buildELDMap()">↻ Refresh</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Driver</th><th>Truck</th><th>Issue</th><th>Fine</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>J. Martinez</td><td style="font-family:var(--fm);font-size:11px">TRK-041</td><td>HOS — 8.5h driving</td><td style="color:#8b2020">$2,500</td><td><span class="badge bo">Pending</span></td></tr>
+            <tr><td>R. Johnson</td><td style="font-family:var(--fm);font-size:11px">TRK-022</td><td>All clear</td><td style="color:#1a6b3a">$0</td><td><span class="badge bg">Coached</span></td></tr>
+            <tr><td>K. Williams</td><td style="font-family:var(--fm);font-size:11px">TRK-058</td><td>HOS — 10.9h critical!</td><td style="color:#8b2020">$2,500</td><td><span class="badge br">Urgent</span></td></tr>
+            <tr><td>M. Garcia</td><td style="font-family:var(--fm);font-size:11px">TRK-031</td><td>All clear</td><td style="color:#1a6b3a">$0</td><td><span class="badge bg">Resolved</span></td></tr>
+          </tbody></table></div></div>
+    </div>
+    <!-- FULL ELD MAP PANEL -->
+    <div style="margin-top:20px;border-radius:16px;overflow:hidden;border:1px solid var(--bdr2);box-shadow:var(--sh2)">
+      <!-- Top stats bar -->
+      <div id="eldTopBar" style="background:#0d1f16;padding:10px 18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(142,182,155,.12)">
+        <div style="display:flex;align-items:center;gap:6px;margin-right:4px">
+          <span style="font-size:12px;color:rgba(142,182,155,.6);font-family:var(--fm)">Search</span>
+          <input id="eldSearch" placeholder="Vehicle # or Driver name" onkeyup="filterDrivers(this.value)" style="background:rgba(142,182,155,.08);border:1px solid rgba(142,182,155,.15);border-radius:7px;padding:5px 10px;font-size:12px;color:#DAF1DE;font-family:var(--fm);outline:none;width:200px">
+        </div>
+        <div style="flex:1"></div>
+        <div class="eld-stat-pill" style="background:rgba(59,172,112,.12);border:1px solid rgba(59,172,112,.25);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#3bac70;display:inline-block"></span>
+          <span style="font-size:12px;font-weight:600;color:#3bac70;font-family:var(--fm)" id="eldDRCount">DR</span>
+          <span style="font-size:11px;color:rgba(142,182,155,.6)">Driving</span>
+          <span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--fm)" id="eldDRNum">61</span>
+        </div>
+        <div class="eld-stat-pill" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#3b82f6;display:inline-block"></span>
+          <span style="font-size:12px;font-weight:600;color:#3b82f6;font-family:var(--fm)">ON</span>
+          <span style="font-size:11px;color:rgba(142,182,155,.6)">On Duty</span>
+          <span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--fm)" id="eldONNum">4</span>
+        </div>
+        <div class="eld-stat-pill" style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#fbbf24;display:inline-block"></span>
+          <span style="font-size:12px;font-weight:600;color:#fbbf24;font-family:var(--fm)">SB</span>
+          <span style="font-size:11px;color:rgba(142,182,155,.6)">Sleeper</span>
+          <span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--fm)" id="eldSBNum">18</span>
+        </div>
+        <div class="eld-stat-pill" style="background:rgba(156,163,175,.08);border:1px solid rgba(156,163,175,.2);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#9ca3af;display:inline-block"></span>
+          <span style="font-size:12px;font-weight:600;color:#9ca3af;font-family:var(--fm)">OFF</span>
+          <span style="font-size:11px;color:rgba(142,182,155,.6)">Off Duty</span>
+          <span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--fm)" id="eldOFFNum">59</span>
+        </div>
+        <div style="background:rgba(142,182,155,.08);border:1px solid rgba(142,182,155,.15);border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:6px">
+          <span style="font-size:12px;font-weight:600;color:#DAF1DE;font-family:var(--fm)">TOTAL</span>
+          <span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--fm)" id="eldTotal">142</span>
+        </div>
+        <button onclick="buildELDMap()" style="background:rgba(142,182,155,.1);border:1px solid rgba(142,182,155,.2);border-radius:8px;padding:5px 12px;color:#8EB69B;font-size:12px;cursor:pointer;font-family:var(--fm)">↻ Live</button>
+      </div>
+      <!-- Split: driver list + map -->
+      <div style="display:grid;grid-template-columns:320px 1fr;height:600px">
+        <!-- LEFT: Driver panel -->
+        <div id="eldDriverList" style="background:#0a1a10;overflow-y:auto;border-right:1px solid rgba(142,182,155,.1)"></div>
+        <!-- RIGHT: Leaflet Real Map -->
+        <div style="position:relative;overflow:hidden">
+          <div id="eldLeafletMap" style="width:100%;height:100%"></div>
+          <div id="eldTooltip" style="display:none;position:absolute;background:rgba(5,31,20,.95);border:1px solid rgba(142,182,155,.3);border-radius:10px;padding:12px 14px;font-family:var(--fm);color:#DAF1DE;font-size:12px;pointer-events:none;z-index:1000;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.5);top:16px;right:16px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAFETY — AG Safety AI Suite -->
+  <div class="page" id="pg-safety">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🛡️</span><div class="sv">98.4</div><div class="sl">Safety Index</div><span class="sc-c cup">↑ 1.2</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⚠️</span><div class="sv" data-count="3">0</div><div class="sl">Monthly incidents</div><span class="sc-c cdn">↓ 2</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📋</span><div class="sv" data-count="387">0</div><div class="sl">FMCSA kod bazasi</div><span class="sc-c cup">SMS Appendix A</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📝</span><div class="sv" data-count="12">0</div><div class="sl">DataQ Letters</div><span class="sc-c cup">Dispute ready</span></div>
+    </div>
+    <div class="tabs" id="safetyTabs">
+      <button class="tab active" onclick="setSafetyTab('ai',this)">🤖 AI Advisor</button>
+      <button class="tab" onclick="setSafetyTab('analyzer',this)">🔍 Violation Analyzer</button>
+      <button class="tab" onclick="setSafetyTab('dataq',this)">📝 DataQ Letter</button>
+      <button class="tab" onclick="setSafetyTab('audit',this)">✅ DOT Audit</button>
+    </div>
+    <!-- AI Tab -->
+    <div id="sft-ai" class="card">
+      <div class="ch"><span class="ct">🛡️ AG Safety AI — Sizning shaxsiy Safety Directoringiz</span><span class="badge br">DOT · FMCSA · 24/7</span></div>
+      <div class="cb"><div class="aiwrap" id="aiWrap-safety"></div></div>
+    </div>
+    <!-- Violation Analyzer Tab -->
+    <div id="sft-analyzer" style="display:none">
+      <div class="g2 mb16">
+        <div class="card"><div class="ch"><span class="ct">SMS Penalty Formula</span></div>
+          <div class="cb">
+            <div class="formula-row">
+              <div class="fbox"><div style="font-size:10px;color:var(--g600)">SEVERITY</div><div style="font-size:14px;font-weight:600;color:var(--g800)">Base weight</div></div>
+              <div class="fop">+</div>
+              <div class="fbox" style="border-color:#1a4f8a"><div style="font-size:10px;color:#1a4f8a">OOS Status</div><div style="font-size:14px;font-weight:600;color:#1a4f8a">+2 pts</div></div>
+              <div class="fop">=</div>
+              <div class="fbox"><div style="font-size:10px;color:var(--g600)">Effective</div><div style="font-size:14px;font-weight:600;color:var(--g800)">weight</div></div>
+              <div class="fop">×</div>
+              <div class="fbox" style="border-color:#8a5200"><div style="font-size:10px;color:#8a5200">TIME WEIGHT</div><div style="font-size:14px;font-weight:600;color:#8a5200">×1–3</div></div>
+              <div class="fop">=</div>
+              <div class="fbox" style="border-color:#1a6b3a;background:#e4f7ec"><div style="font-size:10px;color:#1a6b3a">FINAL</div><div style="font-size:14px;font-weight:600;color:#1a6b3a">POINTS</div></div>
+            </div>
+            <div class="decay-bar">
+              <div class="db" style="background:#fdecea"><div class="db-title" style="color:#8b2020">0–6 oy</div><div class="db-val" style="color:#8b2020">×3</div><div style="font-size:10px;color:#8b2020">Max damage</div></div>
+              <div class="db" style="background:#fff4e0"><div class="db-title" style="color:#8a5200">6–12 oy</div><div class="db-val" style="color:#8a5200">×2</div><div style="font-size:10px;color:#8a5200">Moderate</div></div>
+              <div class="db" style="background:#e3f2fd"><div class="db-title" style="color:#1a4f8a">12–24 oy</div><div class="db-val" style="color:#1a4f8a">×1</div><div style="font-size:10px;color:#1a4f8a">Reduced</div></div>
+              <div class="db" style="background:#e4f7ec"><div class="db-title" style="color:#1a6b3a">> 24 oy</div><div class="db-val" style="color:#1a6b3a">×0</div><div style="font-size:10px;color:#1a6b3a">Cleared!</div></div>
+            </div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">FMCSA Violation Lookup</span></div>
+          <div class="cb">
+            <div class="fg"><label class="fl">FMCSA Kod yozing</label><input class="fi" id="fmcsaCode" placeholder="masalan: 395.8, 392.2, 393.5..."></div>
+            <div class="fg"><label class="fl">Inspection sanasi</label><input class="fi" id="inspDate" type="date"></div>
+            <button class="btn bp" onclick="analyzeFMCSA()" style="width:100%">Tahlil qilish →</button>
+            <div id="fmcsaResult" style="display:none;margin-top:14px;background:var(--g50);border-radius:10px;padding:14px;font-size:13px;color:var(--g800)"></div>
+          </div></div>
+      </div>
+      <div class="card"><div class="ch"><span class="ct">Recent Violations — BASIC Categories</span></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>FMCSA Code</th><th>Description</th><th>BASIC Category</th><th>Points</th><th>OOS</th><th>Decay</th></tr></thead>
+          <tbody>
+            <tr><td style="font-family:var(--fm)">FMCSA-080</td><td>Texting while operating CMV</td><td><span class="badge br">Unsafe Driving</span></td><td style="font-weight:600;color:#8b2020">10</td><td>—</td><td><span class="badge bo">×3</span></td></tr>
+            <tr><td style="font-family:var(--fm)">FMCSA-395.8</td><td>Driver's record of duty status</td><td><span class="badge bo">HOS Compliance</span></td><td style="font-weight:600;color:#8a5200">5</td><td><span class="badge br">OOS</span></td><td><span class="badge bo">×2</span></td></tr>
+            <tr><td style="font-family:var(--fm)">FMCSA-393.5</td><td>Brakes — out of adjustment</td><td><span class="badge bb">Vehicle Maint.</span></td><td style="font-weight:600;color:#1a4f8a">3</td><td>—</td><td><span class="badge bg">×1</span></td></tr>
+          </tbody></table></div></div>
+    </div>
+    <!-- DataQ Tab -->
+    <div id="sft-dataq" style="display:none">
+      <div class="ibox ibox-blue mb16">📝 <strong>DataQ Dispute Letter Generator</strong> — AI yuridik jihatdan to'g'ri apelatsiya xatini bir klik bilan yaratadi. FMCSA inspektorlari kutadigan professional tilda yoziladi.</div>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">Inspection Report yuklash</span></div>
+          <div class="cb">
+            <div class="upl" id="safetyUpl" onclick="document.getElementById('safetyFile').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event)">
+              <input type="file" id="safetyFile" accept=".txt,.pdf,.doc,.docx" onchange="pickFile(event)">
+              <div style="font-size:26px;margin-bottom:8px">📄</div>
+              <div style="font-size:13.5px;font-weight:500;color:var(--g700);margin-bottom:3px">Upload inspection report</div>
+              <div style="font-size:12px;color:var(--g600)">PDF, DOCX, TXT — AI generates DataQ letter</div>
+            </div>
+            <div id="fileRow" style="display:none;margin-top:11px;background:var(--g50);border-radius:9px;padding:11px;align-items:center;gap:9px;border:1px solid var(--bdr2)">
+              <span style="font-size:20px">📄</span>
+              <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--g800)" id="fName">—</div><div style="font-size:11px;color:var(--g600)" id="fSize">—</div></div>
+              <button class="btn bp bsm" onclick="analyzeFile()">Generate DataQ →</button>
+            </div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">Supporting Evidence</span></div>
+          <div class="cb">
+            <div class="fg"><label class="fl">Violation code</label><input class="fi" id="dqCode" placeholder="FMCSA-395.8"></div>
+            <div class="fg"><label class="fl">Kontekst (o'zbek tilida)</label><textarea class="fi" id="dqContext" rows="4" placeholder="Nima bo'lganligi haqida o'z so'zlaringiz bilan yozing..."></textarea></div>
+            <button class="btn bp" onclick="genDataQ()" style="width:100%">📝 Generate DataQ Letter →</button>
+          </div></div>
+      </div>
+    </div>
+    <!-- DOT Audit Tab -->
+    <div id="sft-audit" style="display:none">
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">DOT Audit Checklisti</span><span class="badge bg">97.2% tayyor</span></div>
+          <div class="cb">
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>CDL sertifikatlari saqlandi</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>ELD deviceslari ro'yxatga olindi</span></div>
+            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>DVIR arxivlari tayyor (6 oy)</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Sug'urta polislari yangilangan</span></div>
+            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>HazMat ruxsatnomalar to'liq</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Tibbiy sertifikatlar amal qiladi</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Drug & Alcohol testing records</span></div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">Certificate status</span><button class="btn bp bsm">+ Newlash</button></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Driver</th><th>CDL</th><th>Tibbiy</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>J. Martinez</td><td>2027-Jan</td><td>2025-Aug</td><td><span class="badge bo">Near limit</span></td></tr>
+              <tr><td>R. Johnson</td><td>2028-Mar</td><td>2026-Dec</td><td><span class="badge bg">OK</span></td></tr>
+              <tr><td>K. Williams</td><td>2026-Jul</td><td>2024-Nov</td><td><span class="badge br">Newlash!</span></td></tr>
+              <tr><td>M. Garcia</td><td>2027-Sep</td><td>2026-Apr</td><td><span class="badge bg">OK</span></td></tr>
+            </tbody></table></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI — Dynamic by role -->
+  <div class="page" id="pg-kpi"><div id="kpiContent"></div></div>
+
+  <!-- SALES — ALGO SalesIntel + Pipeline -->
+  <div class="page" id="pg-sales">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📞</span><div class="sv" data-count="240">0</div><div class="sl">Calls heard / day (AI)</div><span class="sc-c cup">Avtomatik</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🎯</span><div class="sv" data-count="84">0</div><div class="sl">Active leads</div><span class="sc-c cup">↑ 14</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💰</span><div class="sv">$4.8M</div><div class="sl">Pipeline value</div><span class="sc-c cup">↑ 18%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📈</span><div class="sv">74%→79%</div><div class="sl">Call score (hafta)</div><span class="sc-c cup">↑ +5%</span></div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setSalesTab('intel',this)">🤖 AI Call Intel</button>
+      <button class="tab" onclick="setSalesTab('pipeline',this)">📊 Pipeline</button>
+      <button class="tab" onclick="setSalesTab('digest',this)">📧 Monday Digest</button>
+      <button class="tab" onclick="setSalesTab('ai',this)">💬 Sales AI</button>
+    </div>
+    <!-- Call Intel -->
+    <div id="slt-intel">
+      <div class="g2 mb16">
+        <div class="card"><div class="ch"><span class="ct">🏆 Team Leaderboard — 6 Skills</span></div>
+          <div class="cb">
+            <div class="ldr"><div class="ldrn ldr1">1</div><div style="flex:1"><div style="font-size:13px;font-weight:500">Sarah</div><div style="font-size:11px;color:var(--g600)">Objection Handling ⭐</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:600;color:var(--g700);font-family:var(--fm)">94%</div><div class="pb" style="width:80px;margin-top:4px"><div class="pf" style="width:94%"></div></div></div></div>
+            <div class="ldr"><div class="ldrn ldr2">2</div><div style="flex:1"><div style="font-size:13px;font-weight:500">Mike</div><div style="font-size:11px;color:var(--g600)">Lead Qualification ⭐</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:600;color:var(--g700);font-family:var(--fm)">91%</div><div class="pb" style="width:80px;margin-top:4px"><div class="pf" style="width:91%"></div></div></div></div>
+            <div class="ldr"><div class="ldrn ldr3">3</div><div style="flex:1"><div style="font-size:13px;font-weight:500">Anna</div><div style="font-size:11px;color:var(--g600)">Pitch Quality ⭐</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:600;color:var(--g700);font-family:var(--fm)">88%</div><div class="pb" style="width:80px;margin-top:4px"><div class="pf" style="width:88%"></div></div></div></div>
+            <div class="ldr"><div class="ldrn ldrd">4</div><div style="flex:1"><div style="font-size:13px;font-weight:500">James</div><div style="font-size:11px;color:var(--g600)">Call Structure</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:600;color:var(--g700);font-family:var(--fm)">85%</div><div class="pb" style="width:80px;margin-top:4px"><div class="pf" style="width:85%"></div></div></div></div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">📊 Business Intelligence</span></div>
+          <div class="cb">
+            <div class="ibox ibox-amber">💬 <strong>15 carrier</strong> bu oy trailer tracking so'radi</div>
+            <div class="ibox ibox-blue">🎯 Buyorchilarning <strong>62%</strong> — 1-3 truckli owner-operator</div>
+            <div class="ibox ibox-green">💰 Price — eng katta e'tiroz (<strong>34 call</strong> da qaytarildi)</div>
+            <div class="ibox" style="background:var(--g50);border-left:3px solid var(--g400);color:var(--g800)">📣 Carrierlar: "I don't want a fine" — <strong>compliance language</strong> ishlating</div>
+          </div></div>
+      </div>
+      <div class="card"><div class="ch"><span class="ct">🔁 Repeated mistakes — AI tahlili</span></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Xato turi</th><th>Calls soni</th><th>Replar</th><th>Tavsiya</th></tr></thead>
+          <tbody>
+            <tr><td>Call vaqtining 78% gapirish (limit: 60%)</td><td><span class="badge br">6/8 rep</span></td><td>Hammasi</td><td>Listening skills workshop</td></tr>
+            <tr><td>FMCSA clause eslatilmagan</td><td><span class="badge bo">34 call</span></td><td>James, Sarah</td><td>Compliance script qo'shing</td></tr>
+            <tr><td>Narx e'tiroziga tayyor emas</td><td><span class="badge bo">22 call</span></td><td>Mike, Anna</td><td>Value prop repetition</td></tr>
+          </tbody></table></div></div>
+    </div>
+    <!-- Pipeline -->
+    <div id="slt-pipeline" style="display:none">
+      <div class="card"><div class="ch"><span class="ct">Savdo pipeline</span><button class="btn bp bsm">+ Lead</button></div>
+        <div class="cb">
+          <div class="pipeline">
+            <div class="plc"><div class="plh">New <span class="pln">12</span></div>
+              <div class="plcard"><div class="plcn">Prime Freight</div><div class="plcv">$120K/oy · Dallas</div></div>
+              <div class="plcard"><div class="plcn">Global Cargo</div><div class="plcv">$85K/oy · LA</div></div>
+              <div class="plcard"><div class="plcn">FastLoad Inc</div><div class="plcv">$200K/oy · Chicago</div></div>
+            </div>
+            <div class="plc"><div class="plh">Review <span class="pln">8</span></div>
+              <div class="plcard"><div class="plcn">StarShip Co</div><div class="plcv">$340K/oy · NYC</div></div>
+              <div class="plcard"><div class="plcn">NorthLine LLC</div><div class="plcv">$180K/oy · Seattle</div></div>
+            </div>
+            <div class="plc"><div class="plh">Negotiation <span class="pln">6</span></div>
+              <div class="plcard"><div class="plcn">EagleTrans</div><div class="plcv">$490K/oy · Miami</div></div>
+              <div class="plcard"><div class="plcn">BlueSky Freight</div><div class="plcv">$225K/oy · Atlanta</div></div>
+            </div>
+            <div class="plc" style="border-color:rgba(26,107,58,.2)"><div class="plh" style="color:#1a6b3a">Closed Won <span class="pln" style="background:#1a6b3a">5</span></div>
+              <div class="plcard" style="border-color:#b6e8c5"><div class="plcn">RedRock Cargo</div><div class="plcv" style="color:#1a6b3a">$620K/oy ✓</div></div>
+              <div class="plcard" style="border-color:#b6e8c5"><div class="plcn">MidWest Trans</div><div class="plcv" style="color:#1a6b3a">$380K/oy ✓</div></div>
+            </div>
+          </div>
+        </div></div>
+    </div>
+    <!-- Monday Digest -->
+    <div id="slt-digest" style="display:none">
+      <div class="card"><div class="ch"><span class="ct">📧 Monday Digest — Week 23</span><span class="badge bg">Auto-generated</span></div>
+        <div class="cb">
+          <div class="ibox ibox-red">🔁 <strong>Repeated mistakes:</strong> Replar call vaqtining 78% gapirdi (norm: 60%) — 6/8 rep. Compliance clause 34 callda eslatilmagan.</div>
+          <div class="ibox ibox-green">⭐ <strong>Top performers:</strong> Sarah — narx e'tirozini 91% yutish. Mike — opener kuchli, carrierlar 40% ko'proq qolmoqda.</div>
+          <div class="ibox ibox-blue">📈 <strong>Hafta vs oldingi hafta:</strong> Team o'rtacha ball: 74% → 79% (+5%). Objection handling 6 repda yaxshilandi.</div>
+          <div style="background:var(--g50);border-radius:10px;padding:16px;border:1px solid var(--bdr2)">
+            <div style="font-size:13px;font-weight:600;color:var(--g800);margin-bottom:10px">Call stats:</div>
+            <div class="g3">
+              <div class="sck"><div style="font-size:11px;color:var(--g600)">Jami calls</div><div class="scn">240</div><div class="scl">haftalik</div></div>
+              <div class="sck"><div style="font-size:11px;color:var(--g600)">O'rt. ball</div><div class="scn">79%</div><div class="scl">↑ +5%</div></div>
+              <div class="sck"><div style="font-size:11px;color:var(--g600)">Conversion</div><div class="scn">38%</div><div class="scl">maqsad: 40%</div></div>
+            </div>
+          </div>
+        </div></div>
+    </div>
+    <!-- AI Sales -->
+    <div id="slt-ai" style="display:none">
+      <div class="card"><div class="ch"><span class="ct">💬 Sales AI — Trucking & ELD specialist</span><span class="badge bg">$110/mo · Active</span></div>
+        <div class="cb"><div class="aiwrap" id="aiWrap-sales"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNTING — IFTA Audit + Expenses -->
+  <div class="page" id="pg-accounting">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💵</span><div class="sv">$2.4M</div><div class="sl">Monthly revenue</div><span class="sc-c cup">↑ 5.3%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⏱️</span><div class="sv">25 min</div><div class="sl">IFTA audit (endi)</div><span class="sc-c cup">vs 3–4 kun</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💰</span><div class="sv">$10K</div><div class="sl">Annual savings</div><span class="sc-c cup">IFTA automation</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🧾</span><div class="sv" data-count="47">0</div><div class="sl">Pending invoices</div><span class="sc-c cdn">12 muddati o'tgan</span></div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setAccTab('ifta',this)">📊 IFTA Audit AI</button>
+      <button class="tab" onclick="setAccTab('invoices',this)">🧾 Invoices</button>
+      <button class="tab" onclick="setAccTab('expenses',this)">💳 Expenses</button>
+      <button class="tab" onclick="setAccTab('ai',this)">🤖 AI Assistant</button>
+    </div>
+    <!-- IFTA Tab -->
+    <div id="act-ifta">
+      <div class="ibox ibox-green mb16">🚀 <strong>ALGO IFTA Audit Assistant</strong> — AI-powered: 3–4 kunlik qo'l ishi endi 20–30 daqiqa. Claude AI ikkala faylni o'qib, mileage farqini topadi va tuzatadi.</div>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">📂 IFTA Quarterly Report yuklash</span></div>
+          <div class="cb">
+            <div class="upl" id="iftaUpl" onclick="document.getElementById('iftaFile').click()">
+              <input type="file" id="iftaFile" accept=".pdf,.csv" onchange="loadIFTA(event)">
+              <div style="font-size:26px;margin-bottom:8px">📋</div>
+              <div style="font-size:13.5px;font-weight:500;color:var(--g700);margin-bottom:3px">IFTA Quarterly Report</div>
+              <div style="font-size:12px;color:var(--g600)">PDF or CSV format</div>
+            </div>
+            <div style="margin-top:10px" class="upl" id="mvmtUpl" onclick="document.getElementById('mvmtFile').click()">
+              <input type="file" id="mvmtFile" accept=".pdf,.csv" onchange="loadMvmt(event)">
+              <div style="font-size:22px;margin-bottom:6px">🚗</div>
+              <div style="font-size:13px;font-weight:500;color:var(--g700);margin-bottom:2px">Movement Report</div>
+              <div style="font-size:11.5px;color:var(--g600)">PDF or CSV format</div>
+            </div>
+            <button class="btn bp" onclick="runIFTA()" style="width:100%;margin-top:12px">🤖 AI Analysis + Fix →</button>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">Results & savings</span></div>
+          <div class="cb">
+            <div class="g2" style="gap:10px;margin-bottom:14px">
+              <div class="sck"><div style="font-size:11px;color:var(--g600)">Oldin</div><div class="scn" style="color:#8b2020">3–4 kun</div><div class="scl">20–30 kishi</div></div>
+              <div class="sck"><div style="font-size:11px;color:var(--g600)">Endi</div><div class="scn" style="color:#1a6b3a">25 min</div><div class="scl">1 kishi</div></div>
+            </div>
+            <div class="ki"><div class="kinf"><div class="kn">Audit service</div></div><div class="kv" style="color:#8b2020">–$7,000</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Employee time</div></div><div class="kv" style="color:#8b2020">–$3,000</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">IFTA Audit Assistant</div></div><div class="kv" style="color:#1a6b3a">$0</div></div>
+            <div class="ki" style="border-top:2px solid var(--bdr)"><div class="kinf"><div class="kn" style="font-weight:700">Annual savings</div></div><div class="kv" style="color:#1a6b3a;font-size:17px">~$10K</div></div>
+          </div></div>
+      </div>
+    </div>
+    <!-- Invoices Tab -->
+    <div id="act-invoices" style="display:none">
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">Invoices</span><button class="btn bp bsm">+ Invoice</button></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>#</th><th>Mijoz</th><th>Amount</th><th>Due date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:var(--fm);font-size:11px">INV-1084</td><td>Prime Freight</td><td>$18,400</td><td>May 20</td><td><span class="badge bo">Pending</span></td></tr>
+              <tr><td style="font-family:var(--fm);font-size:11px">INV-1083</td><td>Global Cargo</td><td>$24,100</td><td>May 18</td><td><span class="badge bg">Paid</span></td></tr>
+              <tr><td style="font-family:var(--fm);font-size:11px">INV-1082</td><td>FastLine LLC</td><td>$9,850</td><td>May 10</td><td><span class="badge br">O'tdi!</span></td></tr>
+              <tr><td style="font-family:var(--fm);font-size:11px">INV-1081</td><td>StarShip Co</td><td>$31,200</td><td>May 25</td><td><span class="badge bb">Sent</span></td></tr>
+            </tbody></table></div></div>
+        <div class="card"><div class="ch"><span class="ct">Expense breakdown</span></div>
+          <div class="cb">
+            <div class="ki"><div class="kinf"><div class="kn">Fuel</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:68%"></div></div></div><div class="kv">$748K</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Driver maoshi</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:52%"></div></div></div><div class="kv">$572K</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Maintenance</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:28%"></div></div></div><div class="kv">$308K</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">IFTA soliqlari</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:22%"></div></div></div><div class="kv">$242K</div></div>
+          </div></div>
+      </div>
+    </div>
+    <!-- Expenses Tab -->
+    <div id="act-expenses" style="display:none">
+      <div class="ibox ibox-blue mb16">📱 <strong>Algo Expenses</strong> — Telegram orqali xarajat so'rovlari avtomatik qayta ishlanadi. Har bir so'rov hujjatlashtiriladi va tasdiqlash uchun yuboriladi.</div>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">Telegram — So'nggi xarajat so'rovlari</span><button class="btn bg_ bsm" onclick="refreshExp()">↻</button></div>
+          <div class="cb" id="expMsgs">
+            <div class="tgmsg"><div class="tgav">JM</div><div style="flex:1"><div class="tgn">J. Martinez</div><div class="tgt">Fuel: $180 — Dallas TA #receipt yuborildi</div></div><div class="tgtime">09:14</div></div>
+            <div class="tgmsg"><div class="tgav">RJ</div><div style="flex:1"><div class="tgn">R. Johnson</div><div class="tgt">Hotel: $95 — Chicago overnight #receipt</div></div><div class="tgtime">08:42</div></div>
+            <div class="tgmsg"><div class="tgav">KW</div><div style="flex:1"><div class="tgn">K. Williams</div><div class="tgt">Scale ticket: $22 — Miami weigh station</div></div><div class="tgtime">07:30</div></div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">Expense categories (oy)</span></div>
+          <div class="cb">
+            <div class="ki"><div class="kinf"><div class="kn">Fuel to'lovlari</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:72%"></div></div></div><div class="kv">$12,400</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Hotel / Overnight</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:28%"></div></div></div><div class="kv">$4,800</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Scale tickets</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:12%"></div></div></div><div class="kv">$2,100</div></div>
+            <div class="ki"><div class="kinf"><div class="kn">Repairs / Parts</div><div class="pb" style="margin-top:5px"><div class="pf" style="width:18%"></div></div></div><div class="kv">$3,200</div></div>
+          </div></div>
+      </div>
+    </div>
+    <!-- AI Tab -->
+    <div id="act-ai" style="display:none">
+      <div class="card"><div class="ch"><span class="ct">🤖 Accounting AI — IFTA · Settlements · Tax</span><span class="badge bg">Active</span></div>
+        <div class="cb"><div class="aiwrap" id="aiWrap-accounting"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE — Algo Training Hub -->
+  <div class="page" id="pg-knowledge">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🎓</span><div class="sv" data-count="8">0</div><div class="sl">Modulelar</div><span class="sc-c cup">4 department</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🧑‍🎓</span><div class="sv" data-count="23">0</div><div class="sl">Onboarding jarayonida</div></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">✅</span><div class="sv">84%</div><div class="sl">O'rt. test natijasi</div></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🏆</span><div class="sv" data-count="12">0</div><div class="sl">Diplom olindi</div><span class="sc-c cup">Gold·Silver·Bronze</span></div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="setKnowTab('modules',this)">📚 Modulees</button>
+      <button class="tab" onclick="setKnowTab('onboard',this)">🗺️ Onboarding</button>
+      <button class="tab" onclick="setKnowTab('diploma',this)">🎓 Diplomas</button>
+      <button class="tab" onclick="setKnowTab('ai',this)">🤖 AI Agent</button>
+    </div>
+    <!-- Modulees -->
+    <div id="knt-modules">
+      <div class="ibox ibox-green mb16">🎓 <strong>Algo Training Hub</strong> — Bir marta qurilgan platforma. Har bir newcomer mustaqil o'rganadi. O'rganish tezligi 3x oshadi, xarajat 70% kamayadi.</div>
+      <div class="mod-grid mb16">
+        <div class="modcard done"><div class="micon">🚛</div><div class="mname">ELD Basics</div><div class="mprog">100% · Gold</div></div>
+        <div class="modcard done"><div class="micon">⏰</div><div class="mname">HOS Rules</div><div class="mprog">100% · Silver</div></div>
+        <div class="modcard"><div class="micon">🛡️</div><div class="mname">Safety & DOT</div><div class="mprog">60% in progress</div></div>
+        <div class="modcard"><div class="micon">🗺️</div><div class="mname">Geography USA</div><div class="mprog">40% in progress</div></div>
+        <div class="modcard locked"><div class="micon">📋</div><div class="mname">Dispatch Flow</div><div class="mprog">🔒 Complete previous module</div></div>
+        <div class="modcard locked"><div class="micon">💵</div><div class="mname">Accounting Basics</div><div class="mprog">🔒 Complete previous module</div></div>
+        <div class="modcard locked"><div class="micon">📞</div><div class="mname">Sales Skills</div><div class="mprog">🔒 Complete previous module</div></div>
+        <div class="modcard locked"><div class="micon">🤖</div><div class="mname">AI Tools Usage</div><div class="mprog">🔒 Complete previous module</div></div>
+      </div>
+    </div>
+    <!-- Onboarding -->
+    <div id="knt-onboard" style="display:none">
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="ct">Onboarding Roadmap</span></div>
+          <div class="cb">
+            <div class="tl"><div class="tld">1</div><div><div class="tlt">Day 1: CEO Welcome Video</div><div class="tlm">Alimkhan akadan salomlashuv — kompaniya ruhi</div></div></div>
+            <div class="tl"><div class="tld">2</div><div><div class="tlt">Week 1: 8 Video Modulese</div><div class="tlm">ELD, HOS, Safety, Geography — sequential, interactive</div></div></div>
+            <div class="tl"><div class="tld">3</div><div><div class="tlt">Week 2: Practice with AI Agent</div><div class="tlm">Claude API — answers any question, 24/7</div></div></div>
+            <div class="tl" style="padding-bottom:0"><div class="tld">4</div><div><div class="tlt">Month 1: Diploma & independent work</div><div class="tlm">Score-based Gold/Silver/Bronze — PDF format</div></div></div>
+          </div></div>
+        <div class="card"><div class="ch"><span class="ct">Newcomer progress</span></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Newcomer</th><th>Started</th><th>Module</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td>A. Karimov</td><td>May 1</td><td>3/8</td><td><span class="badge bg">84%</span></td></tr>
+              <tr><td>B. Yusupov</td><td>May 5</td><td>2/8</td><td><span class="badge bb">71%</span></td></tr>
+              <tr><td>C. Rahimov</td><td>May 10</td><td>1/8</td><td><span class="badge bo">65%</span></td></tr>
+              <tr><td>D. Mirzaev</td><td>May 12</td><td>1/8</td><td><span class="badge bn">New</span></td></tr>
+            </tbody></table></div></div>
+      </div>
+    </div>
+    <!-- Diploma -->
+    <div id="knt-diploma" style="display:none">
+      <div class="g3">
+        <div class="dip dip-gold"><div style="font-size:32px;margin-bottom:8px">🥇</div><div style="font-size:16px;font-weight:700;color:#ffd700;margin-bottom:4px">GOLD</div><div style="font-size:12px;opacity:.7">90%+ ball</div><div style="font-size:13px;margin-top:10px;opacity:.8">1 newcomers</div></div>
+        <div class="dip dip-silver"><div style="font-size:32px;margin-bottom:8px">🥈</div><div style="font-size:16px;font-weight:700;color:#c0c0c0;margin-bottom:4px">SILVER</div><div style="font-size:12px;opacity:.7">75–89% ball</div><div style="font-size:13px;margin-top:10px;opacity:.8">8 newcomers</div></div>
+        <div class="dip"><div style="font-size:32px;margin-bottom:8px">🥉</div><div style="font-size:16px;font-weight:700;color:#cd7f32;margin-bottom:4px">BRONZE</div><div style="font-size:12px;opacity:.7">60–74% ball</div><div style="font-size:13px;margin-top:10px;opacity:.8">3 newcomers</div></div>
+      </div>
+    </div>
+    <!-- AI Agent -->
+    <div id="knt-ai" style="display:none">
+      <div class="card"><div class="ch"><span class="ct">🤖 Training AI Agent — 24/7 yordam</span><span class="badge bg">Claude API</span></div>
+        <div class="cb"><div class="aiwrap" id="aiWrap-knowledge"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDIA -->
+  <div class="page" id="pg-media">
+    <div class="sg">
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">▶️</span><div class="sv">12.4K</div><div class="sl">YouTube obunachi</div><span class="sc-c cup">↑ 340</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📸</span><div class="sv">8.2K</div><div class="sl">Instagram followers</div><span class="sc-c cup">↑ 180</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">👁️</span><div class="sv" id="mvv">84K</div><div class="sl">Ko'rishlar</div><span class="sc-c cup">↑ 22%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">❤️</span><div class="sv" id="mll">3.2K</div><div class="sl">Likes</div><span class="sc-c cup">↑ 15%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💬</span><div class="sv" id="mcc">640</div><div class="sl">Izohlar</div><span class="sc-c cup">↑ 8%</span></div>
+      <div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📈</span><div class="sv">4.8%</div><div class="sl">Engagement</div><span class="sc-c cup">↑ 0.6%</span></div>
+    </div>
+    <div class="tabs" id="mediaTabs">
+      <button class="tab active" onclick="setMPeriod('daily',this)">Daily</button>
+      <button class="tab" onclick="setMPeriod('weekly',this)">Weekly</button>
+      <button class="tab" onclick="setMPeriod('monthly',this)">Monthly</button>
+      <button class="tab" onclick="setMPeriod('quarterly',this)">Quarterly</button>
+      <button class="tab" onclick="setMPeriod('yearly',this)">Yearly</button>
+    </div>
+    <div class="g2 mb16">
+      <div class="card"><div class="ch"><span class="ct">▶️ YouTube Analytics</span><span class="badge bg">Live</span></div>
+        <div class="cb">
+          <div class="smm"><div class="smmi smyt">👁️</div><div style="flex:1"><div class="smmn">Ko'rishlar</div><div class="smmv" id="yt-pl">Monthly</div></div><div class="smnum" id="yt-v">48,200</div></div>
+          <div class="smm"><div class="smmi smyt">❤️</div><div style="flex:1"><div class="smmn">Likes</div><div class="smmv">YT reaction</div></div><div class="smnum" id="yt-l">1,840</div></div>
+          <div class="smm"><div class="smmi smyt">💬</div><div style="flex:1"><div class="smmn">Izohlar</div><div class="smmv">Engagement</div></div><div class="smnum" id="yt-c">312</div></div>
+          <div class="smm"><div class="smmi smyt">▶️</div><div style="flex:1"><div class="smmn">New videolar</div><div class="smmv">Kontent</div></div><div class="smnum" id="yt-u">8</div></div>
+          <div class="smm" style="border:none"><div class="smmi smyt">⏱️</div><div style="flex:1"><div class="smmn">Watch time</div><div class="smmv">Soat</div></div><div class="smnum" id="yt-w">3.4K h</div></div>
+        </div></div>
+      <div class="card"><div class="ch"><span class="ct">📸 Instagram Analytics</span><span class="badge bg">Live</span></div>
+        <div class="cb">
+          <div class="smm"><div class="smmi smig">👁️</div><div style="flex:1"><div class="smmn">Impressions</div><div class="smmv" id="ig-pl">Monthly</div></div><div class="smnum" id="ig-v">35,800</div></div>
+          <div class="smm"><div class="smmi smig">❤️</div><div style="flex:1"><div class="smmn">Likes</div><div class="smmv">Post reactions</div></div><div class="smnum" id="ig-l">1,360</div></div>
+          <div class="smm"><div class="smmi smig">💬</div><div style="flex:1"><div class="smmn">Izohlar</div><div class="smmv">Engagement</div></div><div class="smnum" id="ig-c">328</div></div>
+          <div class="smm"><div class="smmi smig">📤</div><div style="flex:1"><div class="smmn">Shares</div><div class="smmv">Reach</div></div><div class="smnum" id="ig-s">214</div></div>
+          <div class="smm" style="border:none"><div class="smmi smig">🔖</div><div style="flex:1"><div class="smmn">Saves</div><div class="smmv">Saved</div></div><div class="smnum" id="ig-sv">487</div></div>
+        </div></div>
+    </div>
+    <div class="card"><div class="ch"><span class="ct">📊 Views chart</span><span id="mChartLbl" class="badge bb">Monthly</span></div>
+      <div class="cb"><div style="display:flex;align-items:flex-end;gap:6px;height:130px;margin-bottom:7px" id="mediaChart"></div>
+        <div id="mediaLabels" style="display:flex;justify-content:space-between"></div></div></div>
+  </div>
+
+  <!-- AI GENERAL -->
+  <div class="page" id="pg-ai">
+    <div class="card"><div class="ch"><span class="ct" id="aiPageTitle">AI Assistant</span><span class="badge bg">Active</span></div>
+      <div class="cb"><div class="aiwrap" id="aiWrap-general"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ USERS (OPS only) ══ -->
+  <div class="page" id="pg-users">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-size:11px;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#dcfce7">User Management</div>
+      </div>
+      <button class="btn bp" onclick="openAddUser()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 16px rgba(34,197,94,.3)">＋ Add User</button>
+    </div>
+    <!-- Add user modal -->
+    <div id="addUserModal" style="display:none;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:16px">➕ New User</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end">
+        <div><label class="fl">Full Name</label><input class="fi" id="nu-name" placeholder="John Smith" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Email (@algogroup.us)</label><input class="fi" id="nu-email" placeholder="john@algogroup.us" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Password</label><input class="fi" id="nu-pass" type="password" placeholder="Min 8 chars" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Role</label>
+          <select id="nu-role" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+            <option value="ops">⚙️ OPS</option>
+            <option value="manager">👔 Support Manager</option>
+            <option value="sales">💼 Sales</option>
+            <option value="accounting">📊 Accounting</option>
+            <option value="media">📱 Media</option>
+            <option value="safety">🛡️ Safety</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn bp" onclick="addUser()" style="background:linear-gradient(135deg,#16a34a,#22c55e)">Create User</button>
+        <button class="btn bg_" onclick="closeAddUser()" style="color:#4ade80;border-color:rgba(34,197,94,.2)">Cancel</button>
+      </div>
+      <div id="addUserMsg" style="margin-top:10px;font-size:12.5px;display:none"></div>
+    </div>
+    <!-- Users table -->
+    <div class="card">
+      <div class="ch">
+        <span class="ct">All Users <span id="userCount" style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:2px 10px;font-size:11px;margin-left:8px">6</span></span>
+        <input class="fi" id="userSearch" placeholder="Search users..." onkeyup="renderUsersTable()" style="width:200px;font-size:12.5px;padding:6px 12px;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+      </div>
+      <div class="cb" style="padding:0"><div class="tw"><table>
+        <thead><tr>
+          <th>Avatar</th><th>Full Name</th><th>Email</th><th>Password</th><th>Role</th><th>Status</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="usersTableBody"></tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PROJECTS (OPS only) ══ -->
+  <div class="page" id="pg-projects">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-size:11px;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#dcfce7">Projects</div>
+      </div>
+      <button class="btn bp" onclick="openAddProject()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 16px rgba(34,197,94,.3)">＋ New Project</button>
+    </div>
+    <!-- Add project form -->
+    <div id="addProjModal" style="display:none;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:16px">📁 New Project</div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px">
+        <div><label class="fl">Project Name</label><input class="fi" id="np-name" placeholder="Q3 Route Optimization" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Assigned To</label>
+          <select id="np-user" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></select>
+        </div>
+        <div><label class="fl">Priority</label>
+          <select id="np-priority" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+            <option value="high">🔴 High</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">🟢 Low</option>
+          </select>
+        </div>
+        <div><label class="fl">Due Date</label><input class="fi" id="np-date" type="date" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+      </div>
+      <div style="margin-top:12px"><label class="fl">Description</label><textarea class="fi" id="np-desc" rows="2" placeholder="Project description..." style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn bp" onclick="addProject()" style="background:linear-gradient(135deg,#16a34a,#22c55e)">Create Project</button>
+        <button class="btn bg_" onclick="closeAddProject()" style="color:#4ade80;border-color:rgba(34,197,94,.2)">Cancel</button>
+      </div>
+    </div>
+    <!-- Projects grid -->
+    <div id="projectsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px"></div>
+  </div>
+
+  <!-- ─── FLOATING BUBBLE MENU ─── -->
+  <div class="fab-wrap" id="fabWrap">
+    <div class="fab-items" id="fabItems">
+      <div class="fab-item">
+        <span class="fab-label">Toggle Dark / Light</span>
+        <button class="fab-btn" onclick="toggleTheme();closeFAB()" style="background:linear-gradient(135deg,rgba(35,83,71,.7),rgba(58,122,92,.6));border:1px solid rgba(142,182,155,.3);color:#DAF1DE">☀️</button>
+      </div>
+      <div class="fab-item">
+        <span class="fab-label">ELD Live Map</span>
+        <button class="fab-btn" onclick="showPage('eld');closeFAB()" style="background:linear-gradient(135deg,rgba(59,130,246,.5),rgba(99,102,241,.4));border:1px solid rgba(99,102,241,.4);color:#93c5fd">🛰️</button>
+      </div>
+      <div class="fab-item">
+        <span class="fab-label">Safety AI</span>
+        <button class="fab-btn" onclick="showPage('safety');closeFAB()" style="background:linear-gradient(135deg,rgba(239,68,68,.4),rgba(185,28,28,.5));border:1px solid rgba(239,68,68,.35);color:#fca5a5">🛡️</button>
+      </div>
+      <div class="fab-item">
+        <span class="fab-label">AI Assistant</span>
+        <button class="fab-btn" onclick="showPage('ai');closeFAB()" style="background:linear-gradient(135deg,rgba(251,191,36,.4),rgba(217,119,6,.5));border:1px solid rgba(251,191,36,.35);color:#fde68a">🤖</button>
+      </div>
+    </div>
+    <button class="fab-main" id="fabMain" onclick="toggleFAB()">＋</button>
+  </div>
+</main>
+</div><!-- /app -->
+
+<script>
+// ═══ USERS ═══
+// ═══ START IN DARK MODE BY DEFAULT ═══
+document.documentElement.classList.add('dark');
+
+var USERS=[
+  {email:'admin@algogroup.us',pass:'Algo@2026',name:'Alex Doe',role:'ops',initials:'AD',color:'linear-gradient(135deg,#235347,#3a7a5c)'},
+  {email:'manager@algogroup.us',pass:'Support@2026',name:'John Smith',role:'manager',initials:'JS',color:'linear-gradient(135deg,#163832,#235347)'},
+  {email:'sales@algogroup.us',pass:'Sales@2026',name:'Sarah Jones',role:'sales',initials:'SJ',color:'linear-gradient(135deg,#2d6b5a,#3a7a5c)'},
+  {email:'accounting@algogroup.us',pass:'Acc@2026',name:'Mike Chen',role:'accounting',initials:'MC',color:'linear-gradient(135deg,#0B2B26,#163832)'},
+  {email:'media@algogroup.us',pass:'Media@2026',name:'Emily Ross',role:'media',initials:'ER',color:'linear-gradient(135deg,#5a3a7a,#7a5a9a)'},
+  {email:'safety@algogroup.us',pass:'Safe@2026',name:'David Kim',role:'safety',initials:'DK',color:'linear-gradient(135deg,#7a2020,#9a3030)'}
+];
+
+// ═══ ROLES ═══
+// ═══ USERS STATE ═══
+var APP_USERS=[
+  {id:1,email:'admin@algogroup.us',   pass:'Algo@2026',   name:'Alex Doe',    role:'ops',        initials:'AD',status:'active'},
+  {id:2,email:'manager@algogroup.us', pass:'Support@2026',name:'John Smith',  role:'manager',    initials:'JS',status:'active'},
+  {id:3,email:'sales@algogroup.us',   pass:'Sales@2026',  name:'Sarah Jones', role:'sales',      initials:'SJ',status:'active'},
+  {id:4,email:'accounting@algogroup.us',pass:'Acc@2026',  name:'Mike Chen',   role:'accounting', initials:'MC',status:'active'},
+  {id:5,email:'media@algogroup.us',   pass:'Media@2026',  name:'Emily Ross',  role:'media',      initials:'ER',status:'active'},
+  {id:6,email:'safety@algogroup.us',  pass:'Safe@2026',   name:'David Kim',   role:'safety',     initials:'DK',status:'active'},
+];
+var nextUID=7;
+var ROLE_LABELS={ops:'⚙️ OPS',manager:'👔 Support Mgr',sales:'💼 Sales',accounting:'📊 Accounting',media:'📱 Media',safety:'🛡️ Safety'};
+var ROLE_TC={ops:'#22c55e',manager:'#60a5fa',sales:'#fbbf24',accounting:'#34d399',media:'#c084fc',safety:'#f87171'};
+var ROLE_BG={ops:'rgba(34,197,94,.12)',manager:'rgba(59,130,246,.12)',sales:'rgba(251,191,36,.12)',accounting:'rgba(16,185,129,.12)',media:'rgba(168,85,247,.12)',safety:'rgba(239,68,68,.12)'};
+
+function renderUsersTable(){
+  var q=(document.getElementById('userSearch')||{value:''}).value.toLowerCase();
+  var filtered=APP_USERS.filter(function(u){return !q||u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||u.role.includes(q);});
+  var tb=document.getElementById('usersTableBody');if(!tb)return;
+  var uc=document.getElementById('userCount');if(uc)uc.textContent=APP_USERS.length;
+  tb.innerHTML=filtered.map(function(u){
+    var tc=ROLE_TC[u.role]||'#22c55e',bg=ROLE_BG[u.role]||'rgba(34,197,94,.1)';
+    var isSelf=cu&&cu.email===u.email;
+    return '<tr>'
+    +'<td><div style="width:36px;height:36px;border-radius:50%;background:'+bg+';border:1.5px solid '+tc+'55;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:'+tc+'">'+u.initials+'</div></td>'
+    +'<td style="font-weight:500;color:#dcfce7">'+u.name+(isSelf?'<span style="font-size:10px;background:rgba(34,197,94,.12);color:#22c55e;border-radius:20px;padding:1px 7px;margin-left:6px">you</span>':'')+'</td>'
+    +'<td style="font-family:var(--fm);font-size:12.5px;color:#86efac">'+u.email+'</td>'
+    +'<td><div style="display:flex;align-items:center;gap:6px">'
+    +'<span id="pw-dot-'+u.id+'" style="font-family:var(--fm);font-size:13px;color:#4ade80;letter-spacing:.08em">••••••••</span>'
+    +'<span id="pw-real-'+u.id+'" style="display:none;font-family:var(--fm);font-size:12px;color:#fbbf24">'+u.pass+'</span>'
+    +'<button onclick="togglePW('+u.id+')" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);border-radius:5px;color:#4ade80;cursor:pointer;font-size:11px;padding:2px 7px" title="Show">👁</button>'
+    +'</div></td>'
+    +'<td><span style="background:'+bg+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+ROLE_LABELS[u.role]+'</span></td>'
+    +'<td><span style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">● Active</span></td>'
+    +'<td><div style="display:flex;gap:6px">'
+    +'<button onclick="editUser('+u.id+')" style="padding:5px 11px;border-radius:7px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:#60a5fa;font-size:12px;cursor:pointer;font-family:var(--ff)">Edit</button>'
+    +(isSelf?'':'<button onclick="removeUser('+u.id+')" style="padding:5px 11px;border-radius:7px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:12px;cursor:pointer;font-family:var(--ff)">Remove</button>')
+    +'</div></td>'
+    +'</tr>';
+  }).join('');
+}
+function togglePW(id){
+  var dot=document.getElementById('pw-dot-'+id),real=document.getElementById('pw-real-'+id);
+  if(!dot||!real)return;
+  if(real.style.display==='none'){dot.style.display='none';real.style.display='inline';}
+  else{dot.style.display='inline';real.style.display='none';}
+}
+function openAddUser(){var m=document.getElementById('addUserModal');if(m)m.style.display='block';}
+function closeAddUser(){var m=document.getElementById('addUserModal');if(m)m.style.display='none';}
+function addUser(){
+  var name=document.getElementById('nu-name').value.trim();
+  var email=document.getElementById('nu-email').value.trim().toLowerCase();
+  var pass=document.getElementById('nu-pass').value;
+  var role=document.getElementById('nu-role').value;
+  var msg=document.getElementById('addUserMsg');
+  if(!name||!email||!pass){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Fill all fields.';return;}
+  if(!email.endsWith('@algogroup.us')){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Must end with @algogroup.us';return;}
+  if(APP_USERS.find(function(u){return u.email===email;})){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Email already exists.';return;}
+  var ini=name.split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2);
+  APP_USERS.push({id:nextUID++,email:email,pass:pass,name:name,role:role,initials:ini,status:'active'});
+  USERS.push({email:email,pass:pass,name:name,role:role,initials:ini,color:'linear-gradient(135deg,#16a34a,#22c55e)'});
+  msg.style.display='block';msg.style.color='#22c55e';msg.textContent='✓ Created: '+name;
+  document.getElementById('nu-name').value='';document.getElementById('nu-email').value='';document.getElementById('nu-pass').value='';
+  renderUsersTable();setTimeout(closeAddUser,1500);
+}
+function removeUser(id){
+  var user=APP_USERS.find(function(u){return u.id===id;});
+  if(!user||!confirm('Remove '+user.name+'?\nThey will lose access immediately.'))return;
+  APP_USERS=APP_USERS.filter(function(u){return u.id!==id;});
+  USERS=USERS.filter(function(u){return u.email!==user.email;});
+  renderUsersTable();
+}
+function editUser(id){
+  var user=APP_USERS.find(function(u){return u.id===id;});if(!user)return;
+  var np=prompt('New password for '+user.name+':\n(Leave blank to cancel)');
+  if(!np||!np.trim())return;
+  user.pass=np.trim();
+  var u2=USERS.find(function(u){return u.email===user.email;});if(u2)u2.pass=np.trim();
+  alert('✓ Password updated for '+user.name);renderUsersTable();
+}
+
+// ═══ PROJECTS STATE ═══
+var PROJECTS=[
+  {id:1,name:'IFTA Q2 Audit Automation',assignee:'Mike Chen',role:'accounting',priority:'high',due:'2026-06-15',desc:'Automate IFTA quarterly mileage reconciliation using AI. Saves $10K/year.',status:'in_progress',created:'2026-05-01'},
+  {id:2,name:'ELD Factor & Leader Integration',assignee:'Alex Doe',role:'ops',priority:'high',due:'2026-05-31',desc:'Connect Factor ELD and Leader ELD APIs for real-time driver HOS tracking.',status:'in_progress',created:'2026-04-15'},
+  {id:3,name:'Sales Call Intelligence Deploy',assignee:'Sarah Jones',role:'sales',priority:'medium',due:'2026-06-30',desc:'ALGO SalesIntel AI for call scoring, leaderboard, and Monday digest.',status:'planning',created:'2026-05-05'},
+  {id:4,name:'AG Safety Suite Launch',assignee:'David Kim',role:'safety',priority:'medium',due:'2026-07-01',desc:'Full Safety AI deployment: DataQ letters, violation analyzer, DOT audit prep.',status:'planning',created:'2026-05-10'},
+  {id:5,name:'YouTube Growth to 20K',assignee:'Emily Ross',role:'media',priority:'low',due:'2026-08-01',desc:'Grow YouTube to 20K subscribers with weekly trucking content strategy.',status:'planning',created:'2026-05-12'},
+];
+var nextPID=6;
+var P_STATUS_LABEL={in_progress:'In Progress',planning:'Planning',done:'Done',paused:'Paused'};
+var P_STATUS_C={in_progress:'rgba(59,130,246,.15)',planning:'rgba(251,191,36,.12)',done:'rgba(34,197,94,.12)',paused:'rgba(107,114,128,.12)'};
+var P_STATUS_TC={in_progress:'#60a5fa',planning:'#fbbf24',done:'#22c55e',paused:'#9ca3af'};
+var P_PRI_C={high:'#f87171',medium:'#fbbf24',low:'#22c55e'};
+
+function renderProjectsGrid(){
+  var grid=document.getElementById('projectsGrid');if(!grid)return;
+  if(PROJECTS.length===0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px;color:rgba(74,222,128,.4);font-size:14px">No projects yet. Create one!</div>';return;}
+  var today=new Date();
+  grid.innerHTML=PROJECTS.map(function(p){
+    var sc=P_STATUS_C[p.status]||'rgba(107,114,128,.1)',stc=P_STATUS_TC[p.status]||'#9ca3af';
+    var pc=P_PRI_C[p.priority]||'#22c55e',rc=ROLE_TC[p.role]||'#22c55e';
+    var due=new Date(p.due),diff=Math.ceil((due-today)/(864e5));
+    var dueStr=diff<0?'<span style="color:#f87171;font-weight:600">Overdue '+Math.abs(diff)+'d</span>':diff===0?'<span style="color:#fbbf24;font-weight:600">Due today!</span>':diff<=7?'<span style="color:#fbbf24">'+diff+'d left</span>':'<span style="color:#86efac">'+diff+'d left</span>';
+    return '<div style="background:#121a13;border:1px solid rgba(34,197,94,.12);border-radius:14px;padding:18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.4);transition:all .2s" onmouseenter="this.style.borderColor=\'rgba(34,197,94,.28)\';this.style.transform=\'translateY(-3px)\'" onmouseleave="this.style.borderColor=\'rgba(34,197,94,.12)\';this.style.transform=\'translateY(0)\'">'
+    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">'
+    +'<div style="display:flex;align-items:flex-start;gap:8px;flex:1">'
+    +'<span style="width:9px;height:9px;border-radius:50%;background:'+pc+';box-shadow:0 0 6px '+pc+'55;flex-shrink:0;margin-top:4px;display:inline-block"></span>'
+    +'<div style="font-size:14px;font-weight:600;color:#dcfce7;line-height:1.35">'+p.name+'</div></div>'
+    +'<button onclick="removeProject('+p.id+')" style="background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:18px;line-height:1;flex-shrink:0;padding:0 0 0 10px" onmouseenter="this.style.color=\'#f87171\'" onmouseleave="this.style.color=\'rgba(248,113,113,.4)\'">×</button>'
+    +'</div>'
+    +'<div style="font-size:12.5px;color:#86efac;opacity:.65;margin-bottom:12px;line-height:1.45">'+p.desc+'</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">'
+    +'<span style="background:'+sc+';color:'+stc+';border:1px solid '+stc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+P_STATUS_LABEL[p.status]+'</span>'
+    +'<span style="background:rgba(34,197,94,.07);color:'+rc+';border:1px solid '+rc+'33;border-radius:20px;padding:2px 10px;font-size:11px">'+ROLE_LABELS[p.role]+'</span>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(34,197,94,.08);margin-bottom:10px">'
+    +'<div style="font-size:12px;color:#86efac;opacity:.6">👤 '+p.assignee+'</div>'
+    +'<div style="font-size:11.5px">📅 '+dueStr+'</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:5px;flex-wrap:wrap">'
+    +Object.keys(P_STATUS_LABEL).map(function(s){var isA=p.status===s;return '<button onclick="setProjStatus('+p.id+',\''+s+'\')" style="padding:3px 9px;border-radius:6px;font-size:10.5px;border:1px solid '+(isA?P_STATUS_TC[s]+'55':'rgba(34,197,94,.12)')+';background:'+(isA?P_STATUS_C[s]:'transparent')+';color:'+(isA?P_STATUS_TC[s]:'rgba(74,222,128,.45)')+';cursor:pointer;font-family:var(--ff);transition:all .14s">'+P_STATUS_LABEL[s]+'</button>';}).join('')
+    +'</div></div>';
+  }).join('');
+}
+function openAddProject(){
+  var m=document.getElementById('addProjModal');if(m)m.style.display='block';
+  var sel=document.getElementById('np-user');if(sel)sel.innerHTML=APP_USERS.map(function(u){return '<option value="'+u.id+'">'+u.name+' ('+ROLE_LABELS[u.role]+')</option>';}).join('');
+}
+function closeAddProject(){var m=document.getElementById('addProjModal');if(m)m.style.display='none';}
+function addProject(){
+  var name=document.getElementById('np-name').value.trim();
+  var uid=parseInt(document.getElementById('np-user').value);
+  var priority=document.getElementById('np-priority').value;
+  var due=document.getElementById('np-date').value;
+  var desc=document.getElementById('np-desc').value.trim();
+  if(!name||!due){alert('Enter project name and due date.');return;}
+  var user=APP_USERS.find(function(u){return u.id===uid;});
+  PROJECTS.push({id:nextPID++,name:name,assignee:user?user.name:'Unassigned',role:user?user.role:'ops',priority:priority,due:due,desc:desc||'No description.',status:'planning',created:new Date().toISOString().split('T')[0]});
+  closeAddProject();
+  ['np-name','np-date','np-desc'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  renderProjectsGrid();
+}
+function removeProject(id){
+  var p=PROJECTS.find(function(x){return x.id===id;});
+  if(!p||!confirm('Remove: '+p.name+'?'))return;
+  PROJECTS=PROJECTS.filter(function(x){return x.id!==id;});renderProjectsGrid();
+}
+function setProjStatus(id,s){var p=PROJECTS.find(function(x){return x.id===id;});if(p){p.status=s;renderProjectsGrid();}}
+
+var ROLES={
+  ops:{label:'⚙️ OPS Manager',emoji:'⚙️',
+    nav:[
+      {s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},
+      {s:'Operations',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'},{id:'safety',i:'⬡',l:'Safety AI Suite'}]},
+      {s:'Business',items:[{id:'sales',i:'◉',l:'Sales Intel'},{id:'accounting',i:'◎',l:'Accounting'},{id:'knowledge',i:'◷',l:'Training Hub'},{id:'media',i:'◫',l:'Media'}]},
+      {s:'Admin',items:[{id:'users',i:'👥',l:'User Management'},{id:'projects',i:'📁',l:'Projects'}]}
+    ],
+    aiSys:'You are the ALGO GROUP logistics and transport OPS Manager AI assistant. You specialize in dispatch, fleet management, driver coordination, route optimization, FMCSA/DOT compliance, ELD monitoring, and Strategic Compliance Command Centre operations. Respond in English or Uzbek based on user preference.',
+    aiWelcome:'Hello! I\'m your OPS AI assistant. I can help with fleet operations, compliance, dispatch, or any operational questions.'
+  },
+  manager:{label:'👔 Support Manager',emoji:'👔',
+    nav:[{s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Monitoring',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Resources',items:[{id:'knowledge',i:'◷',l:'Training Hub'}]}],
+    aiSys:'You are the ALGO GROUP Support Manager AI assistant. You specialize in team management, KPI analysis, driver management, Telegram message analysis, fleet efficiency, and operational decisions. Respond in English.',
+    aiWelcome:'Hello! I\'m the Support Manager AI assistant. I can help with team responses, KPI analysis, or operational issues.'
+  },
+  sales:{label:'💼 Sales Rep',emoji:'💼',
+    nav:[{s:'Sales',items:[{id:'sales',i:'◉',l:'Sales Intel + Pipeline'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Help',items:[{id:'ai',i:'◌',l:'Sales AI'}]}],
+    aiSys:'You are the ALGO GROUP trucking sales AI assistant. You specialize in freight pricing (per mile, per load), broker negotiations, shipper acquisition, sales scripts, objection handling, call strategies, ALGO SalesIntel call intelligence, and FMCSA/ELD knowledge. Give concrete, actionable sales advice with per-call-minute efficiency.',
+    aiWelcome:'Hello! I\'m your Sales AI assistant. I can help with call scoring, pricing strategy, lead qualification, or handling carrier objections. I also know trucking and ELD regulations.'
+  },
+  accounting:{label:'📊 Accountant',emoji:'📊',
+    nav:[{s:'Finance',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'accounting',i:'◎',l:'Accounting + IFTA'},{id:'ai',i:'◌',l:'AI Assistant'}]}],
+    aiSys:'You are the ALGO GROUP trucking accounting AI assistant. You specialize in IFTA tax reporting and mileage reconciliation, driver settlements, owner-operator pay, fuel surcharge, Algo Expenses Telegram integration, factoring, trucking P&L, detention pay, and lumper fees. Provide precise answers with numbers and formulas.',
+    aiWelcome:'Hello! I\'m your Accounting AI assistant. Ask me about IFTA audit, driver settlements, invoices, or expense management.'
+  },
+  media:{label:'📱 Media Manager',emoji:'📱',
+    nav:[{s:'Media',items:[{id:'media',i:'◫',l:'Media Analytics'},{id:'ai',i:'◌',l:'AI Strategist'}]}],
+    aiSys:'You are the ALGO GROUP trucking company social media marketing AI strategist. You specialize in YouTube and Instagram analytics, content strategy, trucking niche hashtags, posting schedules, engagement optimization, video ideas, and marketing campaigns.',
+    aiWelcome:'Hello! I\'m your Media AI Strategist. I can help with YouTube/Instagram analytics, content strategy, or marketing campaigns.'
+  },
+  safety:{label:'🛡️ Safety Officer',emoji:'🛡️',
+    nav:[{s:'Safety',items:[{id:'safety',i:'⬡',l:'Safety AI Suite'},{id:'ai',i:'◌',l:'Safety AI'}]}],
+    aiSys:'You are the ALGO GROUP AG Safety AI Suite assistant — your personal AI Safety Director. You specialize in DOT/FMCSA regulations, all 387 FMCSA violation codes (SMS Appendix A), CSA scores, OOS calculator, Decay Timeline algorithm (0-6 months ×3, 6-12 months ×2, 12-24 months ×1, >24 months ×0), HOS compliance, DVIR, cargo securement, drug testing, and DataQ dispute letter writing. Respond in English, Uzbek, or Russian based on user preference.',
+    aiWelcome:'Hello! I\'m AG Safety AI — your personal Safety Director. I can help with FMCSA violation analysis, OOS scoring, DataQ dispute letters, or DOT compliance. I know all 387 FMCSA codes and the Decay Timeline algorithm.'
+  }
+};
+
+// ═══ STATE ═══
+var cu=null,chats={general:[],safety:[],sales:[],accounting:[],knowledge:[]},fContent='',fName='';
+var callSec=0,callInt=null,callOn=false;
+var mediaPeriod='monthly';
+var mData={
+  daily:  {ytv:'1,820',ytl:'68',ytc:'12',ytu:'0',ytw:'94h',igv:'1,240',igl:'48',igc:'11',igs:'8',igsv:'18',chart:[820,1020,740,1180,960,1340,1820],lbl:['Dush','Sesh','Chor','Pay','Jum','Sha','Yak']},
+  weekly: {ytv:'12,480',ytl:'480',ytc:'84',ytu:'2',ytw:'640h',igv:'8,640',igl:'336',igc:'77',igs:'56',igsv:'128',chart:[9800,11200,10400,12480,10100,11800,12480],lbl:['H-1','H-2','H-3','H-4','H-5','H-6','H-7']},
+  monthly:{ytv:'48,200',ytl:'1,840',ytc:'312',ytu:'8',ytw:'3.4K h',igv:'35,800',igl:'1,360',igc:'328',igs:'214',igsv:'487',chart:[38000,41000,44000,42000,46000,48200],lbl:['Dec','Jan','Feb','Mar','Apr','May']},
+  quarterly:{ytv:'142,000',ytl:'5,400',ytc:'920',ytu:'24',ytw:'9.8K h',igv:'104,000',igl:'3,960',igc:'940',igs:'640',igsv:'1,420',chart:[96000,112000,128000,142000],lbl:['Q2\'25','Q3\'25','Q4\'25','Q1\'26']},
+  yearly:{ytv:'580,000',ytl:'22,000',ytc:'3,840',ytu:'96',ytw:'42K h',igv:'420,000',igl:'16,000',igc:'3,800',igs:'2,600',igsv:'5,800',chart:[280000,360000,440000,520000,580000],lbl:['2022','2023','2024','2025','2026']}
+};
+
+// ═══ AUTH ═══
+function doLogin(){
+  var em=document.getElementById('lEmail').value.trim().toLowerCase();
+  var pw=document.getElementById('lPass').value;
+  document.getElementById('eErr').style.display='none';
+  document.getElementById('pErr').style.display='none';
+  document.getElementById('lEmail').classList.remove('err');
+  document.getElementById('lPass').classList.remove('err');
+  if(!em||!em.includes('@')){document.getElementById('eErr').style.display='block';document.getElementById('lEmail').classList.add('err');return;}
+  var user=USERS.find(function(u){return u.email===em&&u.pass===pw;});
+  if(!user){document.getElementById('pErr').style.display='block';document.getElementById('lPass').classList.add('err');return;}
+  cu=user;
+  try{setupApp();}catch(e){console.error(e);alert('Violation: '+e.message);}
+}
+function doLogout(){
+  cu=null;
+  var ls=document.getElementById('loginScreen'),ap=document.getElementById('app');
+  ls.classList.remove('hiding');ls.style.opacity='1';ls.style.pointerEvents='';ls.style.display='';
+  ap.style.display='none';ap.style.opacity='0';ap.classList.remove('visible');
+  document.getElementById('lEmail').value='';document.getElementById('lPass').value='';
+}
+
+function setupApp(){
+  var r=ROLES[cu.role];
+  var html='';
+  r.nav.forEach(function(sec){
+    html+='<div class="nsec"><div class="nsl">'+sec.s+'</div>';
+    sec.items.forEach(function(it){html+='<button class="ni" onclick="showPage(\''+it.id+'\')" id="nav-'+it.id+'"><span class="nd"></span><span class="nic">'+it.i+'</span>'+it.l+'</button>';});
+    html+='</div>';
+  });
+  document.getElementById('navWrap').innerHTML=html;
+  document.getElementById('sRoleL').textContent=r.label;
+  document.getElementById('sAvt').textContent=cu.initials;
+  document.getElementById('sAvt').style.background=cu.color;
+  document.getElementById('sName').textContent=cu.name;
+  document.getElementById('sEmail').textContent=cu.email;
+  initAI('general',r.aiSys,r.aiWelcome);
+  initAI('safety',ROLES.safety.aiSys,'Salom! Men AG Safety AI. DOT compliance, FMCSA violations, DataQ dispute letter yoki hujjat tahlili bo\'yicha yordam bera olaman.');
+  initAI('sales',ROLES.sales.aiSys,'Salom! Men Sales AI. Call scoring, pricing strategy yoki carrier objections bo\'yicha savol bering.');
+  initAI('accounting',ROLES.accounting.aiSys,'Salom! Men Accounting AI. IFTA, settlement, invoice yoki expense masalalarida yordam bera olaman.');
+  initAI('knowledge',ROLES.knowledge?ROLES.knowledge.aiSys:r.aiSys,'Hello! I am your Training AI Agent — available 24/7. Ask me about ELD, HOS, Safety, DOT regulations, or anything else.');
+  var at=document.getElementById('aiPageTitle');if(at)at.textContent=r.emoji+' '+cu.name.split(' ')[0]+' AI';
+  var ap=document.getElementById('app');
+  var ls=document.getElementById('loginScreen');
+  ls.style.opacity='0';ls.style.pointerEvents='none';
+  ap.style.display='flex';
+  setTimeout(function(){ap.style.opacity='1';ls.style.display='none';},80);
+  showPage(r.nav[0].items[0].id);
+  buildDBChart();buildMediaChart('monthly');
+  // Preload Leaflet for instant ELD map
+  if(typeof L==='undefined'){
+    var lflt=document.createElement('script');
+    lflt.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    document.head.appendChild(lflt);
+  }
+}
+
+// ═══ NAVIGATION ═══
+var pageMeta={dashboard:['Dashboard','Overview'],eld:['ELD · Command Centre','Monitor → Detect → Resolve'],safety:['Safety AI Suite','AG Safety · DOT · FMCSA'],kpi:['KPI','Performance Metrics'],sales:['Sales Intel','AI Call Intelligence'],accounting:['Accounting','IFTA · Invoices · Expenses'],knowledge:['Training Hub','Algo Learning Platform'],media:['Media Center','Analytics'],ai:['AI Assistant','Intelligent Help'],users:['User Management','Add · Edit · Remove users'],projects:['Projects','OPS Projects · Team visibility']};
+function showPage(key){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active');});
+  var pg=document.getElementById('pg-'+key);if(!pg)return;
+  pg.classList.add('active');
+  var nb=document.getElementById('nav-'+key);if(nb)nb.classList.add('active');
+  var m=pageMeta[key]||[key,''];
+  document.getElementById('pgTitle').textContent=m[0];
+  document.getElementById('pgBadge').textContent=m[1];
+  if(key==='kpi')renderKPI();
+  if(key==='eld')setTimeout(buildELDMap,100);
+  if(key==='users')setTimeout(renderUsersTable,30);
+  if(key==='projects')setTimeout(renderProjectsGrid,30);
+  animNums();
+}
+
+// ═══ TAB HELPERS ═══
+function setSafetyTab(t,btn){
+  ['ai','analyzer','dataq','audit'].forEach(function(x){var el=document.getElementById('sft-'+x);if(el)el.style.display='none';});
+  var el=document.getElementById('sft-'+t);if(el)el.style.display='block';
+  document.querySelectorAll('#safetyTabs .tab').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+}
+function setSalesTab(t,btn){
+  ['intel','pipeline','digest','ai'].forEach(function(x){var el=document.getElementById('slt-'+x);if(el)el.style.display='none';});
+  var el=document.getElementById('slt-'+t);if(el)el.style.display='block';
+  document.querySelectorAll('.tabs .tab').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+}
+function setAccTab(t,btn){
+  ['ifta','invoices','expenses','ai'].forEach(function(x){var el=document.getElementById('act-'+x);if(el)el.style.display='none';});
+  var el=document.getElementById('act-'+t);if(el)el.style.display='block';
+  if(btn){btn.parentNode.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+}
+function setKnowTab(t,btn){
+  ['modules','onboard','diploma','ai'].forEach(function(x){var el=document.getElementById('knt-'+x);if(el)el.style.display='none';});
+  var el=document.getElementById('knt-'+t);if(el)el.style.display='block';
+  if(btn){btn.parentNode.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+}
+
+// ═══ KPI ═══
+function renderKPI(){
+  var role=cu.role,el=document.getElementById('kpiContent');
+  if(role==='ops'){el.innerHTML=kpiOPS();setTimeout(renderKPIops,30);}
+  else if(role==='manager')el.innerHTML=kpiMGR();
+  else if(role==='sales')el.innerHTML=kpiSales();
+  else el.innerHTML='<div style="text-align:center;padding:60px;color:var(--g600);font-size:14px">No KPI available for this role</div>';
+  if(role==='sales')initCallTimer();
+}
+// ─── KPI DATA ───
+var KPI_DATA = [
+  {id:'D415',shift:'Night',s:453,cy:125,br:316,bol:5,nw:1,ex:324,fi:148,pl:0,up:21,ca:254,min:1073,total:1647,pts:906.50},
+  {id:'B115',shift:'Day',  s:407,cy:93, br:280,bol:0,nw:2,ex:274,fi:111,pl:0,up:8, ca:97, min:474, total:1272,pts:653.75},
+  {id:'H385',shift:'Main', s:254,cy:95, br:91, bol:0,nw:2,ex:209,fi:189,pl:0,up:1, ca:167,min:686, total:1008,pts:570.25},
+  {id:'L860',shift:'Day',  s:499,cy:86, br:224,bol:0,nw:0,ex:234,fi:48, pl:0,up:10,ca:49, min:161, total:1150,pts:563.25},
+  {id:'C465',shift:'Night',s:290,cy:102,br:269,bol:0,nw:0,ex:339,fi:37, pl:0,up:0, ca:56, min:264, total:1093,pts:559.00},
+  {id:'C920',shift:'Main', s:297,cy:111,br:66, bol:0,nw:4,ex:130,fi:221,pl:0,up:0, ca:129,min:472, total:958, pts:518.25},
+  {id:'S145',shift:'Main', s:247,cy:79, br:47, bol:4,nw:4,ex:54, fi:120,pl:0,up:3, ca:126,min:451, total:684, pts:390.75},
+  {id:'N950',shift:'Night',s:237,cy:81, br:67, bol:0,nw:1,ex:101,fi:34, pl:0,up:5, ca:35, min:158, total:561, pts:317.00},
+  {id:'A210',shift:'Day',  s:198,cy:64, br:42, bol:2,nw:0,ex:88, fi:72, pl:0,up:2, ca:44, min:122, total:512, pts:288.50},
+];
+var kpiRankBy='all',kpiRange='month',kpiShift='all',kpiFiltered=KPI_DATA.slice();
+
+function kpiOPS(){
+  return '<div id="kpiOpsRoot"></div>';
+}
+function renderKPIops(){
+  var el=document.getElementById('kpiOpsRoot');if(!el)return;
+  // Filter
+  kpiFiltered=KPI_DATA.filter(function(d){
+    if(kpiShift!=='all'&&d.shift.toLowerCase()!==kpiShift.toLowerCase())return false;
+    return true;
+  }).sort(function(a,b){return b.pts-a.pts;});
+
+  var shiftColor={Day:'#3b82f6',Night:'#8b5cf6',Main:'#22c55e'};
+  var shiftBg={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(34,197,94,.15)'};
+
+  // Chart points
+  var months=['Jan','Feb','Mar','Apr','May'];
+  var chartData=[
+    {id:'D415',col:'#f59e0b',vals:[0,80,220,580,906.50]},
+    {id:'B115',col:'#6366f1',vals:[0,60,180,420,653.75]},
+    {id:'H385',col:'#ec4899',vals:[0,40,140,320,570.25]},
+  ];
+
+  el.innerHTML =
+  // TOP SECTION: chart + leaderboard
+  '<div style="display:grid;grid-template-columns:1fr 320px;gap:0;border-radius:14px;overflow:hidden;border:1px solid var(--bdr2);box-shadow:var(--sh2);margin-bottom:18px;background:var(--white)">'
+  // Chart
+  +'<div style="padding:20px 24px 16px;border-right:1px solid var(--bdr2)">'
+  +'<div style="font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Total Points Over Time</div>'
+  +'<div style="position:relative;height:180px">'
+  +'<canvas id="kpiChart" width="700" height="180" style="width:100%;height:100%"></canvas>'
+  +'</div>'
+  +'<div style="display:flex;gap:16px;margin-top:10px">'
+  +chartData.map(function(c){return '<div style="display:flex;align-items:center;gap:5px"><span style="width:24px;height:3px;background:'+c.col+';border-radius:2px;display:inline-block"></span><span style="font-size:11.5px;color:var(--g600)">'+c.id+'</span></div>';}).join('')
+  +'</div>'
+  +'</div>'
+  // Leaderboard
+  +'<div style="background:var(--white)">'
+  +'<div style="padding:16px 18px 10px;font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--bdr2)">Leaderboard</div>'
+  +kpiFiltered.slice(0,3).map(function(d,i){
+    var medals=['🥇','🥈','🥉'],bg=['linear-gradient(90deg,rgba(251,191,36,.12),transparent)','linear-gradient(90deg,rgba(156,163,175,.1),transparent)','linear-gradient(90deg,rgba(205,127,50,.1),transparent)'];
+    var bc=['rgba(251,191,36,.3)','rgba(156,163,175,.25)','rgba(205,127,50,.25)'];
+    return '<div style="padding:14px 18px;border-bottom:1px solid var(--bdr2);background:'+bg[i]+';border-left:3px solid '+bc[i]+'">'
+    +'<div style="display:flex;align-items:center;gap:8px">'
+    +'<span style="font-size:20px">'+medals[i]+'</span>'
+    +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--g800)">'+d.id+'</div>'
+    +'<div style="font-size:11px;color:var(--g600)">'+(i===0?'1st':i===1?'2nd':'3rd')+' place</div></div>'
+    +'<div style="text-align:right"><div style="font-size:18px;font-weight:700;color:var(--g800);font-family:var(--fm)">'+d.pts.toFixed(2)+'</div>'
+    +'<div style="font-size:10px;color:var(--g600)">PTS</div></div>'
+    +'</div></div>';
+  }).join('')
+  +'</div>'
+  +'</div>'
+
+  // FILTERS
+  +'<div style="background:var(--white);border:1px solid var(--bdr2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:var(--sh1)">'
+  +'<div>'
+  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Rank By</div>'
+  +'<select class="fs" onchange="kpiRankBy=this.value;renderKPIops()" style="width:130px;font-size:12.5px">'
+  +'<option value="all">All Tasks</option>'
+  +'<option value="pts">Total Points</option>'
+  +'<option value="calls">Calls</option>'
+  +'<option value="min">Minutes</option>'
+  +'</select></div>'
+  +'<div>'
+  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Range</div>'
+  +'<select class="fs" onchange="kpiRange=this.value;renderKPIops()" style="width:150px;font-size:12.5px">'
+  +'<option value="month">Current Month</option>'
+  +'<option value="week">Current Week</option>'
+  +'<option value="quarter">Quarter</option>'
+  +'<option value="year">Year to Date</option>'
+  +'</select></div>'
+  +'<div>'
+  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Work Shift</div>'
+  +'<div style="display:flex;gap:2px;background:var(--g50);border:1px solid var(--bdr2);border-radius:8px;padding:3px">'
+  +['All','Day','Main','Night'].map(function(s){var active=kpiShift===(s==='All'?'all':s);return '<button onclick="kpiShift=\''+(s==='All'?'all':s)+'\';renderKPIops()" style="padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;border:none;cursor:pointer;font-family:var(--ff);background:'+(active?'var(--g600)':'transparent')+';color:'+(active?'#fff':'var(--g600)')+'">'+s+'</button>';}).join('')
+  +'</div></div>'
+  +'<div style="margin-left:auto"><button onclick="kpiShift=\'all\';kpiRankBy=\'all\';renderKPIops()" style="padding:7px 16px;border-radius:8px;font-size:12.5px;border:1px solid var(--bdr);background:transparent;color:var(--g700);cursor:pointer;font-family:var(--ff)">Reset</button></div>'
+  +'</div>'
+
+  // TABLE
+  +'<div class="card"><div class="ch"><span class="ct" style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border:2px solid var(--g400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--g600)">≡</span> TOTALS</span>'
+  +'<span style="font-size:12px;color:var(--g600)">Showing 1–'+kpiFiltered.length+' of '+kpiFiltered.length+' entries</span>'
+  +'</div>'
+  +'<div style="overflow-x:auto"><table style="min-width:1100px">'
+  +'<thead><tr>'
+  +'<th style="width:50px">Rank</th>'
+  +'<th>Employee</th>'
+  +'<th>Work Shift</th>'
+  +'<th>Shift</th><th>Cycle</th><th>Break</th>'
+  +'<th>BOL</th><th>New</th><th>Extra</th><th>Filled</th>'
+  +'<th>Paperlog</th><th>Update</th><th>Calls</th><th>Minutes</th>'
+  +'<th style="font-weight:700">Total</th>'
+  +'<th style="font-weight:700;color:var(--g600)">Total (Pts)</th>'
+  +'</tr></thead><tbody>'
+  +kpiFiltered.map(function(d,i){
+    var rank=i+1;
+    var medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+    var sc=shiftColor[d.shift]||'#888',sb=shiftBg[d.shift]||'rgba(100,100,100,.12)';
+    var isTop=rank<=3;
+    return '<tr style="'+(isTop?'background:rgba(142,182,155,.03)':'')+'">'
+    +'<td style="text-align:center"><span style="font-size:'+(medal?'18px':'13px')+';font-weight:700;color:var(--g700)">'+(medal||rank)+'</span></td>'
+    +'<td style="font-weight:600;color:var(--g800);font-family:var(--fm)">'+d.id+'</td>'
+    +'<td><span style="background:'+sb+';color:'+sc+';border:1px solid '+sc+'44;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+d.shift+'</span></td>'
+    +'<td style="font-family:var(--fm)">'+d.s+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.cy+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.br+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.bol+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.nw+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.ex+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.fi+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.pl+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.up+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.ca+'</td>'
+    +'<td style="font-family:var(--fm)">'+d.min+'</td>'
+    +'<td style="font-weight:700;font-family:var(--fm);color:var(--g800)">'+d.total+'</td>'
+    +'<td style="font-weight:700;font-family:var(--fm);color:var(--g600)">'+d.pts.toFixed(2)+'</td>'
+    +'</tr>';
+  }).join('')
+  +'</tbody></table></div></div>';
+
+  // Draw chart
+  setTimeout(function(){
+    var canvas=document.getElementById('kpiChart');
+    if(!canvas)return;
+    var W=canvas.offsetWidth||700,H=180;
+    canvas.width=W*2;canvas.height=H*2;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';
+    var ctx=canvas.getContext('2d');ctx.scale(2,2);
+    ctx.clearRect(0,0,W,H);
+    // Grid
+    var maxV=1000,pad={t:10,r:10,b:30,l:44};
+    var cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+    // Y axis labels
+    ctx.font='10px DM Mono,monospace';ctx.fillStyle='rgba(142,182,155,.5)';ctx.textAlign='right';
+    [0,2000,4000,6000,8000].forEach(function(v){
+      var y=pad.t+ch-(v/8000)*ch;
+      ctx.fillText(v===0?'0':v>=1000?(v/1000)+'k':v,pad.l-6,y+3);
+      ctx.strokeStyle='rgba(142,182,155,.06)';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+    });
+    // X labels
+    ctx.textAlign='center';ctx.fillStyle='rgba(142,182,155,.5)';
+    months.forEach(function(m,i){ctx.fillText(m,pad.l+(i/(months.length-1))*cw,H-pad.b+14);});
+    // Lines
+    chartData.forEach(function(series){
+      ctx.beginPath();
+      series.vals.forEach(function(v,i){
+        var x=pad.l+(i/(months.length-1))*cw;
+        var y=pad.t+ch-(v/8000)*ch;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      });
+      ctx.strokeStyle=series.col;ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();
+      // Dots
+      series.vals.forEach(function(v,i){
+        var x=pad.l+(i/(months.length-1))*cw,y=pad.t+ch-(v/8000)*ch;
+        ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);
+        ctx.fillStyle=series.col;ctx.fill();
+        ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+      });
+    });
+  },60);
+}
+function kpiMGR(){return '<div class="sg"><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📨</span><div class="sv" data-count="284">0</div><div class="sl">Telegram messages</div><span class="sc-c cup">↑ 12%</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⚡</span><div class="sv">8.4 min</div><div class="sl">Avg response time</div><span class="sc-c cup">↓ 1.2 min</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">👥</span><div class="sv" data-count="23">0</div><div class="sl">Active members</div><span class="sc-c cup">↑ 3</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">✅</span><div class="sv">94.2%</div><div class="sl">Response rate</div><span class="sc-c cup">↑ 2.1%</span></div></div><div class="g2"><div class="card"><div class="ch"><span class="ct">🤖 Telegram Bot Connection</span><span id="tgSt" class="badge bn">Disconnected</span></div><div class="cb"><div class="fg"><label class="fl">Bot Token</label><input class="fi" id="tgTok" type="password" placeholder="7xxxxxxxxxx:AAxx..."></div><div class="fg"><label class="fl">Group Chat ID</label><input class="fi" id="tgCid" placeholder="-100xxxxxxxxxx"></div><div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="connTG()" style="flex:1">Connect →</button><button class="btn bg_ bsm" onclick="disconnTG()">Disconnect</button></div><div id="tgInf" style="display:none;margin-top:10px"><span class="badge bg">✓ Telegram ulangan</span></div></div></div><div class="card"><div class="ch"><span class="ct">Member responses</span><button class="btn bg_ bsm" onclick="refTG()">↻</button></div><div class="cb" id="tgMsgs"><div class="tgmsg"><div class="tgav">JM</div><div style="flex:1"><div class="tgn">J. Martinez</div><div class="tgt">Yuk yetkazildi. Keyingi reys uchun tayyor.</div></div><div class="tgtime">14:32</div></div><div class="tgmsg"><div class="tgav">RJ</div><div style="flex:1"><div class="tgn">R. Johnson</div><div class="tgt">Chicago — 45 min delay. Traffic.</div></div><div class="tgtime">14:18</div></div><div class="tgmsg"><div class="tgav">KW</div><div style="flex:1"><div class="tgn">K. Williams</div><div class="tgt">Fuel dolgan. Receipt yuborildi.</div></div><div class="tgtime">13:55</div></div></div></div></div>';}
+function kpiSales(){return '<div class="sg"><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📞</span><div class="sv" data-count="47">0</div><div class="sl">Calls Today</div><span class="sc-c cup">↑ 8</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⏱️</span><div class="sv">4.2 min</div><div class="sl">Avg call duration</div></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💰</span><div class="sv">$3.80</div><div class="sl">Revenue / call min</div><span class="sc-c cup">↑ $0.40</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🎯</span><div class="sv">38%</div><div class="sl">Conversion</div><span class="sc-c cup">↑ 3%</span></div></div><div class="g2"><div class="card"><div class="ch"><span class="ct">📞 Call Timer — Per-Minute KPI</span></div><div class="cb"><div class="ctimer"><div class="ctime" id="callDisp">00:00</div><div style="font-size:12px;color:var(--g600);margin-top:6px" id="callSt">Ready</div><div style="display:flex;gap:10px;justify-content:center;margin-top:16px"><button class="btn bp" onclick="togCall()" id="callBtn">▶ Start</button><button class="btn bg_" onclick="rstCall()">↺ Reset</button><button class="btn bg_" id="logBtn" style="display:none" onclick="lgCall()">📋 Log call</button></div></div></div></div><div class="card"><div class="ch"><span class="ct">Call journal</span></div><div class="cb" style="padding:0"><table><thead><tr><th>Time</th><th>Client</th><th>Duration</th><th>Result</th></tr></thead><tbody id="callLog"><tr><td style="font-family:var(--fm);font-size:11px">09:14</td><td>Prime Freight</td><td>6:32</td><td><span class="badge bg">Deal ✓</span></td></tr><tr><td style="font-family:var(--fm);font-size:11px">10:02</td><td>Global Cargo</td><td>3:18</td><td><span class="badge bn">Follow up</span></td></tr><tr><td style="font-family:var(--fm);font-size:11px">11:30</td><td>FastLoad Inc</td><td>8:45</td><td><span class="badge bg">Deal ✓</span></td></tr></tbody></table></div></div></div>';}
+
+// ═══ CALL TIMER ═══
+function initCallTimer(){callSec=0;callOn=false;}
+function togCall(){
+  callOn=!callOn;
+  var btn=document.getElementById('callBtn'),st=document.getElementById('callSt'),lb=document.getElementById('logBtn');
+  if(callOn){btn.textContent='⏸ Pause';st.textContent='Qo\'ng\'iroq in progress...';if(lb)lb.style.display='none';
+    callInt=setInterval(function(){callSec++;var m=Math.floor(callSec/60).toString().padStart(2,'0'),s=(callSec%60).toString().padStart(2,'0');var d=document.getElementById('callDisp');if(d)d.textContent=m+':'+s;},1000);
+  }else{clearInterval(callInt);btn.textContent='▶ Resume';st.textContent='Paused';if(lb)lb.style.display='inline-flex';}
+}
+function rstCall(){clearInterval(callInt);callSec=0;callOn=false;var d=document.getElementById('callDisp');if(d)d.textContent='00:00';var b=document.getElementById('callBtn');if(b)b.textContent='▶ Start';var s=document.getElementById('callSt');if(s)s.textContent='Ready';var l=document.getElementById('logBtn');if(l)l.style.display='none';}
+function lgCall(){
+  var m=Math.floor(callSec/60),s=callSec%60,dur=m+':'+(s.toString().padStart(2,'0'));
+  var n=new Date(),tm=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+  var log=document.getElementById('callLog');
+  if(log){var tr=document.createElement('tr');tr.innerHTML='<td style="font-family:var(--fm);font-size:11px">'+tm+'</td><td>New mijoz</td><td>'+dur+'</td><td><span class="badge bn">Logged</span></td>';log.insertBefore(tr,log.firstChild);}
+  rstCall();
+}
+
+// ═══ ELD ═══
+function connectELD(t){
+  var tok=document.getElementById(t+'Tok').value.trim();if(!tok){alert('Please enter a token!');return;}
+  document.getElementById(t+'St').className='badge bg';document.getElementById(t+'St').textContent='Connected';
+  document.getElementById(t+'Inf').style.display='block';buildELDMap();
+}
+function disconnELD(t){
+  document.getElementById(t+'St').className='badge bn';document.getElementById(t+'St').textContent='Disconnected';
+  document.getElementById(t+'Inf').style.display='none';
+}
+var ELD_DRIVERS=[
+  {id:'1407',name:'Bekhruz Shamsov',loc:'1.4mi SE of Tedrow, OH',speed:64,status:'DR',hos:'4h 32m left',moving:'43m 28s',lat:41.35,lng:-84.02},
+  {id:'836135',name:'Amin Ghulomiddinov',loc:'2.7mi WNW of Scott, IN',speed:69,status:'DR',hos:'6h 18m left',moving:'40m 28s',lat:40.92,lng:-85.44},
+  {id:'832214',name:'Khurshed Choriev',loc:'0.8mi NNE of Birmingham, OH',speed:60,status:'DR',hos:'2h 08m left',moving:'4h 54m',lat:40.67,lng:-84.24},
+  {id:'554987',name:'Kamol Komilov',loc:'1.4mi S of Page, IN',speed:37,status:'DR',hos:'5h 41m left',moving:'3h 27m',lat:41.54,lng:-85.61},
+  {id:'751853',name:'Botirjon Mamatkulov',loc:'0.6mi E of Parkertown, OH',speed:70,status:'DR',hos:'3h 22m left',moving:'4h 10m',lat:40.48,lng:-83.92},
+  {id:'261077',name:'Sanat Akhrorkulov',loc:'2.2mi NE of Orland, IN',speed:68,status:'DR',hos:'7h 12m left',moving:'2h 27m',lat:41.73,lng:-85.16},
+  {id:'768991',name:'Jahongir Tursunov',loc:'3.1mi W of Columbus, OH',speed:55,status:'DR',hos:'5h 55m left',moving:'1h 38m',lat:39.96,lng:-83.09},
+  {id:'445221',name:'Eldor Yusupov',loc:'4.1mi W of Chicago, IL',speed:52,status:'DR',hos:'8h 02m left',moving:'2h 15m',lat:41.88,lng:-87.93},
+  {id:'332109',name:'Mansur Holiqov',loc:'1.2mi S of Atlanta, GA',speed:61,status:'DR',hos:'4h 44m left',moving:'1h 58m',lat:33.64,lng:-84.35},
+  {id:'561004',name:'Akbar Toshmatov',loc:'2.5mi W of Memphis, TN',speed:58,status:'DR',hos:'6h 30m left',moving:'3h 02m',lat:35.12,lng:-90.11},
+  {id:'223890',name:'Firdavs Xoliqov',loc:'1.9mi E of Phoenix, AZ',speed:71,status:'DR',hos:'5h 11m left',moving:'2h 44m',lat:33.47,lng:-111.94},
+  {id:'673028',name:'Ilhom Qodirov',loc:'2.1mi S of Miami, FL',speed:64,status:'DR',hos:'3h 48m left',moving:'1h 22m',lat:25.62,lng:-80.35},
+  {id:'719834',name:'Nodir Mirzaev',loc:'0.5mi E of Dallas, TX',speed:0,status:'ON',hos:'On duty 2h',moving:'Loading',lat:32.78,lng:-96.74},
+  {id:'556537',name:'Dilshod Nazarov',loc:'1.8mi N of Elko, NV',speed:0,status:'SB',hos:'Sleeper berth',moving:'Stopped',lat:40.88,lng:-115.76},
+  {id:'883012',name:'Sherzod Raimov',loc:'3.0mi N of Denver, CO',speed:0,status:'SB',hos:'Sleeper berth',moving:'Stopped',lat:39.82,lng:-104.88},
+  {id:'447193',name:'Behruz Sultonov',loc:'1.3mi W of Houston, TX',speed:0,status:'SB',hos:'Sleeper berth',moving:'Stopped',lat:29.75,lng:-95.44},
+  {id:'808480',name:'Rustam Karimov',loc:'2.0mi SE of Barstow, CA',speed:0,status:'OFF',hos:'Off duty',moving:'Parked',lat:34.88,lng:-116.98},
+  {id:'994417',name:'Sanjar Askarov',loc:'0.8mi N of Seattle, WA',speed:0,status:'OFF',hos:'Off duty',moving:'Parked',lat:47.72,lng:-122.33},
+];
+var eldFiltered=ELD_DRIVERS.slice(),eldSelected=null,eldMap=null,eldMarkers={};
+var ELD_COL={DR:'#3bac70',ON:'#3b82f6',SB:'#fbbf24',OFF:'#6b7280'};
+var ELD_BG={DR:'rgba(59,172,112,.18)',ON:'rgba(59,130,246,.15)',SB:'rgba(251,191,36,.12)',OFF:'rgba(107,114,128,.12)'};
+
+function filterDrivers(q){
+  q=q.toLowerCase();
+  eldFiltered=q?ELD_DRIVERS.filter(function(d){return d.id.includes(q)||d.name.toLowerCase().includes(q)||d.status.toLowerCase().includes(q);}):ELD_DRIVERS.slice();
+  renderDriverList();
+  if(eldMap){
+    ELD_DRIVERS.forEach(function(d){
+      var m=eldMarkers[d.id];if(!m)return;
+      var inFilter=!!eldFiltered.find(function(f){return f.id===d.id;});
+      m.setOpacity(inFilter?1:.15);
+    });
+  }
+}
+function renderDriverList(){
+  var el=document.getElementById('eldDriverList');if(!el)return;
+  el.innerHTML=eldFiltered.map(function(d){
+    var c=ELD_COL[d.status]||'#6b7280',b=ELD_BG[d.status]||'rgba(107,114,128,.1)';
+    var isSel=eldSelected&&eldSelected.id===d.id;
+    return '<div onclick="selectDriver(\''+d.id+'\')" style="padding:12px 14px;border-bottom:1px solid rgba(142,182,155,.07);cursor:pointer;background:'+(isSel?'rgba(142,182,155,.12)':'transparent')+';transition:background .13s"'
+    +' onmouseenter="this.style.background=\'rgba(142,182,155,.08)\'" onmouseleave="this.style.background=\''+(isSel?'rgba(142,182,155,.12)':'transparent')+'\'">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
+    +'<span style="font-size:12.5px;font-weight:700;color:#DAF1DE;font-family:var(--fm)">'+d.id+'</span>'
+    +(d.speed>0?'<span style="margin-left:auto;background:#0d3320;border:1px solid #1a5c32;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:700;color:#4ade80;font-family:var(--fm)">'+d.speed+' mph</span>':'<span style="margin-left:auto;background:rgba(107,114,128,.12);border:1px solid rgba(107,114,128,.18);border-radius:5px;padding:1px 8px;font-size:11px;color:#9ca3af;font-family:var(--fm)">Stopped</span>')
+    +'</div>'
+    +'<div style="font-size:11px;color:rgba(142,182,155,.55);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📍 '+d.loc+'</div>'
+    +'<div style="display:flex;align-items:center;gap:6px">'
+    +'<span style="font-size:11.5px;font-weight:500;color:#a7c8b0">'+d.name+'</span>'
+    +'<span style="margin-left:auto;background:'+b+';border:1px solid '+c+'55;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;color:'+c+';font-family:var(--fm)">'+d.status+'</span>'
+    +'</div>'
+    +'<div style="margin-top:4px;font-size:10px;color:rgba(142,182,155,.42)">⏱ '+d.moving+'&nbsp;&nbsp;·&nbsp;&nbsp;HOS: '+d.hos+'</div>'
+    +'</div>';
+  }).join('');
+}
+function selectDriver(id){
+  eldSelected=ELD_DRIVERS.find(function(d){return d.id===id;})||null;
+  renderDriverList();
+  if(eldMap&&eldSelected){
+    eldMap.setView([eldSelected.lat,eldSelected.lng],9,{animate:true});
+    var m=eldMarkers[id];if(m)m.openPopup();
+  }
+}
+function buildELDMap(){
+  renderDriverList();
+  if(!document.getElementById('eldLeafletMap'))return;
+  // Load Leaflet if not loaded
+  if(typeof L==='undefined'){
+    var s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    s.onload=function(){initLeafletMap();};
+    document.head.appendChild(s);
+  } else {
+    initLeafletMap();
+  }
+}
+function initLeafletMap(){
+  var mapEl=document.getElementById('eldLeafletMap');
+  if(!mapEl||mapEl._leaflet_id){
+    // Already initialized — just refresh markers
+    refreshMarkers();return;
+  }
+  eldMap=L.map('eldLeafletMap',{zoomControl:true,attributionControl:true}).setView([38.5,-96],4);
+  // Dark OSM tiles
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://carto.com">CARTO</a>',
+    subdomains:'abcd',maxZoom:19
+  }).addTo(eldMap);
+  refreshMarkers();
+  // Live update every 5s
+  setInterval(function(){
+    ELD_DRIVERS.forEach(function(d){
+      if(d.status==='DR'&&d.speed>0){
+        d.speed=Math.max(38,Math.min(75,d.speed+Math.round((Math.random()-.5)*6)));
+        d.lat+=((Math.random()-.5)*.04);
+        d.lng+=((Math.random()-.5)*.06);
+        var m=eldMarkers[d.id];
+        if(m){m.setLatLng([d.lat,d.lng]);m.setPopupContent(makePopup(d));}
+      }
+    });
+    renderDriverList();
+    var el=document.getElementById('eldDRNum');if(el)el.textContent=ELD_DRIVERS.filter(function(d){return d.status==='DR';}).length;
+  },5000);
+}
+function makePopup(d){
+  var c=ELD_COL[d.status]||'#6b7280';
+  return '<div style="font-family:DM Sans,sans-serif;min-width:160px">'
+    +'<div style="font-size:13px;font-weight:700;color:#DAF1DE;margin-bottom:5px">'+d.name+'</div>'
+    +'<div style="font-size:11px;color:#8EB69B;margin-bottom:2px">Vehicle <b style="color:#DAF1DE">#'+d.id+'</b></div>'
+    +'<div style="font-size:11px;margin-bottom:2px"><span style="color:#8EB69B">Status: </span><b style="color:'+c+'">'+d.status+'</b></div>'
+    +'<div style="font-size:11px;margin-bottom:2px"><span style="color:#8EB69B">Speed: </span><b style="color:#DAF1DE">'+(d.speed>0?d.speed+' mph':'Stopped')+'</b></div>'
+    +'<div style="font-size:11px;margin-bottom:2px"><span style="color:#8EB69B">HOS: </span><span style="color:#DAF1DE">'+d.hos+'</span></div>'
+    +'<div style="font-size:10px;color:rgba(142,182,155,.6);margin-top:4px">📍 '+d.loc+'</div>'
+    +'</div>';
+}
+function refreshMarkers(){
+  // Clear old
+  Object.values(eldMarkers).forEach(function(m){if(eldMap)eldMap.removeLayer(m);});
+  eldMarkers={};
+  ELD_DRIVERS.forEach(function(d){
+    var c=ELD_COL[d.status]||'#6b7280';
+    var icon=L.divIcon({
+      className:'',
+      html:'<div class="eld-marker-div" style="background:'+ELD_BG[d.status]+';border-color:'+c+';color:'+c+'">'+d.status+'</div>',
+      iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]
+    });
+    var marker=L.marker([d.lat,d.lng],{icon:icon})
+      .bindPopup(makePopup(d),{className:'eld-popup',maxWidth:220})
+      .on('click',function(){selectDriver(d.id);});
+    marker.addTo(eldMap);
+    eldMarkers[d.id]=marker;
+  });
+}
+
+// ═══ TG ═══
+function connTG(){var t=document.getElementById('tgTok');if(t&&!t.value.trim()){alert('Please enter a token!');return;}document.getElementById('tgSt').className='badge bg';document.getElementById('tgSt').textContent='✓ Connected';document.getElementById('tgInf').style.display='block';}
+function disconnTG(){document.getElementById('tgSt').className='badge bn';document.getElementById('tgSt').textContent='Disconnected';document.getElementById('tgInf').style.display='none';}
+function refTG(){var nm=['J. Martinez','R. Johnson','K. Williams','T. Brown'],in_=['JM','RJ','KW','TB'],msgs=['Trip completed, heading back.','Fuel stop — 20 min.','Load delayed, waiting.','Delivered, receipt yuborildi.'],i=Math.floor(Math.random()*nm.length),now=new Date(),tm=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0'),box=document.getElementById('tgMsgs');if(box){var el=document.createElement('div');el.className='tgmsg';el.style.animation='pi .3s ease';el.innerHTML='<div class="tgav">'+in_[i]+'</div><div style="flex:1"><div class="tgn">'+nm[i]+'</div><div class="tgt">'+msgs[Math.floor(Math.random()*msgs.length)]+'</div></div><div class="tgtime">'+tm+'</div>';box.insertBefore(el,box.firstChild);if(box.children.length>6)box.lastChild.remove();}}
+
+// ═══ SAFETY TOOLS ═══
+function analyzeFMCSA(){
+  var code=document.getElementById('fmcsaCode').value.trim(),dt=document.getElementById('inspDate').value;
+  if(!code){alert('Please enter a code!');return;}
+  var res=document.getElementById('fmcsaResult');
+  var months=dt?Math.round((new Date()-new Date(dt))/(30*24*3600*1000)):6;
+  var tw=months<=6?3:months<=12?2:months<=24?1:0;
+  res.style.display='block';
+  res.innerHTML='<strong>Kod: '+code+'</strong><br>Vaqt koeffitsienti ('+months+' oy): <strong style="color:'+(tw>=3?'#8b2020':tw>=2?'#8a5200':tw>=1?'#1a4f8a':'#1a6b3a')+'">×'+tw+'</strong><br><br>This violation is in the SMS BASIC category. Inspection was '+months+' months ago — '+(tw===0?'Per the Decay Timeline <strong style="color:#1a6b3a">TOZALANGAN</strong>!':tw===1?'Low impact (×1)':tw===2?'Moderate impact (×2)':'<strong style="color:#8b2020">Maximum impact (×3)</strong>. DataQ dispute recommended!')+'<br><br><em>For detailed analysis, chat with AI Advisor.</em>';
+}
+function setSafetyTab2(t,btn){setSafetyTab(t,btn);}
+function genDataQ(){
+  var code=document.getElementById('dqCode').value.trim(),ctx=document.getElementById('dqContext').value.trim();
+  if(!code&&!ctx){alert('Kod yoki kontekst kiriting!');return;}
+  var inp=document.getElementById('ai-inp-safety');if(!inp)return;
+  inp.value='Write a DataQ dispute letter: Kod: '+code+'. Kontekst: '+ctx+'. Create a legally correct, professional letter in English suitable for FMCSA inspectors.';
+  setSafetyTab('ai',document.querySelector('#safetyTabs .tab'));
+  setTimeout(function(){sendAI('safety');},100);
+}
+
+// ═══ FILE HANDLING ═══
+function pickFile(e){var f=e.target.files[0];if(f)procFile(f);}
+function dropFile(e){e.preventDefault();document.getElementById('safetyUpl').classList.remove('drag');var f=e.dataTransfer.files[0];if(f)procFile(f);}
+function procFile(f){fName=f.name;var r=document.getElementById('fileRow');document.getElementById('fName').textContent=f.name;document.getElementById('fSize').textContent=fmt(f.size)+' · '+f.type;if(r)r.style.display='flex';var rd=new FileReader();rd.onload=function(ev){fContent=ev.target.result.slice(0,8000);};rd.readAsText(f);}
+function analyzeFile(){var inp=document.getElementById('ai-inp-safety');if(!inp)return;inp.value='"'+fName+'" faylini logistics xavfsizlik nuqtai nazaridan tahlil qil:\n\n'+(fContent||'[Matn o\'qilmadi]')+'\n\n1. Asosiy topilmalar\n2. DOT/FMCSA muvofiqligi\n3. Risklar\n4. Tavsiyalar\n5. Xavfsizlik reytingi (100 ball)';setSafetyTab('ai',document.querySelector('#safetyTabs .tab'));setTimeout(function(){sendAI('safety');},100);}
+function fmt(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
+
+// ═══ IFTA ═══
+var iftaFile='',mvmtFile='';
+function loadIFTA(e){var f=e.target.files[0];if(f){iftaFile=f.name;document.getElementById('iftaUpl').style.borderColor='var(--g400)';document.getElementById('iftaUpl').innerHTML='<div style="font-size:22px;margin-bottom:6px">✅</div><div style="font-size:13px;font-weight:500;color:var(--g700)">'+f.name+'</div><div style="font-size:11.5px;color:var(--g600)">Uploaded</div>';}}
+function loadMvmt(e){var f=e.target.files[0];if(f){mvmtFile=f.name;document.getElementById('mvmtUpl').style.borderColor='var(--g400)';document.getElementById('mvmtUpl').innerHTML='<div style="font-size:20px;margin-bottom:6px">✅</div><div style="font-size:13px;font-weight:500;color:var(--g700)">'+f.name+'</div><div style="font-size:11.5px;color:var(--g600)">Uploaded</div>';}}
+function runIFTA(){alert('AI IFTA tahlil boshlandi! Haqiqiy API ulanish kerak. Batafsil: Accounting AI bilan gaplashing.');}
+
+// ═══ EXPENSES ═══
+function refreshExp(){var nm=['J. Martinez','R. Johnson','K. Williams'],in_=['JM','RJ','KW'],msgs=['Fuel: $145 — Dallas stop','Lumper fee: $60 — Chicago','Hotel: $89 — overnight Denver'],now=new Date(),tm=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0'),box=document.getElementById('expMsgs');if(box){var el=document.createElement('div');var i=Math.floor(Math.random()*nm.length);el.className='tgmsg';el.innerHTML='<div class="tgav">'+in_[i]+'</div><div style="flex:1"><div class="tgn">'+nm[i]+'</div><div class="tgt">'+msgs[i]+'</div></div><div class="tgtime">'+tm+'</div>';box.insertBefore(el,box.firstChild);if(box.children.length>6)box.lastChild.remove();}}
+
+// ═══ MEDIA ═══
+function setMPeriod(p,btn){
+  mediaPeriod=p;
+  document.querySelectorAll('#mediaTabs .tab').forEach(function(t){t.classList.remove('active');});if(btn)btn.classList.add('active');
+  var d=mData[p],lbl={daily:'Daily',weekly:'Weekly',monthly:'Monthly',quarterly:'Quarterly',yearly:'Yearly'}[p];
+  var ids={ytv:'yt-v',ytl:'yt-l',ytc:'yt-c',ytu:'yt-u',ytw:'yt-w',igv:'ig-v',igl:'ig-l',igc:'ig-c',igs:'ig-s',igsv:'ig-sv'};
+  var vals={ytv:d.ytv,ytl:d.ytl,ytc:d.ytc,ytu:d.ytu,ytw:d.ytw,igv:d.igv,igl:d.igl,igc:d.igc,igs:d.igs,igsv:d.igsv};
+  Object.keys(ids).forEach(function(k){var e=document.getElementById(ids[k]);if(e)e.textContent=vals[k];});
+  ['yt-pl','ig-pl'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=lbl;});
+  ['mvv','mll','mcc'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=id==='mvv'?d.ytv:id==='mll'?d.ytl:d.ytc;});
+  var cl=document.getElementById('mChartLbl');if(cl)cl.textContent=lbl;
+  buildMediaChart(p);
+}
+function buildMediaChart(p){
+  var d=mData[p],mc=document.getElementById('mediaChart'),ml=document.getElementById('mediaLabels');
+  if(!mc)return;mc.innerHTML='';if(ml)ml.innerHTML='';
+  var max=Math.max.apply(null,d.chart);
+  d.chart.forEach(function(v,i){
+    var h=Math.round((v/max)*125);
+    var col=document.createElement('div');col.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:4px';
+    col.innerHTML='<div style="width:100%;height:'+h+'px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--g400),var(--g700));cursor:pointer;transition:opacity .14s;min-height:3px" onmouseenter="this.style.opacity=\'.75\'" onmouseleave="this.style.opacity=\'1\'"></div>';
+    mc.appendChild(col);
+    if(ml){var lb=document.createElement('span');lb.style.cssText='font-size:9.5px;color:var(--g600)';lb.textContent=d.lbl[i];ml.appendChild(lb);}
+  });
+}
+
+// ═══ CHARTS ═══
+function buildDBChart(){
+  var vals=[1.8,2.0,1.9,2.2,2.4],max=Math.max.apply(null,vals),c=document.getElementById('dbChart');
+  if(!c)return;c.innerHTML='';
+  vals.forEach(function(v){var h=Math.round((v/max)*112);var col=document.createElement('div');col.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:4px';col.innerHTML='<span style="font-size:9.5px;color:var(--g600);font-family:var(--fm)">$'+v+'M</span><div style="width:100%;height:'+h+'px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--g400),var(--g700))"></div>';c.appendChild(col);});
+}
+function animNums(){
+  document.querySelectorAll('.page.active [data-count]').forEach(function(el){
+    var target=parseInt(el.getAttribute('data-count')),curr=0,step=Math.ceil(target/30);
+    el.textContent='0';
+    var t=setInterval(function(){curr=Math.min(curr+step,target);el.textContent=curr.toLocaleString();if(curr>=target)clearInterval(t);},30);
+  });
+}
+
+// ═══ AI CHAT ═══
+function initAI(slot,sys,welcome){
+  chats[slot]={system:sys,messages:[]};
+  var w=document.getElementById('aiWrap-'+slot);if(!w)return;
+  w.innerHTML='<div class="aimsgs" id="ai-m-'+slot+'"><div class="am bot">'+welcome+'</div></div><div class="airow"><textarea class="aiinp" id="ai-inp-'+slot+'" rows="1" placeholder="Savol yozing..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendAI(\''+slot+'\')}"></textarea><button class="aisend" id="ai-s-'+slot+'" onclick="sendAI(\''+slot+'\')">→</button></div>';
+}
+async function sendAI(slot){
+  var inp=document.getElementById('ai-inp-'+slot),btn=document.getElementById('ai-s-'+slot),msgs=document.getElementById('ai-m-'+slot);
+  var txt=inp.value.trim();if(!txt||!btn||btn.disabled)return;
+  inp.value='';btn.disabled=true;
+  msgs.innerHTML+='<div class="am user">'+esc(txt)+'</div>';
+  var tid='t'+Date.now();msgs.innerHTML+='<div class="am think" id="'+tid+'">⟳ O\'ylamoqda...</div>';msgs.scrollTop=99999;
+  var h=chats[slot];h.messages.push({role:'user',content:txt});
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:h.system,messages:h.messages.slice(-14)})});
+    var data=await res.json();var reply=data.content&&data.content[0]?data.content[0].text:'Javob olishda xatolik.';
+    h.messages.push({role:'assistant',content:reply});
+    document.getElementById(tid)?document.getElementById(tid).remove():null;
+    msgs.innerHTML+='<div class="am bot">'+esc(reply)+'</div>';
+  }catch(e){document.getElementById(tid)?document.getElementById(tid).remove():null;msgs.innerHTML+='<div class="am bot" style="border-color:rgba(200,80,80,.3)">Ulanish xatosi. API kalitni tekshiring.</div>';}
+  btn.disabled=false;msgs.scrollTop=99999;
+}
+function toggleTheme(){
+  var isDark=document.documentElement.classList.toggle('dark');
+  // Update FAB theme button emoji
+  var fabThemeBtn=document.querySelector('.fab-items .fab-item:first-child .fab-btn');
+  if(fabThemeBtn)fabThemeBtn.textContent=isDark?'🌙':'☀️';
+}
+var fabOpen=false;
+function toggleFAB(){
+  fabOpen=!fabOpen;
+  var items=document.getElementById('fabItems');
+  var btn=document.getElementById('fabMain');
+  if(items)items.classList.toggle('open',fabOpen);
+  if(btn)btn.classList.toggle('open',fabOpen);
+}
+function closeFAB(){
+  fabOpen=false;
+  var items=document.getElementById('fabItems');
+  var btn=document.getElementById('fabMain');
+  if(items)items.classList.remove('open');
+  if(btn)btn.classList.remove('open');
+}
+// Close FAB on outside click
+document.addEventListener('click',function(e){
+  var wrap=document.getElementById('fabWrap');
+  if(fabOpen&&wrap&&!wrap.contains(e.target))closeFAB();
+});
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+</script>
+</body>
+</html>
