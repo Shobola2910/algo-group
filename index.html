@@ -189,60 +189,6 @@ html.dark .glass-toggle-thumb{
   transform:translateX(34px);
 }
 
-/* ─── FLOATING BUBBLE MENU (bottom-right) ─── */
-.fab-wrap{
-  position:fixed;bottom:28px;right:28px;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-}
-.fab-main{
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 24px rgba(35,83,71,.45),0 2px 8px rgba(0,0,0,.2);
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  color:#fff;font-size:20px;
-  backdrop-filter:blur(10px);
-}
-.fab-main:hover{transform:scale(1.1) rotate(45deg);box-shadow:0 10px 32px rgba(35,83,71,.6)}
-.fab-main.open{transform:rotate(45deg);background:linear-gradient(135deg,#8b2020,#c0392b)}
-.fab-items{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  pointer-events:none;opacity:0;transform:translateY(16px) scale(.85);
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
-}
-.fab-items.open{pointer-events:all;opacity:1;transform:translateY(0) scale(1)}
-.fab-item{
-  position:relative;display:flex;align-items:center;gap:0;
-}
-.fab-btn{
-  width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:17px;
-  backdrop-filter:blur(16px);
-  transition:all .25s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.15);
-}
-.fab-btn:hover{transform:scale(1.14)}
-.fab-label{
-  position:absolute;right:52px;
-  background:rgba(5,31,20,.88);
-  border:1px solid rgba(142,182,155,.2);
-  color:#DAF1DE;font-size:12px;font-weight:500;
-  padding:5px 12px;border-radius:20px;white-space:nowrap;
-  backdrop-filter:blur(12px);
-  pointer-events:none;
-  opacity:0;transform:translateX(8px);
-  transition:all .2s ease;
-  font-family:var(--ff);
-}
-.fab-item:hover .fab-label{opacity:1;transform:translateX(0)}
-
-/* stagger animation */
-.fab-items.open .fab-item:nth-child(1){transition-delay:.04s}
-.fab-items.open .fab-item:nth-child(2){transition-delay:.08s}
-.fab-items.open .fab-item:nth-child(3){transition-delay:.12s}
-.fab-items.open .fab-item:nth-child(4){transition-delay:.16s}
-
 /* ─── GLASS TOPBAR ELEMENTS ─── */
 .glass-pill{
   background:rgba(255,255,255,.1);
@@ -505,11 +451,12 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="rpill"><div class="rpdot"></div><span id="sRoleL" style="font-size:12px;font-weight:500;color:var(--g100);flex:1">—</span></div>
   <div class="nwrap" id="navWrap"></div>
   <div class="sbfoot">
-    <div class="urow">
+    <div class="urow" onclick="showPage('profile')" style="cursor:pointer;transition:background .16s" onmouseenter="this.style.background='rgba(34,197,94,.1)'" onmouseleave="this.style.background=''">
       <div class="uav" id="sAvt">AG</div>
       <div style="flex:1;min-width:0"><div class="un" id="sName">—</div><div class="ue" id="sEmail">—</div></div>
+      <span style="font-size:10px;color:rgba(74,222,128,.35);margin-left:4px">→</span>
     </div>
-    <button onclick="doLogout()" style="width:100%;margin-top:8px;padding:11px 14px;border-radius:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-family:var(--ff);font-size:13px;font-weight:500;cursor:pointer;transition:all .17s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseenter="this.style.background='rgba(224,112,112,.2)'" onmouseleave="this.style.background='rgba(224,112,112,.12)'">
+    <button onclick="doLogout()" style="width:100%;margin-top:8px;padding:11px 14px;border-radius:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-family:var(--ff);font-size:13px;font-weight:500;cursor:pointer;transition:all .17s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseenter="this.style.background='rgba(224,112,112,.2)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'">
       <span style="font-size:15px">⏏</span> Sign Out
     </button>
   </div>
@@ -1205,10 +1152,14 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
           <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:10px">💬 Team Chat</div>
           <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)">
         </div>
-        <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.07);transition:background .13s" onmouseenter="this.style.background='rgba(34,197,94,.08)'" onmouseleave="this.style.background='transparent'">
+        <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.07);transition:background .13s;background:rgba(34,197,94,.06)" onmouseenter="this.style.background='rgba(34,197,94,.12)'" onmouseleave="this.style.background='rgba(34,197,94,.06)'">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
-            <div><div style="font-size:13px;font-weight:600;color:#dcfce7">ALGO GROUP Team</div><div style="font-size:11px;color:#4ade80;opacity:.6">Group · All members</div></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#dcfce7">ALGO GROUP Team</div>
+              <div style="font-size:11px;color:#4ade80;opacity:.6" id="groupLastMsg">Group · All members</div>
+            </div>
+            <div style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55"></div>
           </div>
         </div>
         <div id="contactList" style="flex:1;overflow-y:auto"></div>
@@ -1264,27 +1215,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   </div>
 
   <!-- ─── FLOATING BUBBLE MENU ─── -->
-  <div class="fab-wrap" id="fabWrap">
-    <div class="fab-items" id="fabItems">
-      <div class="fab-item">
-        <span class="fab-label">Toggle Dark / Light</span>
-        <button class="fab-btn" onclick="toggleTheme();closeFAB()" style="background:linear-gradient(135deg,rgba(35,83,71,.7),rgba(58,122,92,.6));border:1px solid rgba(142,182,155,.3);color:#DAF1DE">☀️</button>
-      </div>
-      <div class="fab-item">
-        <span class="fab-label">ELD Live Map</span>
-        <button class="fab-btn" onclick="showPage('eld');closeFAB()" style="background:linear-gradient(135deg,rgba(59,130,246,.5),rgba(99,102,241,.4));border:1px solid rgba(99,102,241,.4);color:#93c5fd">🛰️</button>
-      </div>
-      <div class="fab-item">
-        <span class="fab-label">Safety AI</span>
-        <button class="fab-btn" onclick="showPage('safety');closeFAB()" style="background:linear-gradient(135deg,rgba(239,68,68,.4),rgba(185,28,28,.5));border:1px solid rgba(239,68,68,.35);color:#fca5a5">🛡️</button>
-      </div>
-      <div class="fab-item">
-        <span class="fab-label">AI Assistant</span>
-        <button class="fab-btn" onclick="showPage('ai');closeFAB()" style="background:linear-gradient(135deg,rgba(251,191,36,.4),rgba(217,119,6,.5));border:1px solid rgba(251,191,36,.35);color:#fde68a">🤖</button>
-      </div>
-    </div>
-    <button class="fab-main" id="fabMain" onclick="toggleFAB()">＋</button>
-  </div>
+
 </main>
 </div><!-- /app -->
 
@@ -1458,33 +1389,33 @@ var ROLES={
       {s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},
       {s:'Operations',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'},{id:'safety',i:'⬡',l:'Safety AI Suite'}]},
       {s:'Business',items:[{id:'sales',i:'◉',l:'Sales Intel'},{id:'accounting',i:'◎',l:'Accounting'},{id:'knowledge',i:'◷',l:'Training Hub'},{id:'media',i:'◫',l:'Media'}]},
-      {s:'Admin',items:[{id:'users',i:'👥',l:'User Management'},{id:'projects',i:'📁',l:'Projects'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}
+      {s:'Admin',items:[{id:'users',i:'👥',l:'User Management'},{id:'projects',i:'📁',l:'Projects'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}
     ],
     aiSys:'You are the ALGO GROUP logistics and transport OPS Manager AI assistant. You specialize in dispatch, fleet management, driver coordination, route optimization, FMCSA/DOT compliance, ELD monitoring, and Strategic Compliance Command Centre operations. Respond in English or Uzbek based on user preference.',
     aiWelcome:'Hello! I\'m your OPS AI assistant. I can help with fleet operations, compliance, dispatch, or any operational questions.'
   },
   manager:{label:'👔 Support Manager',emoji:'👔',
-    nav:[{s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Monitoring',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Resources',items:[{id:'knowledge',i:'◷',l:'Training Hub'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
+    nav:[{s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Monitoring',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Resources',items:[{id:'knowledge',i:'◷',l:'Training Hub'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}],
     aiSys:'You are the ALGO GROUP Support Manager AI assistant. You specialize in team management, KPI analysis, driver management, Telegram message analysis, fleet efficiency, and operational decisions. Respond in English.',
     aiWelcome:'Hello! I\'m the Support Manager AI assistant. I can help with team responses, KPI analysis, or operational issues.'
   },
   sales:{label:'💼 Sales Rep',emoji:'💼',
-    nav:[{s:'Sales',items:[{id:'sales',i:'◉',l:'Sales Intel + Pipeline'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Help',items:[{id:'ai',i:'◌',l:'Sales AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
+    nav:[{s:'Sales',items:[{id:'sales',i:'◉',l:'Sales Intel + Pipeline'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Help',items:[{id:'ai',i:'◌',l:'Sales AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}],
     aiSys:'You are the ALGO GROUP trucking sales AI assistant. You specialize in freight pricing (per mile, per load), broker negotiations, shipper acquisition, sales scripts, objection handling, call strategies, ALGO SalesIntel call intelligence, and FMCSA/ELD knowledge. Give concrete, actionable sales advice with per-call-minute efficiency.',
     aiWelcome:'Hello! I\'m your Sales AI assistant. I can help with call scoring, pricing strategy, lead qualification, or handling carrier objections. I also know trucking and ELD regulations.'
   },
   accounting:{label:'📊 Accountant',emoji:'📊',
-    nav:[{s:'Finance',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'accounting',i:'◎',l:'Accounting + IFTA'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
+    nav:[{s:'Finance',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'accounting',i:'◎',l:'Accounting + IFTA'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}],
     aiSys:'You are the ALGO GROUP trucking accounting AI assistant. You specialize in IFTA tax reporting and mileage reconciliation, driver settlements, owner-operator pay, fuel surcharge, Algo Expenses Telegram integration, factoring, trucking P&L, detention pay, and lumper fees. Provide precise answers with numbers and formulas.',
     aiWelcome:'Hello! I\'m your Accounting AI assistant. Ask me about IFTA audit, driver settlements, invoices, or expense management.'
   },
   media:{label:'📱 Media Manager',emoji:'📱',
-    nav:[{s:'Media',items:[{id:'media',i:'◫',l:'Media Analytics'},{id:'ai',i:'◌',l:'AI Strategist'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
+    nav:[{s:'Media',items:[{id:'media',i:'◫',l:'Media Analytics'},{id:'ai',i:'◌',l:'AI Strategist'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}],
     aiSys:'You are the ALGO GROUP trucking company social media marketing AI strategist. You specialize in YouTube and Instagram analytics, content strategy, trucking niche hashtags, posting schedules, engagement optimization, video ideas, and marketing campaigns.',
     aiWelcome:'Hello! I\'m your Media AI Strategist. I can help with YouTube/Instagram analytics, content strategy, or marketing campaigns.'
   },
   safety:{label:'🛡️ Safety Officer',emoji:'🛡️',
-    nav:[{s:'Safety',items:[{id:'safety',i:'⬡',l:'Safety AI Suite'},{id:'ai',i:'◌',l:'Safety AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
+    nav:[{s:'Safety',items:[{id:'safety',i:'⬡',l:'Safety AI Suite'},{id:'ai',i:'◌',l:'Safety AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'}]}],
     aiSys:'You are the ALGO GROUP AG Safety AI Suite assistant — your personal AI Safety Director. You specialize in DOT/FMCSA regulations, all 387 FMCSA violation codes (SMS Appendix A), CSA scores, OOS calculator, Decay Timeline algorithm (0-6 months ×3, 6-12 months ×2, 12-24 months ×1, >24 months ×0), HOS compliance, DVIR, cargo securement, drug testing, and DataQ dispute letter writing. Respond in English, Uzbek, or Russian based on user preference.',
     aiWelcome:'Hello! I\'m AG Safety AI — your personal Safety Director. I can help with FMCSA violation analysis, OOS scoring, DataQ dispute letters, or DOT compliance. I know all 387 FMCSA codes and the Decay Timeline algorithm.'
   }
@@ -1580,7 +1511,7 @@ function showPage(key){
   if(key==='users')setTimeout(renderUsersTable,30);
   if(key==='projects')setTimeout(renderProjectsGrid,30);
   if(key==='profile')setTimeout(renderProfilePage,30);
-  if(key==='chat')setTimeout(function(){renderContactList();},30);
+  if(key==='chat')setTimeout(function(){renderContactList();openChat('group','ALGO GROUP Team','👥');},30);
   if(key==='notifications')setTimeout(renderNotifPage,30);
   animNums();
 }
@@ -2068,26 +1999,7 @@ function toggleTheme(){
   var fabThemeBtn=document.querySelector('.fab-items .fab-item:first-child .fab-btn');
   if(fabThemeBtn)fabThemeBtn.textContent=isDark?'🌙':'☀️';
 }
-var fabOpen=false;
-function toggleFAB(){
-  fabOpen=!fabOpen;
-  var items=document.getElementById('fabItems');
-  var btn=document.getElementById('fabMain');
-  if(items)items.classList.toggle('open',fabOpen);
-  if(btn)btn.classList.toggle('open',fabOpen);
-}
-function closeFAB(){
-  fabOpen=false;
-  var items=document.getElementById('fabItems');
-  var btn=document.getElementById('fabMain');
-  if(items)items.classList.remove('open');
-  if(btn)btn.classList.remove('open');
-}
-// Close FAB on outside click
-document.addEventListener('click',function(e){
-  var wrap=document.getElementById('fabWrap');
-  if(fabOpen&&wrap&&!wrap.contains(e.target))closeFAB();
-});
+
 // ═══ NOTIFICATIONS SYSTEM ═══
 var NOTIFICATIONS=[
   {id:1,from:'system',text:'Welcome to ALGO GROUP Dashboard!',time:fmtTime(new Date()),read:[],type:'info',icon:'👋'},
@@ -2173,7 +2085,7 @@ function renderProfilePage(){
     if(prof.avatar){av.innerHTML='<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">';}
     else{av.innerHTML=cu.initials;av.style.background='linear-gradient(135deg,'+tc+'66,'+tc+')';}
   }
-  setEl('profileNameBig',cu.name);
+  setEl('profileNameBig', prof.displayName||cu.name);
   var rolePill=document.getElementById('profileRoleBig');
   if(rolePill){rolePill.textContent=ROLE_LABELS&&ROLE_LABELS[cu.role]||cu.role;rolePill.style.background='rgba(34,197,94,.12)';rolePill.style.color='#22c55e';rolePill.style.border='1px solid rgba(34,197,94,.2)';}
   setEl('profileEmailBig',cu.email);
@@ -2215,14 +2127,48 @@ function uploadAvatar(e){
 function saveProfile(){
   if(!cu)return;
   var prof=USER_PROFILES[cu.email]||(USER_PROFILES[cu.email]={});
-  var name=document.getElementById('prof-name').value.trim();
-  if(name){prof.displayName=name;cu.name=name;setEl('sName',name);}
+  var nameInp=document.getElementById('prof-name');
+  var name=nameInp?nameInp.value.trim():'';
+  var msg=document.getElementById('prof-msg');
+
+  if(!name){if(msg){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Name cannot be empty.';}return;}
+
+  // Update everywhere
+  prof.displayName=name;
+  cu.name=name;
+
+  // Update initials
+  var parts=name.trim().split(' ');
+  var ini=(parts[0]?parts[0][0]:'')+(parts[1]?parts[1][0]:'');
+  ini=ini.toUpperCase().slice(0,2)||name.slice(0,2).toUpperCase();
+  cu.initials=ini;
+
+  // Sync APP_USERS
+  var au=APP_USERS.find(function(u){return u.email===cu.email;});
+  if(au){au.name=name;au.initials=ini;}
+
+  // Sync USERS
+  var u2=USERS.find(function(u){return u.email===cu.email;});
+  if(u2){u2.name=name;u2.initials=ini;}
+
+  // Update sidebar name
+  setEl('sName',name);
+
+  // Update profile page display
+  setEl('profileNameBig',name);
+
+  // Update topbar + sidebar avatar (initials or photo)
+  updateTopbarAvt();
+
+  // Update user rows in user management table if open
+  renderUsersTable();
+
+  if(msg){msg.style.display='block';msg.style.color='#22c55e';msg.textContent='✓ Name updated successfully!';}
+  setTimeout(function(){if(msg)msg.style.display='none';},2500);
+
+  // Also save other fields
   prof.phone=(document.getElementById('prof-phone')||{value:''}).value;
   prof.bio=(document.getElementById('prof-bio')||{value:''}).value;
-  var msg=document.getElementById('prof-msg');
-  if(msg){msg.style.display='block';msg.style.color='#22c55e';msg.textContent='✓ Profile saved!';}
-  renderProfilePage();
-  setTimeout(function(){if(msg)msg.style.display='none';},2000);
 }
 
 function requestPasswordChange(){
@@ -2242,7 +2188,9 @@ function requestPasswordChange(){
 }
 
 // ═══ CHAT SYSTEM ═══
-var CHAT_MSGS={'group':[]};  // group + direct messages per room
+var CHAT_MSGS={'group':[
+  {from:'system',text:'Welcome to ALGO GROUP Team Chat! 🎉 All team members can see this group.',time:'09:00',type:'system'},
+]};  // group + direct messages per room
 var chatPendingFiles=[];
 var currentChatRoom=null;
 var currentChatName='';
@@ -2258,18 +2206,23 @@ function renderContactList(){
     var prof=USER_PROFILES[u.email]||{};
     var room=roomKey(cu.email,u.email);
     var msgs=CHAT_MSGS[room]||[];
-    var last=msgs.length?msgs[msgs.length-1]:'';
-    var lastTxt=last?last.text?last.text.slice(0,30)+(last.text.length>30?'...':''):(last.files&&last.files.length?'📎 Photo':''):'';
-    return '<div onclick="openChat(\''+u.email+'\',\''+u.name+'\',\'\',\''+u.email+'\')" style="padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.06);transition:background .13s" onmouseenter="this.style.background=\'rgba(34,197,94,.07)\'" onmouseleave="this.style.background=\'transparent\'">'
+    var last=msgs.filter(function(m){return m.type!=='system';});
+    var lastM=last.length?last[last.length-1]:null;
+    var lastTxt=lastM?(lastM.text?lastM.text.slice(0,28)+(lastM.text.length>28?'…':''):(lastM.files&&lastM.files.length?'📎 Attachment':'')):ROLE_LABELS[u.role];
+    var isActive=currentChatRoom===room;
+    return '<div onclick="openChat(\''+u.email+'\',\''+u.name+'\',\'\',\''+u.email+'\')" style="padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.06);transition:background .13s;background:'+(isActive?'rgba(34,197,94,.1)':'transparent')+'" onmouseenter="this.style.background=\'rgba(34,197,94,.09)\'" onmouseleave="this.style.background=\''+(isActive?'rgba(34,197,94,.1)':'transparent')+'\';">'
     +'<div style="display:flex;align-items:center;gap:10px">'
     +'<div style="width:38px;height:38px;border-radius:50%;background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';border:1.5px solid '+tc+'44;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+tc+';flex-shrink:0">'
     +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':u.initials)
     +'</div>'
     +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#dcfce7">'+u.name+'</div>'
-    +'<div style="font-size:11px;color:#86efac;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(lastTxt||ROLE_LABELS[u.role])+'</div></div>'
+    +'<div style="font-size:11px;color:#86efac;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(lastTxt)+'</div></div>'
     +'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55;flex-shrink:0"></div>'
     +'</div></div>';
   }).join('');
+  // Update group last message
+  var gm=document.getElementById('groupLastMsg');
+  if(gm){var gmsgs=CHAT_MSGS['group']||[];var glast=gmsgs.filter(function(m){return m.type!=='system';});var glm=glast.length?glast[glast.length-1]:null;gm.textContent=glm?glm.fromName+': '+glm.text.slice(0,24):'Group · All members';}
 }
 
 function openChat(room,name,emoji,email){
@@ -2370,6 +2323,7 @@ document.addEventListener('click',function(e){
   }
 });
 
+function setEl(id,val){var e=document.getElementById(id);if(e)e.textContent=val;}
 function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 </script>
 </body>
