@@ -124,6 +124,31 @@ html.dark .ibox{color:#dcfce7}
 html.dark .formula-row .fbox{color:#dcfce7}
 html.dark .decay-bar .db{filter:brightness(.85)}
 html.dark .dip{border-color:rgba(34,197,94,.3)}
+/* ─── NOTIFICATION BELL ─── */
+.notif-bell{position:relative;width:38px;height:38px;border-radius:10px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+.notif-bell:hover{background:rgba(34,197,94,.15);transform:scale(1.05)}
+.notif-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#ef4444;color:#fff;border-radius:20px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #0d1410;padding:0 4px;font-family:var(--fm)}
+/* Topbar avatar */
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);border:2px solid rgba(34,197,94,.35);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;transition:all .18s}
+.topbar-avatar:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(34,197,94,.25)}
+/* Chat bubbles */
+.msg-bubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55;word-break:break-word;position:relative}
+.msg-bubble.mine{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
+.msg-bubble.theirs{background:#1a2e1d;color:#dcfce7;border:1px solid rgba(34,197,94,.12);border-bottom-left-radius:4px}
+.msg-bubble.system{background:rgba(34,197,94,.06);color:#4ade80;text-align:center;font-size:12px;margin:4px auto;border-radius:20px;padding:5px 16px;max-width:100%}
+.msg-time{font-size:10px;opacity:.55;margin-top:3px;text-align:right}
+.msg-wrap{display:flex;flex-direction:column}
+.msg-wrap.mine{align-items:flex-end}
+.msg-wrap.theirs{align-items:flex-start}
+.msg-sender{font-size:11px;color:#4ade80;font-weight:600;margin-bottom:3px;padding-left:4px}
+/* Notif item */
+.notif-item{padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.07);display:flex;gap:12px;align-items:flex-start;transition:background .13s;cursor:pointer}
+.notif-item:hover{background:rgba(34,197,94,.05)}
+.notif-item.unread{background:rgba(34,197,94,.04);border-left:3px solid #22c55e}
+.notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+/* Profile avatar preview */
+#profileAvatarBig img{width:100%;height:100%;object-fit:cover}
+
 /* ─── GLASS THEME TOGGLE ─── */
 .glass-toggle-wrap{
   position:relative;display:flex;align-items:center;gap:0;
@@ -493,6 +518,12 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <header class="topbar">
     <span class="pgt" id="pgTitle">Dashboard</span>
     <span class="glass-pill" id="pgBadge">Overview</span>
+    <!-- Notification Bell -->
+    <button class="notif-bell" id="notifBell" onclick="toggleNotifPanel()" title="Notifications">
+      🔔<span class="notif-badge" id="notifBadge" style="display:none">0</span>
+    </button>
+    <!-- Profile avatar in topbar -->
+    <div class="topbar-avatar" id="topbarAvt" onclick="showPage('profile')" title="My Profile"></div>
     <!-- Glass Day/Night Toggle -->
     <div class="glass-toggle-wrap" title="Toggle dark / light mode" onclick="toggleTheme()">
       <div class="glass-toggle-thumb" id="toggleThumb"></div>
@@ -1120,6 +1151,118 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
     <div id="projectsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px"></div>
   </div>
 
+  <!-- ══ PROFILE ══ -->
+  <div class="page" id="pg-profile">
+    <div style="max-width:800px;margin:0 auto">
+      <div style="font-size:22px;font-weight:700;color:#dcfce7;margin-bottom:22px">My Profile</div>
+      <div class="card mb20" style="background:linear-gradient(135deg,#0f2a14,#121a13);border-color:rgba(34,197,94,.18)">
+        <div class="cb" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="position:relative;cursor:pointer" onclick="document.getElementById('avatarInput').click()" title="Change photo">
+            <div id="profileAvatarBig" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;border:3px solid rgba(34,197,94,.4);overflow:hidden;flex-shrink:0"></div>
+            <div style="position:absolute;bottom:2px;right:2px;width:26px;height:26px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #0d1410">📷</div>
+          </div>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)">
+          <div style="flex:1">
+            <div id="profileNameBig" style="font-size:22px;font-weight:700;color:#dcfce7;margin-bottom:3px">—</div>
+            <div id="profileRoleBig" style="font-size:12px;font-weight:600;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:6px">—</div>
+            <div id="profileEmailBig" style="font-size:13px;color:#86efac;font-family:var(--fm)">—</div>
+          </div>
+          <span style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600">● Online</span>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="ch"><span class="ct">Edit Profile</span></div>
+          <div class="cb">
+            <div class="fg"><label class="fl">Full Name</label><input class="fi" id="prof-name" placeholder="Your name" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <div class="fg"><label class="fl">Email</label><input class="fi" id="prof-email" disabled style="background:#0a150b;color:#86efac;border-color:rgba(34,197,94,.1);opacity:.7"></div>
+            <div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="prof-phone" placeholder="+1 (555) 000-0000" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <div class="fg"><label class="fl">Bio (optional)</label><textarea class="fi" id="prof-bio" rows="2" placeholder="Short bio..." style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></textarea></div>
+            <button class="btn bp" onclick="saveProfile()" style="width:100%;background:linear-gradient(135deg,#16a34a,#22c55e)">Save Changes</button>
+            <div id="prof-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Change Password</span><span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">OPS approval</span></div>
+          <div class="cb">
+            <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:12px;font-size:12.5px;color:#fde68a;margin-bottom:16px">🔐 Request will be sent to OPS Manager for approval.</div>
+            <div class="fg"><label class="fl">Current Password</label><input class="fi" id="pw-cur" type="password" placeholder="Current password" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <div class="fg"><label class="fl">New Password</label><input class="fi" id="pw-new" type="password" placeholder="Min 8 characters" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" id="pw-conf" type="password" placeholder="Repeat new password" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <button class="btn" onclick="requestPasswordChange()" style="width:100%;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.22);color:#fbbf24;font-family:var(--ff);padding:10px;border-radius:9px;cursor:pointer">Send Request to OPS →</button>
+            <div id="pw-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CHAT ══ -->
+  <div class="page" id="pg-chat">
+    <div style="display:flex;height:calc(100vh - 110px);min-height:500px;border-radius:16px;overflow:hidden;border:1px solid rgba(34,197,94,.15);box-shadow:0 8px 32px rgba(0,0,0,.4)">
+      <div style="width:260px;background:#0d1410;border-right:1px solid rgba(34,197,94,.1);display:flex;flex-direction:column;flex-shrink:0">
+        <div style="padding:16px 14px 10px;border-bottom:1px solid rgba(34,197,94,.08)">
+          <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:10px">💬 Team Chat</div>
+          <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)">
+        </div>
+        <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.07);transition:background .13s" onmouseenter="this.style.background='rgba(34,197,94,.08)'" onmouseleave="this.style.background='transparent'">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
+            <div><div style="font-size:13px;font-weight:600;color:#dcfce7">ALGO GROUP Team</div><div style="font-size:11px;color:#4ade80;opacity:.6">Group · All members</div></div>
+          </div>
+        </div>
+        <div id="contactList" style="flex:1;overflow-y:auto"></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;background:#0a1510">
+        <div id="chatHeader" style="padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.08);display:flex;align-items:center;gap:12px;background:#0d1410;min-height:62px">
+          <div style="color:rgba(74,222,128,.45);font-size:14px">← Select a conversation</div>
+        </div>
+        <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:8px"></div>
+        <div id="chatInputArea" style="display:none;padding:12px 16px;border-top:1px solid rgba(34,197,94,.08);background:#0d1410">
+          <div id="chatImgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <label for="chatFileInput" style="width:38px;height:38px;border-radius:9px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0" title="Attach photo/video">📎</label>
+            <input type="file" id="chatFileInput" multiple accept="image/*,video/*" style="display:none" onchange="chatAttach(event)">
+            <textarea id="chatTextInp" rows="1" placeholder="Write a message..." style="flex:1;padding:10px 14px;border-radius:14px;border:1px solid rgba(34,197,94,.18);background:#0f1f11;color:#dcfce7;font-family:var(--ff);font-size:13.5px;resize:none;outline:none;max-height:120px;line-height:1.5;overflow-y:auto" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
+            <button onclick="sendChatMsg()" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 12px rgba(34,197,94,.35);display:flex;align-items:center;justify-content:center">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOTIFICATIONS PAGE ══ -->
+  <div class="page" id="pg-notifications">
+    <div style="max-width:720px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-size:22px;font-weight:700;color:#dcfce7">🔔 Notifications</div>
+        <button onclick="markAllRead()" class="btn bg_" style="font-size:12px;color:#4ade80;border-color:rgba(34,197,94,.2)">Mark all read</button>
+      </div>
+      <div id="broadcastPanel" style="display:none;margin-bottom:16px">
+        <div class="card" style="border-color:rgba(34,197,94,.22)">
+          <div class="ch"><span class="ct">📢 Broadcast to All Users</span></div>
+          <div class="cb" style="display:flex;gap:10px">
+            <input class="fi" id="broadcastMsg" placeholder="Notification message..." style="flex:1;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+            <button class="btn bp" onclick="sendBroadcast()" style="white-space:nowrap;background:linear-gradient(135deg,#16a34a,#22c55e)">📢 Send to All</button>
+          </div>
+        </div>
+      </div>
+      <div id="notifList" class="card" style="overflow:hidden"></div>
+    </div>
+  </div>
+
+  <!-- Notification Dropdown Panel -->
+  <div id="notifPanel" style="display:none;position:fixed;top:68px;right:72px;width:360px;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:999;overflow:hidden;max-height:480px;overflow-y:auto">
+    <div style="padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#121a13">
+      <span style="font-size:13.5px;font-weight:600;color:#dcfce7">Notifications</span>
+      <div style="display:flex;gap:10px">
+        <button onclick="markAllRead()" style="background:none;border:none;color:#4ade80;font-size:12px;cursor:pointer">Mark all read</button>
+        <button onclick="showPage('notifications');toggleNotifPanel()" style="background:none;border:none;color:#86efac;font-size:12px;cursor:pointer;opacity:.6">View all</button>
+      </div>
+    </div>
+    <div id="notifPanelList"></div>
+  </div>
+
   <!-- ─── FLOATING BUBBLE MENU ─── -->
   <div class="fab-wrap" id="fabWrap">
     <div class="fab-items" id="fabItems">
@@ -1315,33 +1458,33 @@ var ROLES={
       {s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},
       {s:'Operations',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'},{id:'safety',i:'⬡',l:'Safety AI Suite'}]},
       {s:'Business',items:[{id:'sales',i:'◉',l:'Sales Intel'},{id:'accounting',i:'◎',l:'Accounting'},{id:'knowledge',i:'◷',l:'Training Hub'},{id:'media',i:'◫',l:'Media'}]},
-      {s:'Admin',items:[{id:'users',i:'👥',l:'User Management'},{id:'projects',i:'📁',l:'Projects'}]}
+      {s:'Admin',items:[{id:'users',i:'👥',l:'User Management'},{id:'projects',i:'📁',l:'Projects'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}
     ],
     aiSys:'You are the ALGO GROUP logistics and transport OPS Manager AI assistant. You specialize in dispatch, fleet management, driver coordination, route optimization, FMCSA/DOT compliance, ELD monitoring, and Strategic Compliance Command Centre operations. Respond in English or Uzbek based on user preference.',
     aiWelcome:'Hello! I\'m your OPS AI assistant. I can help with fleet operations, compliance, dispatch, or any operational questions.'
   },
   manager:{label:'👔 Support Manager',emoji:'👔',
-    nav:[{s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Monitoring',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Resources',items:[{id:'knowledge',i:'◷',l:'Training Hub'}]}],
+    nav:[{s:'Main',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Monitoring',items:[{id:'eld',i:'▷',l:'ELD · Command'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Resources',items:[{id:'knowledge',i:'◷',l:'Training Hub'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
     aiSys:'You are the ALGO GROUP Support Manager AI assistant. You specialize in team management, KPI analysis, driver management, Telegram message analysis, fleet efficiency, and operational decisions. Respond in English.',
     aiWelcome:'Hello! I\'m the Support Manager AI assistant. I can help with team responses, KPI analysis, or operational issues.'
   },
   sales:{label:'💼 Sales Rep',emoji:'💼',
-    nav:[{s:'Sales',items:[{id:'sales',i:'◉',l:'Sales Intel + Pipeline'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Help',items:[{id:'ai',i:'◌',l:'Sales AI'}]}],
+    nav:[{s:'Sales',items:[{id:'sales',i:'◉',l:'Sales Intel + Pipeline'},{id:'kpi',i:'◑',l:'KPI'}]},{s:'Help',items:[{id:'ai',i:'◌',l:'Sales AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
     aiSys:'You are the ALGO GROUP trucking sales AI assistant. You specialize in freight pricing (per mile, per load), broker negotiations, shipper acquisition, sales scripts, objection handling, call strategies, ALGO SalesIntel call intelligence, and FMCSA/ELD knowledge. Give concrete, actionable sales advice with per-call-minute efficiency.',
     aiWelcome:'Hello! I\'m your Sales AI assistant. I can help with call scoring, pricing strategy, lead qualification, or handling carrier objections. I also know trucking and ELD regulations.'
   },
   accounting:{label:'📊 Accountant',emoji:'📊',
-    nav:[{s:'Finance',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'accounting',i:'◎',l:'Accounting + IFTA'},{id:'ai',i:'◌',l:'AI Assistant'}]}],
+    nav:[{s:'Finance',items:[{id:'dashboard',i:'◈',l:'Dashboard'},{id:'accounting',i:'◎',l:'Accounting + IFTA'},{id:'ai',i:'◌',l:'AI Assistant'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
     aiSys:'You are the ALGO GROUP trucking accounting AI assistant. You specialize in IFTA tax reporting and mileage reconciliation, driver settlements, owner-operator pay, fuel surcharge, Algo Expenses Telegram integration, factoring, trucking P&L, detention pay, and lumper fees. Provide precise answers with numbers and formulas.',
     aiWelcome:'Hello! I\'m your Accounting AI assistant. Ask me about IFTA audit, driver settlements, invoices, or expense management.'
   },
   media:{label:'📱 Media Manager',emoji:'📱',
-    nav:[{s:'Media',items:[{id:'media',i:'◫',l:'Media Analytics'},{id:'ai',i:'◌',l:'AI Strategist'}]}],
+    nav:[{s:'Media',items:[{id:'media',i:'◫',l:'Media Analytics'},{id:'ai',i:'◌',l:'AI Strategist'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
     aiSys:'You are the ALGO GROUP trucking company social media marketing AI strategist. You specialize in YouTube and Instagram analytics, content strategy, trucking niche hashtags, posting schedules, engagement optimization, video ideas, and marketing campaigns.',
     aiWelcome:'Hello! I\'m your Media AI Strategist. I can help with YouTube/Instagram analytics, content strategy, or marketing campaigns.'
   },
   safety:{label:'🛡️ Safety Officer',emoji:'🛡️',
-    nav:[{s:'Safety',items:[{id:'safety',i:'⬡',l:'Safety AI Suite'},{id:'ai',i:'◌',l:'Safety AI'}]}],
+    nav:[{s:'Safety',items:[{id:'safety',i:'⬡',l:'Safety AI Suite'},{id:'ai',i:'◌',l:'Safety AI'}]},{s:'Personal',items:[{id:'chat',i:'💬',l:'Team Chat'},{id:'notifications',i:'🔔',l:'Notifications'},{id:'profile',i:'🙍',l:'My Profile'}]}],
     aiSys:'You are the ALGO GROUP AG Safety AI Suite assistant — your personal AI Safety Director. You specialize in DOT/FMCSA regulations, all 387 FMCSA violation codes (SMS Appendix A), CSA scores, OOS calculator, Decay Timeline algorithm (0-6 months ×3, 6-12 months ×2, 12-24 months ×1, >24 months ×0), HOS compliance, DVIR, cargo securement, drug testing, and DataQ dispute letter writing. Respond in English, Uzbek, or Russian based on user preference.',
     aiWelcome:'Hello! I\'m AG Safety AI — your personal Safety Director. I can help with FMCSA violation analysis, OOS scoring, DataQ dispute letters, or DOT compliance. I know all 387 FMCSA codes and the Decay Timeline algorithm.'
   }
@@ -1405,10 +1548,15 @@ function setupApp(){
   var ls=document.getElementById('loginScreen');
   ls.style.opacity='0';ls.style.pointerEvents='none';
   ap.style.display='flex';
-  setTimeout(function(){ap.style.opacity='1';ls.style.display='none';},80);
+  setTimeout(function(){
+    ap.style.opacity='1';ls.style.display='none';
+    updateTopbarAvt();
+    updateNotifBadge();
+    // Welcome notification
+    pushNotif('Welcome back, '+cu.name+'! You are logged in as '+ROLE_LABELS[cu.role],'info','👋');
+  },80);
   showPage(r.nav[0].items[0].id);
   buildDBChart();buildMediaChart('monthly');
-  // Preload Leaflet for instant ELD map
   if(typeof L==='undefined'){
     var lflt=document.createElement('script');
     lflt.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
@@ -1417,7 +1565,7 @@ function setupApp(){
 }
 
 // ═══ NAVIGATION ═══
-var pageMeta={dashboard:['Dashboard','Overview'],eld:['ELD · Command Centre','Monitor → Detect → Resolve'],safety:['Safety AI Suite','AG Safety · DOT · FMCSA'],kpi:['KPI','Performance Metrics'],sales:['Sales Intel','AI Call Intelligence'],accounting:['Accounting','IFTA · Invoices · Expenses'],knowledge:['Training Hub','Algo Learning Platform'],media:['Media Center','Analytics'],ai:['AI Assistant','Intelligent Help'],users:['User Management','Add · Edit · Remove users'],projects:['Projects','OPS Projects · Team visibility']};
+var pageMeta={dashboard:['Dashboard','Overview'],eld:['ELD · Command Centre','Monitor → Detect → Resolve'],safety:['Safety AI Suite','AG Safety · DOT · FMCSA'],kpi:['KPI','Performance Metrics'],sales:['Sales Intel','AI Call Intelligence'],accounting:['Accounting','IFTA · Invoices · Expenses'],knowledge:['Training Hub','Algo Learning Platform'],media:['Media Center','Analytics'],ai:['AI Assistant','Intelligent Help'],users:['User Management','Add · Edit · Remove users'],projects:['Projects','OPS Projects'],profile:['My Profile','Account & Settings'],chat:['Team Chat','Messages & Files'],notifications:['Notifications','Updates & Alerts']};
 function showPage(key){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('active');});
@@ -1431,6 +1579,9 @@ function showPage(key){
   if(key==='eld')setTimeout(buildELDMap,100);
   if(key==='users')setTimeout(renderUsersTable,30);
   if(key==='projects')setTimeout(renderProjectsGrid,30);
+  if(key==='profile')setTimeout(renderProfilePage,30);
+  if(key==='chat')setTimeout(function(){renderContactList();},30);
+  if(key==='notifications')setTimeout(renderNotifPage,30);
   animNums();
 }
 
@@ -1937,6 +2088,288 @@ document.addEventListener('click',function(e){
   var wrap=document.getElementById('fabWrap');
   if(fabOpen&&wrap&&!wrap.contains(e.target))closeFAB();
 });
+// ═══ NOTIFICATIONS SYSTEM ═══
+var NOTIFICATIONS=[
+  {id:1,from:'system',text:'Welcome to ALGO GROUP Dashboard!',time:fmtTime(new Date()),read:[],type:'info',icon:'👋'},
+];
+var notifId=100;
+
+function fmtTime(d){return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false})+' · '+d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+
+function pushNotif(text,type,icon){
+  NOTIFICATIONS.unshift({id:notifId++,from:cu?cu.name:'System',text:text,time:fmtTime(new Date()),read:[],type:type||'info',icon:icon||'🔔'});
+  updateNotifBadge();
+  renderNotifPanel();
+}
+
+function updateNotifBadge(){
+  var unread=NOTIFICATIONS.filter(function(n){return !n.read.includes(cu&&cu.email);}).length;
+  var badge=document.getElementById('notifBadge');
+  if(badge){badge.style.display=unread>0?'flex':'none';badge.textContent=unread>9?'9+':unread;}
+}
+
+function toggleNotifPanel(){
+  var p=document.getElementById('notifPanel');
+  if(!p)return;
+  var open=p.style.display==='none'||p.style.display==='';
+  p.style.display=open?'block':'none';
+  if(open)renderNotifPanel();
+}
+
+function renderNotifPanel(){
+  var el=document.getElementById('notifPanelList');if(!el)return;
+  var items=NOTIFICATIONS.slice(0,6);
+  if(items.length===0){el.innerHTML='<div style="padding:24px;text-align:center;color:rgba(74,222,128,.4);font-size:13px">No notifications</div>';return;}
+  el.innerHTML=items.map(function(n){
+    var unread=!n.read.includes(cu&&cu.email);
+    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(34,197,94,.1)">'+n.icon+'</div>'
+    +'<div style="flex:1"><div style="font-size:13px;color:#dcfce7;margin-bottom:2px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:11px;color:#4ade80;opacity:.6">'+n.from+' · '+n.time+'</div></div>'
+    +(unread?'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:4px"></div>':'')
+    +'</div>';
+  }).join('');
+}
+
+function renderNotifPage(){
+  var el=document.getElementById('notifList');if(!el)return;
+  var bp=document.getElementById('broadcastPanel');
+  if(bp)bp.style.display=cu&&cu.role==='ops'?'block':'none';
+  if(NOTIFICATIONS.length===0){el.innerHTML='<div style="padding:40px;text-align:center;color:rgba(74,222,128,.4)">No notifications</div>';return;}
+  el.innerHTML=NOTIFICATIONS.map(function(n){
+    var unread=!n.read.includes(cu&&cu.email);
+    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(34,197,94,.1)">'+n.icon+'</div>'
+    +'<div style="flex:1"><div style="font-size:13.5px;font-weight:'+(unread?'600':'400')+';color:#dcfce7;margin-bottom:3px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:12px;color:#4ade80;opacity:.65">'+n.from+' · '+n.time+'</div></div>'
+    +(unread?'<div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:6px"></div>':'')
+    +'</div>';
+  }).join('');
+}
+
+function markAllRead(){
+  if(!cu)return;
+  NOTIFICATIONS.forEach(function(n){if(!n.read.includes(cu.email))n.read.push(cu.email);});
+  updateNotifBadge();renderNotifPanel();renderNotifPage();
+}
+
+function sendBroadcast(){
+  var msg=document.getElementById('broadcastMsg');
+  if(!msg||!msg.value.trim())return;
+  pushNotif(msg.value.trim(),'broadcast','📢');
+  msg.value='';
+  renderNotifPage();
+  alert('✓ Broadcast sent to all users!');
+}
+
+// ═══ PROFILE SYSTEM ═══
+var USER_PROFILES={}; // keyed by email
+
+function renderProfilePage(){
+  if(!cu)return;
+  var prof=USER_PROFILES[cu.email]||{};
+  var tc=ROLE_TC&&ROLE_TC[cu.role]||'#22c55e';
+  // Avatar
+  var av=document.getElementById('profileAvatarBig');
+  if(av){
+    if(prof.avatar){av.innerHTML='<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">';}
+    else{av.innerHTML=cu.initials;av.style.background='linear-gradient(135deg,'+tc+'66,'+tc+')';}
+  }
+  setEl('profileNameBig',cu.name);
+  var rolePill=document.getElementById('profileRoleBig');
+  if(rolePill){rolePill.textContent=ROLE_LABELS&&ROLE_LABELS[cu.role]||cu.role;rolePill.style.background='rgba(34,197,94,.12)';rolePill.style.color='#22c55e';rolePill.style.border='1px solid rgba(34,197,94,.2)';}
+  setEl('profileEmailBig',cu.email);
+  var ni=document.getElementById('prof-name');if(ni)ni.value=prof.displayName||cu.name;
+  var ei=document.getElementById('prof-email');if(ei)ei.value=cu.email;
+  var pi=document.getElementById('prof-phone');if(pi)pi.value=prof.phone||'';
+  var bi=document.getElementById('prof-bio');if(bi)bi.value=prof.bio||'';
+  // Update topbar avatar
+  updateTopbarAvt();
+}
+
+function updateTopbarAvt(){
+  if(!cu)return;
+  var av=document.getElementById('topbarAvt');if(!av)return;
+  var prof=USER_PROFILES[cu.email]||{};
+  var tc=ROLE_TC&&ROLE_TC[cu.role]||'#22c55e';
+  if(prof.avatar){av.innerHTML='<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">';av.style.background='transparent';}
+  else{av.textContent=cu.initials;av.style.background='linear-gradient(135deg,'+tc+'66,'+tc+')';}
+  // Sidebar avatar
+  var sa=document.getElementById('sAvt');
+  if(sa){
+    if(prof.avatar){sa.innerHTML='<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';sa.style.background='transparent';}
+    else{sa.textContent=cu.initials;}
+  }
+}
+
+function uploadAvatar(e){
+  var f=e.target.files[0];if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(ev){
+    var prof=USER_PROFILES[cu.email]||(USER_PROFILES[cu.email]={});
+    prof.avatar=ev.target.result;
+    renderProfilePage();
+    pushNotif('You updated your profile photo.','info','📷');
+  };
+  rd.readAsDataURL(f);
+}
+
+function saveProfile(){
+  if(!cu)return;
+  var prof=USER_PROFILES[cu.email]||(USER_PROFILES[cu.email]={});
+  var name=document.getElementById('prof-name').value.trim();
+  if(name){prof.displayName=name;cu.name=name;setEl('sName',name);}
+  prof.phone=(document.getElementById('prof-phone')||{value:''}).value;
+  prof.bio=(document.getElementById('prof-bio')||{value:''}).value;
+  var msg=document.getElementById('prof-msg');
+  if(msg){msg.style.display='block';msg.style.color='#22c55e';msg.textContent='✓ Profile saved!';}
+  renderProfilePage();
+  setTimeout(function(){if(msg)msg.style.display='none';},2000);
+}
+
+function requestPasswordChange(){
+  var cur=document.getElementById('pw-cur').value;
+  var nw=document.getElementById('pw-new').value;
+  var conf=document.getElementById('pw-conf').value;
+  var msg=document.getElementById('pw-msg');
+  if(!cur||!nw||!conf){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Fill all fields.';return;}
+  if(cur!==cu.pass){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Current password incorrect.';return;}
+  if(nw!==conf){msg.style.display='block';msg.style.color='#f87171';msg.textContent='New passwords do not match.';return;}
+  if(nw.length<8){msg.style.display='block';msg.style.color='#f87171';msg.textContent='Min 8 characters.';return;}
+  // Send notification to OPS
+  pushNotif('🔑 Password change request from '+cu.name+' ('+cu.email+')','request','🔑');
+  msg.style.display='block';msg.style.color='#22c55e';msg.textContent='✓ Request sent to OPS Manager!';
+  document.getElementById('pw-cur').value='';document.getElementById('pw-new').value='';document.getElementById('pw-conf').value='';
+  setTimeout(function(){msg.style.display='none';},3000);
+}
+
+// ═══ CHAT SYSTEM ═══
+var CHAT_MSGS={'group':[]};  // group + direct messages per room
+var chatPendingFiles=[];
+var currentChatRoom=null;
+var currentChatName='';
+
+function roomKey(email1,email2){return [email1,email2].sort().join('::');}
+
+function renderContactList(){
+  var el=document.getElementById('contactList');if(!el||!cu)return;
+  var q=(document.getElementById('chatSearch')||{value:''}).value.toLowerCase();
+  var others=APP_USERS.filter(function(u){return u.email!==cu.email&&(!q||u.name.toLowerCase().includes(q));});
+  el.innerHTML=others.map(function(u){
+    var tc=ROLE_TC[u.role]||'#22c55e';
+    var prof=USER_PROFILES[u.email]||{};
+    var room=roomKey(cu.email,u.email);
+    var msgs=CHAT_MSGS[room]||[];
+    var last=msgs.length?msgs[msgs.length-1]:'';
+    var lastTxt=last?last.text?last.text.slice(0,30)+(last.text.length>30?'...':''):(last.files&&last.files.length?'📎 Photo':''):'';
+    return '<div onclick="openChat(\''+u.email+'\',\''+u.name+'\',\'\',\''+u.email+'\')" style="padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.06);transition:background .13s" onmouseenter="this.style.background=\'rgba(34,197,94,.07)\'" onmouseleave="this.style.background=\'transparent\'">'
+    +'<div style="display:flex;align-items:center;gap:10px">'
+    +'<div style="width:38px;height:38px;border-radius:50%;background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';border:1.5px solid '+tc+'44;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+tc+';flex-shrink:0">'
+    +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':u.initials)
+    +'</div>'
+    +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#dcfce7">'+u.name+'</div>'
+    +'<div style="font-size:11px;color:#86efac;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(lastTxt||ROLE_LABELS[u.role])+'</div></div>'
+    +'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55;flex-shrink:0"></div>'
+    +'</div></div>';
+  }).join('');
+}
+
+function openChat(room,name,emoji,email){
+  currentChatRoom=room==='group'?'group':(email?roomKey(cu.email,email):room);
+  currentChatName=name;
+  if(!CHAT_MSGS[currentChatRoom])CHAT_MSGS[currentChatRoom]=[];
+  // Header
+  var hdr=document.getElementById('chatHeader');
+  if(hdr){
+    var tc=email?(ROLE_TC[APP_USERS.find(function(u){return u.email===email;})||{role:'ops'}]||'#22c55e'):'#22c55e';
+    var prof=email?USER_PROFILES[email]||{}:{};
+    hdr.innerHTML='<div style="width:40px;height:40px;border-radius:'+(room==='group'?'12px':'50%')+';background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';display:flex;align-items:center;justify-content:center;font-size:'+(room==='group'?'18px':'13px')+';font-weight:700;color:#fff;overflow:hidden;flex-shrink:0">'
+    +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':(emoji||name.slice(0,2).toUpperCase()))
+    +'</div>'
+    +'<div><div style="font-size:14px;font-weight:600;color:#dcfce7">'+name+'</div>'
+    +'<div style="font-size:11.5px;color:#4ade80;opacity:.6">'+(room==='group'?APP_USERS.length+' members · Group':'Online')+'</div></div>';
+  }
+  var ia=document.getElementById('chatInputArea');if(ia)ia.style.display='block';
+  renderChatMessages();
+  var inp=document.getElementById('chatTextInp');if(inp)inp.focus();
+}
+
+function renderChatMessages(){
+  var el=document.getElementById('chatMessages');if(!el||!currentChatRoom)return;
+  var msgs=CHAT_MSGS[currentChatRoom]||[];
+  if(msgs.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:rgba(74,222,128,.35);font-size:13px">No messages yet. Say hello! 👋</div>';return;}
+  el.innerHTML=msgs.map(function(m){
+    var isMine=m.from===cu.email;
+    var isSystem=m.type==='system';
+    if(isSystem)return '<div class="msg-bubble system">'+esc(m.text)+'</div>';
+    var senderName=m.fromName||m.from;
+    return '<div class="msg-wrap '+(isMine?'mine':'theirs')+'">'
+    +(!isMine?'<div class="msg-sender">'+esc(senderName)+'</div>':'')
+    +'<div class="msg-bubble '+(isMine?'mine':'theirs')+'">'
+    +(m.text?'<div>'+esc(m.text)+'</div>':'')
+    +(m.files&&m.files.length?m.files.map(function(f){
+      if(f.type==='video')return '<video src="'+f.data+'" controls style="max-width:240px;border-radius:8px;margin-top:6px;display:block"></video>';
+      return '<img src="'+f.data+'" style="max-width:240px;border-radius:8px;margin-top:6px;display:block;cursor:pointer" onclick="window.open(this.src)">';
+    }).join(''):'')
+    +'<div class="msg-time">'+m.time+'</div>'
+    +'</div></div>';
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function chatAttach(e){
+  var files=e.target.files;
+  for(var i=0;i<files.length;i++){
+    (function(f){
+      var rd=new FileReader();
+      rd.onload=function(ev){
+        chatPendingFiles.push({data:ev.target.result,type:f.type.startsWith('video')?'video':'image',name:f.name});
+        updateImgPreview();
+      };
+      rd.readAsDataURL(f);
+    })(files[i]);
+  }
+  e.target.value='';
+}
+
+function updateImgPreview(){
+  var p=document.getElementById('chatImgPreview');if(!p)return;
+  p.innerHTML=chatPendingFiles.map(function(f,i){
+    return '<div style="position:relative;display:inline-block">'
+    +(f.type==='video'?'<video src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(34,197,94,.2)"></video>'
+    :'<img src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(34,197,94,.2)">')
+    +'<button onclick="chatPendingFiles.splice('+i+',1);updateImgPreview()" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>'
+    +'</div>';
+  }).join('');
+}
+
+function chatKeyDown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();}}
+
+function sendChatMsg(){
+  var inp=document.getElementById('chatTextInp');
+  var txt=inp?inp.value.trim():'';
+  if(!txt&&chatPendingFiles.length===0)return;
+  if(!currentChatRoom)return;
+  if(!CHAT_MSGS[currentChatRoom])CHAT_MSGS[currentChatRoom]=[];
+  CHAT_MSGS[currentChatRoom].push({
+    from:cu.email,fromName:cu.name,
+    text:txt,files:chatPendingFiles.slice(),
+    time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false})
+  });
+  if(inp)inp.value='';
+  chatPendingFiles=[];updateImgPreview();
+  renderChatMessages();
+}
+
+function autoResize(ta){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px';}
+
+// ═══ CLOSE NOTIF PANEL ON OUTSIDE CLICK ═══
+document.addEventListener('click',function(e){
+  var panel=document.getElementById('notifPanel');
+  var bell=document.getElementById('notifBell');
+  if(panel&&bell&&panel.style.display==='block'&&!panel.contains(e.target)&&!bell.contains(e.target)){
+    panel.style.display='none';
+  }
+});
+
 function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 </script>
 </body>
