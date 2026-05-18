@@ -21,130 +21,185 @@
 </style>
 <style>
 :root{
-  /* Brand greens - richer, matching portal screenshot */
-  --g900:#0a0e0a;--g800:#111a12;--g700:#162518;--g600:#1a3320;
-  --g500:#22c55e;--g400:#16a34a;--g300:#4ade80;--g200:#86efac;--g100:#dcfce7;--g50:#f0fdf4;
-  --white:#161d17;--surf:#0d1410;
-  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.14);
-  --sh1:0 1px 4px rgba(0,0,0,.3);--sh2:0 6px 22px rgba(0,0,0,.5);
+  /* ── DAY MODE (default) ── */
+  /* Image 1: Dark Forest #102F15, Sage #728C5A, Pale Lime #EAF1B1, Pastel Mint #EBFADC */
+  --g900:#102F15;--g800:#1a3d1f;--g700:#264d29;--g600:#728C5A;
+  --g500:#8fa870;--g400:#728C5A;--g300:#a8be8c;--g200:#c8dca8;--g100:#EAF1B1;--g50:#EBFADC;
+  --white:#ffffff;--surf:#f6fdf0;
+  --bdr:rgba(114,140,90,.18);--bdr2:rgba(114,140,90,.24);
+  --sh1:0 1px 4px rgba(16,47,21,.08);--sh2:0 6px 22px rgba(16,47,21,.14);
   --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sw:220px;--hh:58px;
-  /* Sidebar always dark */
-  --sb-bg:#0d1410;--sb-bdr:rgba(34,197,94,.08);
-  --accent:#22c55e;--accent-dim:rgba(34,197,94,.15);--accent-glow:rgba(34,197,94,.3);
+  --accent:#728C5A;--accent-dim:rgba(114,140,90,.15);--accent-glow:rgba(114,140,90,.3);
 }
-/* Default (light) mode */
+/* ── LIGHT (DAY) MODE ── */
 html:not(.dark){
-  --surf:#f9fafb;--white:#fff;
-  --bdr:rgba(22,163,74,.14);--bdr2:rgba(22,163,74,.18);
-  --sh1:0 1px 4px rgba(0,0,0,.07);--sh2:0 6px 22px rgba(0,0,0,.1);
-  --g900:#052e09;--g800:#064d10;--g700:#15803d;
+  --surf:#EBFADC;--white:#ffffff;
+  --bdr:rgba(114,140,90,.18);--bdr2:rgba(114,140,90,.24);
+  --sh1:0 1px 4px rgba(16,47,21,.08);--sh2:0 6px 22px rgba(16,47,21,.14);
 }
-html:not(.dark) body{color:#052e09}
-html:not(.dark) .sidebar{background:#0d1410}
-html:not(.dark) .main{background:#f9fafb}
-html:not(.dark) .card{background:#fff}
-html:not(.dark) .sc{background:#fff}
-html:not(.dark) tbody td{color:#111}
-html:not(.dark) .ct{color:#052e09}
-html:not(.dark) .topbar{background:rgba(249,250,251,.94)}
-html:not(.dark) .pgt{color:#052e09}
+html:not(.dark) body{color:#102F15;background:#EBFADC}
+html:not(.dark) .sidebar{background:#102F15}
+html:not(.dark) .main{background:#EBFADC}
+html:not(.dark) .card{background:#ffffff;border-color:rgba(114,140,90,.22)}
+html:not(.dark) .sc{background:#ffffff;border-color:rgba(114,140,90,.2)}
+html:not(.dark) .sc::before{background:#EAF1B1}
+html:not(.dark) .sv{color:#102F15}
+html:not(.dark) .sl{color:#728C5A}
+html:not(.dark) .ch{border-color:rgba(114,140,90,.2)}
+html:not(.dark) .ct{color:#102F15}
+html:not(.dark) tbody td{color:#102F15}
+html:not(.dark) tbody tr:hover{background:#f4fde8}
+html:not(.dark) thead th{background:#EAF1B1;color:#264d29}
+html:not(.dark) .topbar{background:rgba(235,250,220,.94);border-bottom-color:rgba(114,140,90,.2)}
+html:not(.dark) .pgt{color:#102F15}
+html:not(.dark) .tpill, html:not(.dark) .glass-pill{background:rgba(114,140,90,.12);color:#264d29;border-color:rgba(114,140,90,.25)}
+html:not(.dark) .btn.bg_{color:#264d29;border-color:rgba(114,140,90,.3)}
+html:not(.dark) .btn.bg_:hover{background:#EAF1B1}
+html:not(.dark) .btn.bp{background:#728C5A;color:#fff}
+html:not(.dark) .btn.bp:hover{background:#5a7045}
+html:not(.dark) .ni{color:rgba(235,250,220,.6)}
+html:not(.dark) .ni:hover{background:rgba(235,250,220,.12);color:#EBFADC}
+html:not(.dark) .ni.active{background:rgba(234,241,177,.18);color:#EAF1B1}
+html:not(.dark) .ni.active .nd{background:#EAF1B1;box-shadow:0 0 7px #EAF1B155}
+html:not(.dark) .rpdot{background:#EAF1B1;box-shadow:0 0 6px #EAF1B1}
+html:not(.dark) .lt{color:#EBFADC}
+html:not(.dark) .ld{color:#a8be8c;opacity:.7}
+html:not(.dark) .un{color:#EBFADC}
+html:not(.dark) .ue{color:#a8be8c}
+html:not(.dark) .tabs{background:#fff;border-color:rgba(114,140,90,.2)}
+html:not(.dark) .tab{color:#264d29}
+html:not(.dark) .tab.active{background:#728C5A;color:#fff}
+html:not(.dark) .pb{background:#EAF1B1}
+html:not(.dark) .pf{background:linear-gradient(90deg,#728C5A,#a8be8c)}
+html:not(.dark) .ki{border-color:rgba(114,140,90,.18)}
+html:not(.dark) .kn{color:#102F15}
+html:not(.dark) .tlt{color:#102F15}
+html:not(.dark) .fi,.fi,.fs{border-color:rgba(114,140,90,.25)}
+html:not(.dark) .upl{background:#EAF1B1;border-color:rgba(114,140,90,.3)}
+html:not(.dark) .sck{background:#EAF1B1;border-color:rgba(114,140,90,.2)}
+html:not(.dark) .scn{color:#102F15}
+html:not(.dark) .plc{background:#EAF1B1;border-color:rgba(114,140,90,.18)}
+html:not(.dark) .plcard{background:#fff;border-color:rgba(114,140,90,.15)}
+html:not(.dark) .plcn{color:#102F15}
+html:not(.dark) .modcard{background:#EAF1B1;border-color:rgba(114,140,90,.18)}
+html:not(.dark) .mname{color:#102F15}
+html:not(.dark) .cup{background:rgba(114,140,90,.15);color:#264d29}
+html:not(.dark) .ai-inp,.aiinp{border-color:rgba(114,140,90,.25)}
+html:not(.dark) .am.bot{background:#EAF1B1;color:#102F15;border-color:rgba(114,140,90,.2)}
+html:not(.dark) .aisend{background:#728C5A}
+html:not(.dark) .aisend:hover{background:#5a7045}
+html:not(.dark) .glass-toggle-wrap{background:rgba(255,255,255,.5);border-color:rgba(114,140,90,.3)}
+html:not(.dark) .glass-toggle-thumb{background:linear-gradient(135deg,#728C5A,#8fa870)}
+html:not(.dark) .sbfoot{border-top-color:rgba(235,250,220,.15)}
+html:not(.dark) .notif-bell{background:rgba(235,250,220,.12);border-color:rgba(235,250,220,.2)}
+html:not(.dark) [style*="color:#A5B6AF"]{color:#102F15!important}
+html:not(.dark) [style*="color:#899F71"]{color:#264d29!important}
+html:not(.dark) [style*="color:#899F71"]{color:#728C5A!important}
 /* Dark mode - default (app starts dark like screenshot) */
 html.dark{
-  --surf:#0d1410;--white:#121a13;--g50:#0f1f11;
-  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.13);
+  /* Image 2: Dark Forest #0D1F13, Sage #4A5A4A, Golden Olive #899F71, Pastel Mint #A5B6AF */
+  --surf:#0D1F13;--white:#111d14;--g50:#142018;
+  --g900:#0D1F13;--g800:#111d14;--g700:#1a2e1d;--g600:#4A5A4A;
+  --g500:#899F71;--g400:#728C5A;--g300:#899F71;--g100:#A5B6AF;
+  --bdr:rgba(137,159,113,.12);--bdr2:rgba(137,159,113,.16);
   --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
+  --accent:#899F71;
 }
 /* ─── DARK MODE ─── */
 html.dark{
-  --surf:#0d1410;--white:#121a13;--g50:#0f1f11;
-  --bdr:rgba(34,197,94,.1);--bdr2:rgba(34,197,94,.13);
+  /* Image 2: Dark Forest #0D1F13, Sage #4A5A4A, Golden Olive #899F71, Pastel Mint #A5B6AF */
+  --surf:#0D1F13;--white:#111d14;--g50:#142018;
+  --g900:#0D1F13;--g800:#111d14;--g700:#1a2e1d;--g600:#4A5A4A;
+  --g500:#899F71;--g400:#728C5A;--g300:#899F71;--g100:#A5B6AF;
+  --bdr:rgba(137,159,113,.12);--bdr2:rgba(137,159,113,.16);
   --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
+  --accent:#899F71;
 }
-html.dark body{color:#dcfce7}
-html.dark .main{background:#0d1410}
-html.dark .sc{background:#121a13;border-color:rgba(34,197,94,.13)}
+html.dark body{color:#A5B6AF}
+html.dark .main{background:#0D1F13}
+html.dark .sc{background:#111d14;border-color:rgba(137,159,113,.16)}
 html.dark .sc::before{opacity:.06}
-html.dark .sv{color:#dcfce7}
-html.dark .sl{color:#4ade80;opacity:.8}
-html.dark .card{background:#121a13;border-color:rgba(34,197,94,.12)}
-html.dark .ch{border-color:rgba(34,197,94,.1)}
-html.dark .ct{color:#dcfce7}
+html.dark .sv{color:#A5B6AF}
+html.dark .sl{color:#899F71;opacity:.9}
+html.dark .card{background:#111d14;border-color:rgba(137,159,113,.15)}
+html.dark .ch{border-color:rgba(137,159,113,.12)}
+html.dark .ct{color:#A5B6AF}
 /* Fix all inline color styles in dark mode */
-html.dark [style*="color:var(--g700)"]{color:#4ade80!important}
-html.dark [style*="color:var(--g800)"]{color:#dcfce7!important}
-html.dark [style*="color:var(--g600)"]{color:#4ade80!important}
-html.dark [style*="color:var(--g900)"]{color:#dcfce7!important}
-html.dark svg text{fill:#dcfce7!important}
-html.dark .topbar{background:rgba(13,20,16,.92);border-bottom-color:rgba(34,197,94,.1)}
-html.dark .pgt{color:#dcfce7}
-html.dark .tpill{background:rgba(34,197,94,.1);color:#4ade80;border-color:rgba(34,197,94,.18)}
-html.dark .btn.bg_{color:#4ade80;border-color:rgba(34,197,94,.2)}
-html.dark .btn.bg_:hover{background:rgba(34,197,94,.1)}
-html.dark tbody tr{border-color:rgba(34,197,94,.1)}
-html.dark tbody tr:hover{background:#0f1f11}
-html.dark tbody td{color:#dcfce7}
-html.dark thead th{background:#0f1f11;color:#4ade80}
-html.dark .am.bot{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
-html.dark .aiinp{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
-html.dark .airow{border-color:rgba(34,197,94,.12)}
-html.dark .fi,.html.dark .fs{background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)}
-html.dark .fi,.html.dark select{background:#0f1f11;color:#dcfce7}
-html.dark .tabs{background:#121a13;border-color:rgba(34,197,94,.13)}
-html.dark .tab{color:#4ade80}
-html.dark .tab:hover:not(.active){background:#0f1f11}
-html.dark .pb{background:rgba(34,197,94,.12)}
-html.dark .ki{border-color:rgba(34,197,94,.1)}
-html.dark .kn{color:#dcfce7}
-html.dark .tl::before{background:rgba(34,197,94,.12)}
-html.dark .tlt{color:#dcfce7}
-html.dark .upl{background:#0f1f11;border-color:rgba(34,197,94,.22)}
-html.dark .sck{background:#0f1f11;border-color:rgba(34,197,94,.12)}
-html.dark .scn{color:#dcfce7}
-html.dark .modcard{background:#0f1f11;border-color:rgba(34,197,94,.12)}
-html.dark .mname{color:#dcfce7}
-html.dark .ctimer{background:#0f1f11;border-color:rgba(34,197,94,.12)}
-html.dark .ctime{color:#dcfce7}
-html.dark .plc{background:#0f1f11;border-color:rgba(34,197,94,.12)}
-html.dark .plcard{background:#121a13;border-color:rgba(34,197,94,.1)}
-html.dark .plcn{color:#dcfce7}
-html.dark .ldr{border-color:rgba(34,197,94,.1)}
-html.dark .ck{border-color:rgba(34,197,94,.1)}
-html.dark .smm{border-color:rgba(34,197,94,.1)}
-html.dark .smmn{color:#dcfce7}
-html.dark .tgmsg{border-color:rgba(34,197,94,.1)}
-html.dark .tgn{color:#dcfce7}
-html.dark .tgt{color:#86efac}
-html.dark .fbox{background:#121a13;border-color:rgba(34,197,94,.12)}
+html.dark [style*="color:var(--g700)"]{color:#899F71!important}
+html.dark [style*="color:var(--g800)"]{color:#A5B6AF!important}
+html.dark [style*="color:var(--g600)"]{color:#899F71!important}
+html.dark [style*="color:var(--g900)"]{color:#A5B6AF!important}
+html.dark svg text{fill:#A5B6AF!important}
+html.dark .topbar{background:rgba(13,31,19,.94);border-bottom-color:rgba(137,159,113,.12)}
+html.dark .pgt{color:#A5B6AF}
+html.dark .tpill{background:rgba(137,159,113,.1);color:#899F71;border-color:rgba(137,159,113,.2)}
+html.dark .btn.bg_{color:#899F71;border-color:rgba(137,159,113,.22)}
+html.dark .btn.bg_:hover{background:rgba(137,159,113,.1)}
+html.dark tbody tr{border-color:rgba(137,159,113,.1)}
+html.dark tbody tr:hover{background:#142018}
+html.dark tbody td{color:#A5B6AF}
+html.dark thead th{background:#142018;color:#899F71}
+html.dark .am.bot{background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)}
+html.dark .aiinp{background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)}
+html.dark .airow{border-color:rgba(137,159,113,.12)}
+html.dark .fi,.html.dark .fs{background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)}
+html.dark .fi,.html.dark select{background:#142018;color:#A5B6AF}
+html.dark .tabs{background:#111d14;border-color:rgba(137,159,113,.14)}
+html.dark .tab{color:#899F71}
+html.dark .tab:hover:not(.active){background:#142018}
+html.dark .pb{background:rgba(137,159,113,.12)}
+html.dark .ki{border-color:rgba(137,159,113,.1)}
+html.dark .kn{color:#A5B6AF}
+html.dark .tl::before{background:rgba(137,159,113,.12)}
+html.dark .tlt{color:#A5B6AF}
+html.dark .upl{background:#142018;border-color:rgba(137,159,113,.22)}
+html.dark .sck{background:#142018;border-color:rgba(137,159,113,.12)}
+html.dark .scn{color:#A5B6AF}
+html.dark .modcard{background:#142018;border-color:rgba(137,159,113,.12)}
+html.dark .mname{color:#A5B6AF}
+html.dark .ctimer{background:#142018;border-color:rgba(137,159,113,.12)}
+html.dark .ctime{color:#A5B6AF}
+html.dark .plc{background:#142018;border-color:rgba(137,159,113,.12)}
+html.dark .plcard{background:#111d14;border-color:rgba(137,159,113,.1)}
+html.dark .plcn{color:#A5B6AF}
+html.dark .ldr{border-color:rgba(137,159,113,.1)}
+html.dark .ck{border-color:rgba(137,159,113,.1)}
+html.dark .smm{border-color:rgba(137,159,113,.1)}
+html.dark .smmn{color:#A5B6AF}
+html.dark .tgmsg{border-color:rgba(137,159,113,.1)}
+html.dark .tgn{color:#A5B6AF}
+html.dark .tgt{color:#899F71}
+html.dark .fbox{background:#111d14;border-color:rgba(137,159,113,.12)}
 html.dark .db{opacity:.9}
-html.dark .ibox-green{background:rgba(34,197,94,.1);color:#86efac}
+html.dark .ibox-green{background:rgba(137,159,113,.12);color:#899F71}
 html.dark .ibox-amber{background:rgba(138,82,0,.15);color:#f5d99b}
 html.dark .ibox-red{background:rgba(139,32,32,.15);color:#f5b9b5}
 html.dark .ibox-blue{background:rgba(26,79,138,.15);color:#b3d7f7}
-html.dark .ibox{color:#dcfce7}
-html.dark .formula-row .fbox{color:#dcfce7}
+html.dark .ibox{color:#A5B6AF}
+html.dark .formula-row .fbox{color:#A5B6AF}
 html.dark .decay-bar .db{filter:brightness(.85)}
-html.dark .dip{border-color:rgba(34,197,94,.3)}
+html.dark .dip{border-color:rgba(137,159,113,.3)}
 /* ─── NOTIFICATION BELL ─── */
-.notif-bell{position:relative;width:38px;height:38px;border-radius:10px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
-.notif-bell:hover{background:rgba(34,197,94,.15);transform:scale(1.05)}
+.notif-bell{position:relative;width:38px;height:38px;border-radius:10px;background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+.notif-bell:hover{background:rgba(137,159,113,.15);transform:scale(1.05)}
 .notif-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#ef4444;color:#fff;border-radius:20px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #0d1410;padding:0 4px;font-family:var(--fm)}
 /* Topbar avatar */
-.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);border:2px solid rgba(34,197,94,.35);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;transition:all .18s}
-.topbar-avatar:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(34,197,94,.25)}
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);border:2px solid rgba(137,159,113,.35);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;transition:all .18s}
+.topbar-avatar:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(137,159,113,.25)}
 /* Chat bubbles */
 .msg-bubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55;word-break:break-word;position:relative}
-.msg-bubble.mine{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
-.msg-bubble.theirs{background:#1a2e1d;color:#dcfce7;border:1px solid rgba(34,197,94,.12);border-bottom-left-radius:4px}
-.msg-bubble.system{background:rgba(34,197,94,.06);color:#4ade80;text-align:center;font-size:12px;margin:4px auto;border-radius:20px;padding:5px 16px;max-width:100%}
+.msg-bubble.mine{background:linear-gradient(135deg,#728C5A,#899F71);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
+.msg-bubble.theirs{background:#1a2e1d;color:#A5B6AF;border:1px solid rgba(137,159,113,.12);border-bottom-left-radius:4px}
+.msg-bubble.system{background:rgba(137,159,113,.06);color:#899F71;text-align:center;font-size:12px;margin:4px auto;border-radius:20px;padding:5px 16px;max-width:100%}
 .msg-time{font-size:10px;opacity:.55;margin-top:3px;text-align:right}
 .msg-wrap{display:flex;flex-direction:column}
 .msg-wrap.mine{align-items:flex-end}
 .msg-wrap.theirs{align-items:flex-start}
-.msg-sender{font-size:11px;color:#4ade80;font-weight:600;margin-bottom:3px;padding-left:4px}
+.msg-sender{font-size:11px;color:#899F71;font-weight:600;margin-bottom:3px;padding-left:4px}
 /* Notif item */
-.notif-item{padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.07);display:flex;gap:12px;align-items:flex-start;transition:background .13s;cursor:pointer}
-.notif-item:hover{background:rgba(34,197,94,.05)}
-.notif-item.unread{background:rgba(34,197,94,.04);border-left:3px solid #22c55e}
+.notif-item{padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.07);display:flex;gap:12px;align-items:flex-start;transition:background .13s;cursor:pointer}
+.notif-item:hover{background:rgba(137,159,113,.05)}
+.notif-item.unread{background:rgba(137,159,113,.04);border-left:3px solid #22c55e}
 .notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 /* Profile avatar preview */
 #profileAvatarBig img{width:100%;height:100%;object-fit:cover}
@@ -160,9 +215,10 @@ html.dark .dip{border-color:rgba(34,197,94,.3)}
   box-shadow:0 4px 20px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.15);
   transition:all .3s ease;
 }
+html.dark .glass-pill{background:rgba(137,159,113,.1);color:#899F71;border-color:rgba(137,159,113,.18)}
 html.dark .glass-toggle-wrap{
   background:rgba(0,0,0,.3);
-  border-color:rgba(34,197,94,.2);
+  border-color:rgba(137,159,113,.2);
   box-shadow:0 4px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(142,182,155,.1);
 }
 .glass-toggle-option{
@@ -184,7 +240,7 @@ html.dark .glass-toggle-option{color:var(--g300)}
   pointer-events:none;
 }
 html.dark .glass-toggle-thumb{
-  background:linear-gradient(135deg,#163832,#235347);
+  background:linear-gradient(135deg,#4A5A4A,#728C5A);
   box-shadow:0 3px 12px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(142,182,155,.2);
   transform:translateX(34px);
 }
@@ -224,7 +280,7 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 .li{width:100%;padding:11px 14px;border-radius:11px;border:1px solid rgba(142,182,155,.18);background:rgba(255,255,255,.05);color:#fff;font-family:var(--ff);font-size:13.5px;outline:none;transition:all .18s;margin-bottom:14px}
 .li::placeholder{color:rgba(142,182,155,.4)}.li:focus{border-color:rgba(142,182,155,.45);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(142,182,155,.1)}.li.err{border-color:rgba(231,76,60,.5)}
 .lerr{font-size:11.5px;color:#e07070;margin-top:-10px;margin-bottom:12px;display:none}
-.lbtn{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,var(--g500),var(--g400));color:#fff;font-family:var(--ff);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(35,83,71,.4)}
+.lbtn{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,#4A5A4A,#728C5A);color:#fff;font-family:var(--ff);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(35,83,71,.4)}
 .lbtn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(35,83,71,.5)}
 
 /* ─── APP ─── */
@@ -232,20 +288,20 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 #app.visible{opacity:1}
 
 /* ─── SIDEBAR ─── */
-.sidebar{width:var(--sw);background:#0d1410;min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;border-right:1px solid rgba(142,182,155,.07)}
-.lwrap{padding:18px 18px 16px;border-bottom:1px solid rgba(34,197,94,.08);display:flex;align-items:center;gap:11px;background:transparent}
+.sidebar{width:var(--sw);background:#0D1F13;min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;border-right:1px solid rgba(142,182,155,.07)}
+.lwrap{padding:18px 18px 16px;border-bottom:1px solid rgba(137,159,113,.08);display:flex;align-items:center;gap:11px;background:transparent}
 .lt{font-size:14.5px;font-weight:600;color:#fff;letter-spacing:.04em}
 .ld{font-size:9px;color:var(--g300);opacity:.55;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
 .rpill{margin:10px 14px;padding:8px 11px;background:rgba(142,182,155,.07);border:1px solid rgba(142,182,155,.11);border-radius:9px;display:flex;align-items:center;gap:8px}
-.rpdot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;flex-shrink:0;animation:dp 2.5s ease-in-out infinite}
+.rpdot{width:6px;height:6px;border-radius:50%;background:#899F71;box-shadow:0 0 6px #899F71;flex-shrink:0;animation:dp 2.5s ease-in-out infinite}
 @keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
 .nwrap{overflow-y:auto;flex:1;padding-bottom:8px}
 .nsec{padding:8px 12px 3px}
 .nsl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(142,182,155,.4);padding:0 9px;margin-bottom:3px;font-weight:500}
 .ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:1px;color:rgba(218,241,222,.5);font-size:13px;font-weight:400;border:none;background:none;width:100%;text-align:left}
-.ni:hover{background:rgba(34,197,94,.09);color:#dcfce7;transform:translateX(2px)}
-.ni.active{background:rgba(34,197,94,.14);color:#fff;font-weight:500}
-.ni.active .nd{background:#22c55e;box-shadow:0 0 7px #22c55e}
+.ni:hover{background:rgba(137,159,113,.09);color:#A5B6AF;transform:translateX(2px)}
+.ni.active{background:rgba(137,159,113,.14);color:#fff;font-weight:500}
+.ni.active .nd{background:#899F71;box-shadow:0 0 7px #899F71}
 .nd{width:5px;height:5px;border-radius:50%;background:rgba(142,182,155,.2);flex-shrink:0;transition:all .15s}
 .nic{font-size:15px;width:18px;text-align:center;flex-shrink:0}
 .sbfoot{margin-top:auto;padding:13px 12px;border-top:1px solid rgba(142,182,155,.07)}
@@ -260,7 +316,7 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 .pgt{font-size:15px;font-weight:600;color:var(--g800);flex:1}
 .tpill{background:var(--g100);color:var(--g700);font-size:11px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(35,83,71,.13)}
 .btn{padding:8px 16px;border-radius:9px;font-family:var(--ff);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:5px}
-.bp{background:#16a34a;color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.3)}.bp:hover{background:#15803d;transform:translateY(-1px)}
+.bp{background:#728C5A;color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.3)}.bp:hover{background:#5a7045;transform:translateY(-1px)}
 .bg_{background:transparent;color:var(--g700);border:1px solid var(--bdr)}.bg_:hover{background:var(--g100);border-color:var(--g300)}
 .bsm{font-size:11.5px;padding:5px 12px}
 .content{padding:24px;flex:1}
@@ -275,7 +331,7 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 .sv{font-size:22px;font-weight:600;color:var(--g800);line-height:1;margin-bottom:2px;font-variant-numeric:tabular-nums}
 .sl{font-size:12px;color:var(--g600);opacity:.8}
 .sc-c{font-size:10.5px;font-weight:500;margin-top:6px;padding:2px 7px;border-radius:20px;display:inline-block}
-.cup{background:rgba(34,197,94,.12);color:#22c55e}.cdn{background:#fdecea;color:#8b2020}
+.cup{background:rgba(137,159,113,.12);color:#22c55e}.cdn{background:#fdecea;color:#8b2020}
 .card{background:#fff;border:1px solid var(--bdr2);border-radius:14px;box-shadow:var(--sh1);overflow:hidden;transition:box-shadow .2s}.card:hover{box-shadow:var(--sh2)}
 .ch{padding:15px 19px 12px;border-bottom:1px solid var(--bdr2);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ct{font-size:13.5px;font-weight:600;color:var(--g800)}.cb{padding:17px 19px}
@@ -295,7 +351,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
 .bpu{background:#f3e8ff;color:#6b21a8;border:1px solid #d8b4fe}
 .bcy{background:#e0f7f7;color:#0e6b6b;border:1px solid #a3d8d8}
 .pb{height:5px;background:var(--g100);border-radius:10px;overflow:hidden}
-.pf{height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:10px;transition:width .5s}
+.pf{height:100%;background:linear-gradient(90deg,#728C5A,#899F71);border-radius:10px;transition:width .5s}
 .ki{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr2)}.ki:last-child{border-bottom:none}
 .kinf{flex:1}.kn{font-size:13px;font-weight:500;color:var(--g800);margin-bottom:4px}.km{font-size:11px;color:var(--g600);opacity:.72}
 .kv{font-size:14px;font-weight:600;color:var(--g700);font-family:var(--fm);min-width:44px;text-align:right}
@@ -315,8 +371,8 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
 .airow{display:flex;gap:8px;margin-top:11px;padding-top:11px;border-top:1px solid var(--bdr2)}
 .aiinp{flex:1;padding:10px 13px;border:1px solid var(--bdr);border-radius:9px;font-family:var(--ff);font-size:13px;color:var(--g800);background:#fff;outline:none;resize:none;transition:border-color .14s,box-shadow .14s}
 .aiinp:focus{border-color:var(--g400);box-shadow:0 0 0 3px rgba(58,122,92,.1)}
-.aisend{padding:10px 17px;border-radius:9px;background:#16a34a;color:#fff;font-family:var(--ff);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:all .14s}
-.aisend:hover{background:#15803d}.aisend:disabled{opacity:.5;cursor:not-allowed}
+.aisend{padding:10px 17px;border-radius:9px;background:#728C5A;color:#fff;font-family:var(--ff);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:all .14s}
+.aisend:hover{background:#5a7045}.aisend:disabled{opacity:.5;cursor:not-allowed}
 /* UPLOAD */
 .upl{border:2px dashed rgba(142,182,155,.35);border-radius:12px;padding:26px;text-align:center;cursor:pointer;background:var(--g50);transition:all .17s}.upl:hover,.upl.drag{border-color:var(--g400);background:rgba(142,182,155,.07)}
 .upl input{display:none}
@@ -417,7 +473,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
       </svg>
       <div>
         <div style="font-size:20px;font-weight:600;color:#fff;letter-spacing:.04em">ALGO GROUP</div>
-        <div style="font-size:10px;color:#4ade80;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
+        <div style="font-size:10px;color:#899F71;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
       </div>
     </div>
     <label class="ll">Corporate email</label>
@@ -451,7 +507,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="rpill"><div class="rpdot"></div><span id="sRoleL" style="font-size:12px;font-weight:500;color:var(--g100);flex:1">—</span></div>
   <div class="nwrap" id="navWrap"></div>
   <div class="sbfoot">
-    <div class="urow" onclick="showPage('profile')" style="cursor:pointer;transition:background .16s" onmouseenter="this.style.background='rgba(34,197,94,.1)'" onmouseleave="this.style.background=''">
+    <div class="urow" onclick="showPage('profile')" style="cursor:pointer;transition:background .16s" onmouseenter="this.style.background='rgba(137,159,113,.1)'" onmouseleave="this.style.background=''">
       <div class="uav" id="sAvt">AG</div>
       <div style="flex:1;min-width:0"><div class="un" id="sName">—</div><div class="ue" id="sEmail">—</div></div>
       <span style="font-size:10px;color:rgba(74,222,128,.35);margin-left:4px">→</span>
@@ -496,17 +552,17 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
           <div style="display:flex;justify-content:space-between;margin-top:6px"><span style="font-size:9.5px;color:var(--g600)">Jan</span><span style="font-size:9.5px;color:var(--g600)">Feb</span><span style="font-size:9.5px;color:var(--g600)">Mar</span><span style="font-size:9.5px;color:var(--g600)">Apr</span><span style="font-size:9.5px;color:var(--g600)">May</span></div></div></div>
       <div class="card"><div class="ch"><span class="ct">Trip status</span></div>
         <div class="cb" style="display:flex;align-items:center;gap:18px">
-          <svg width="105" height="105" viewBox="0 0 105 105"><circle cx="52" cy="52" r="38" fill="none" stroke="#DAF1DE" stroke-width="14"/><circle cx="52" cy="52" r="38" fill="none" stroke="#235347" stroke-width="14" stroke-dasharray="143 96" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#8EB69B" stroke-width="14" stroke-dasharray="50 189" stroke-dashoffset="-143" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#F4D8D8" stroke-width="14" stroke-dasharray="24 215" stroke-dashoffset="-193" stroke-linecap="round" transform="rotate(-90 52 52)"/><text x="52" y="48" text-anchor="middle" font-size="16" font-weight="600" fill="#0B2B26">60%</text><text x="52" y="60" text-anchor="middle" font-size="8" fill="#235347">Bajarildi</text></svg>
+          <svg width="105" height="105" viewBox="0 0 105 105"><circle cx="52" cy="52" r="38" fill="none" stroke="#DAF1DE" stroke-width="14"/><circle cx="52" cy="52" r="38" fill="none" stroke="#235347" stroke-width="14" stroke-dasharray="143 96" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#8EB69B" stroke-width="14" stroke-dasharray="50 189" stroke-dashoffset="-143" stroke-linecap="round" transform="rotate(-90 52 52)"/><circle cx="52" cy="52" r="38" fill="none" stroke="#F4D8D8" stroke-width="14" stroke-dasharray="24 215" stroke-dashoffset="-193" stroke-linecap="round" transform="rotate(-90 52 52)"/><text x="52" y="48" text-anchor="middle" font-size="16" font-weight="600" fill="#0B2B26">60%</text><text x="52" y="60" text-anchor="middle" font-size="8" fill="#235347">Done</text></svg>
           <div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#235347;display:inline-block"></span>Bajarilgan — 60%</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#235347;display:inline-block"></span>Delivered — 60%</div>
             <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#8EB69B;display:inline-block"></span>In transit — 21%</div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#F4D8D8;display:inline-block"></span>Bekor — 10%</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700);margin-bottom:5px"><span style="width:8px;height:8px;border-radius:50%;background:#F4D8D8;display:inline-block"></span>Cancelled — 10%</div>
             <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g700)"><span style="width:8px;height:8px;border-radius:50%;background:#DAF1DE;display:inline-block"></span>Pending — 9%</div>
           </div>
         </div></div>
     </div>
     <div class="card"><div class="ch"><span class="ct">Recent trips</span><button class="btn bg_ bsm">View all →</button></div>
-      <div class="cb" style="padding:0"><table><thead><tr><th>ID</th><th>Driver</th><th>Route</th><th>Yuk</th><th>Status</th><th>ELD</th></tr></thead>
+      <div class="cb" style="padding:0"><table><thead><tr><th>ID</th><th>Driver</th><th>Route</th><th>Weight</th><th>Status</th><th>ELD</th></tr></thead>
         <tbody>
           <tr><td style="font-family:var(--fm);font-size:11px">#AG-2841</td><td>J. Martinez</td><td>LA → Chicago</td><td>24,000 lbs</td><td><span class="badge bg">Delivered</span></td><td><span class="badge bn">OK</span></td></tr>
           <tr><td style="font-family:var(--fm);font-size:11px">#AG-2840</td><td>R. Johnson</td><td>Dallas → NYC</td><td>18,500 lbs</td><td><span class="badge bb">In transit</span></td><td><span class="badge bg">Live</span></td></tr>
@@ -696,12 +752,12 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
       <div class="g2">
         <div class="card"><div class="ch"><span class="ct">DOT Audit Checklisti</span><span class="badge bg">97.2% tayyor</span></div>
           <div class="cb">
-            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>CDL sertifikatlari saqlandi</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>CDL certificates on file</span></div>
             <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>ELD deviceslari ro'yxatga olindi</span></div>
-            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>DVIR arxivlari tayyor (6 oy)</span></div>
-            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Sug'urta polislari yangilangan</span></div>
-            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>HazMat ruxsatnomalar to'liq</span></div>
-            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Tibbiy sertifikatlar amal qiladi</span></div>
+            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>DVIR archives ready (6 months)</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Insurance policies current</span></div>
+            <div class="ck"><div class="ckb" onclick="this.classList.toggle('chk')"></div><span>HazMat permits complete</span></div>
+            <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Medical certificates valid</span></div>
             <div class="ck"><div class="ckb chk" onclick="this.classList.toggle('chk')"></div><span>Drug & Alcohol testing records</span></div>
           </div></div>
         <div class="card"><div class="ch"><span class="ct">Certificate status</span><button class="btn bp bsm">+ Newlash</button></div>
@@ -864,7 +920,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
             <tbody>
               <tr><td style="font-family:var(--fm);font-size:11px">INV-1084</td><td>Prime Freight</td><td>$18,400</td><td>May 20</td><td><span class="badge bo">Pending</span></td></tr>
               <tr><td style="font-family:var(--fm);font-size:11px">INV-1083</td><td>Global Cargo</td><td>$24,100</td><td>May 18</td><td><span class="badge bg">Paid</span></td></tr>
-              <tr><td style="font-family:var(--fm);font-size:11px">INV-1082</td><td>FastLine LLC</td><td>$9,850</td><td>May 10</td><td><span class="badge br">O'tdi!</span></td></tr>
+              <tr><td style="font-family:var(--fm);font-size:11px">INV-1082</td><td>FastLine LLC</td><td>$9,850</td><td>May 10</td><td><span class="badge br">Overdue!</span></td></tr>
               <tr><td style="font-family:var(--fm);font-size:11px">INV-1081</td><td>StarShip Co</td><td>$31,200</td><td>May 25</td><td><span class="badge bb">Sent</span></td></tr>
             </tbody></table></div></div>
         <div class="card"><div class="ch"><span class="ct">Expense breakdown</span></div>
@@ -936,10 +992,10 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
       <div class="g2">
         <div class="card"><div class="ch"><span class="ct">Onboarding Roadmap</span></div>
           <div class="cb">
-            <div class="tl"><div class="tld">1</div><div><div class="tlt">Day 1: CEO Welcome Video</div><div class="tlm">Alimkhan akadan salomlashuv — kompaniya ruhi</div></div></div>
-            <div class="tl"><div class="tld">2</div><div><div class="tlt">Week 1: 8 Video Modulese</div><div class="tlm">ELD, HOS, Safety, Geography — sequential, interactive</div></div></div>
-            <div class="tl"><div class="tld">3</div><div><div class="tlt">Week 2: Practice with AI Agent</div><div class="tlm">Claude API — answers any question, 24/7</div></div></div>
-            <div class="tl" style="padding-bottom:0"><div class="tld">4</div><div><div class="tlt">Month 1: Diploma & independent work</div><div class="tlm">Score-based Gold/Silver/Bronze — PDF format</div></div></div>
+            <div class="tl"><div class="tld">1</div><div><div class="tlt">Day 1: CEO Welcome Video</div><div class="tlm">Welcome from the CEO — company values and culture</div></div></div>
+            <div class="tl"><div class="tld">2</div><div><div class="tlt">Week 1: 8 Video Modulese</div><div class="tlm">ELD, HOS, Safety, Geography — step-by-step, interactive</div></div></div>
+            <div class="tl"><div class="tld">3</div><div><div class="tlt">Week 2: Practice with AI Agent</div><div class="tlm">Claude AI — answers any question, available 24/7</div></div></div>
+            <div class="tl" style="padding-bottom:0"><div class="tld">4</div><div><div class="tlt">Month 1: Diploma & independent work</div><div class="tlm">Score-based Gold/Silver/Bronze diploma — PDF format</div></div></div>
           </div></div>
         <div class="card"><div class="ch"><span class="ct">Newcomer progress</span></div>
           <div class="cb" style="padding:0"><table><thead><tr><th>Newcomer</th><th>Started</th><th>Module</th><th>Score</th></tr></thead>
@@ -1018,20 +1074,20 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-users">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
-        <div style="font-size:11px;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
-        <div style="font-size:22px;font-weight:700;color:#dcfce7">User Management</div>
+        <div style="font-size:11px;color:#899F71;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">User Management</div>
       </div>
-      <button class="btn bp" onclick="openAddUser()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 16px rgba(34,197,94,.3)">＋ Add User</button>
+      <button class="btn bp" onclick="openAddUser()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#899F71);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ Add User</button>
     </div>
     <!-- Add user modal -->
-    <div id="addUserModal" style="display:none;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
-      <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:16px">➕ New User</div>
+    <div id="addUserModal" style="display:none;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:16px">➕ New User</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end">
-        <div><label class="fl">Full Name</label><input class="fi" id="nu-name" placeholder="John Smith" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-        <div><label class="fl">Email (@algogroup.us)</label><input class="fi" id="nu-email" placeholder="john@algogroup.us" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-        <div><label class="fl">Password</label><input class="fi" id="nu-pass" type="password" placeholder="Min 8 chars" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Full Name</label><input class="fi" id="nu-name" placeholder="John Smith" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Email (@algogroup.us)</label><input class="fi" id="nu-email" placeholder="john@algogroup.us" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Password</label><input class="fi" id="nu-pass" type="password" placeholder="Min 8 chars" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
         <div><label class="fl">Role</label>
-          <select id="nu-role" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+          <select id="nu-role" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
             <option value="ops">⚙️ OPS</option>
             <option value="manager">👔 Support Manager</option>
             <option value="sales">💼 Sales</option>
@@ -1042,16 +1098,16 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-top:14px">
-        <button class="btn bp" onclick="addUser()" style="background:linear-gradient(135deg,#16a34a,#22c55e)">Create User</button>
-        <button class="btn bg_" onclick="closeAddUser()" style="color:#4ade80;border-color:rgba(34,197,94,.2)">Cancel</button>
+        <button class="btn bp" onclick="addUser()" style="background:linear-gradient(135deg,#728C5A,#899F71)">Create User</button>
+        <button class="btn bg_" onclick="closeAddUser()" style="color:#899F71;border-color:rgba(137,159,113,.2)">Cancel</button>
       </div>
       <div id="addUserMsg" style="margin-top:10px;font-size:12.5px;display:none"></div>
     </div>
     <!-- Users table -->
     <div class="card">
       <div class="ch">
-        <span class="ct">All Users <span id="userCount" style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:2px 10px;font-size:11px;margin-left:8px">6</span></span>
-        <input class="fi" id="userSearch" placeholder="Search users..." onkeyup="renderUsersTable()" style="width:200px;font-size:12.5px;padding:6px 12px;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+        <span class="ct">All Users <span id="userCount" style="background:rgba(137,159,113,.12);color:#22c55e;border:1px solid rgba(137,159,113,.2);border-radius:20px;padding:2px 10px;font-size:11px;margin-left:8px">6</span></span>
+        <input class="fi" id="userSearch" placeholder="Search users..." onkeyup="renderUsersTable()" style="width:200px;font-size:12.5px;padding:6px 12px;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
       </div>
       <div class="cb" style="padding:0"><div class="tw"><table>
         <thead><tr>
@@ -1066,32 +1122,32 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-projects">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
-        <div style="font-size:11px;color:#4ade80;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
-        <div style="font-size:22px;font-weight:700;color:#dcfce7">Projects</div>
+        <div style="font-size:11px;color:#899F71;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">Projects</div>
       </div>
-      <button class="btn bp" onclick="openAddProject()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 16px rgba(34,197,94,.3)">＋ New Project</button>
+      <button class="btn bp" onclick="openAddProject()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#899F71);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ New Project</button>
     </div>
     <!-- Add project form -->
-    <div id="addProjModal" style="display:none;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
-      <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:16px">📁 New Project</div>
+    <div id="addProjModal" style="display:none;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:16px">📁 New Project</div>
       <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px">
-        <div><label class="fl">Project Name</label><input class="fi" id="np-name" placeholder="Q3 Route Optimization" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Project Name</label><input class="fi" id="np-name" placeholder="Q3 Route Optimization" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
         <div><label class="fl">Assigned To</label>
-          <select id="np-user" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></select>
+          <select id="np-user" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></select>
         </div>
         <div><label class="fl">Priority</label>
-          <select id="np-priority" class="fs" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
+          <select id="np-priority" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
             <option value="high">🔴 High</option>
             <option value="medium">🟡 Medium</option>
             <option value="low">🟢 Low</option>
           </select>
         </div>
-        <div><label class="fl">Due Date</label><input class="fi" id="np-date" type="date" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+        <div><label class="fl">Due Date</label><input class="fi" id="np-date" type="date" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
       </div>
-      <div style="margin-top:12px"><label class="fl">Description</label><textarea class="fi" id="np-desc" rows="2" placeholder="Project description..." style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></textarea></div>
+      <div style="margin-top:12px"><label class="fl">Description</label><textarea class="fi" id="np-desc" rows="2" placeholder="Project description..." style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></textarea></div>
       <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn bp" onclick="addProject()" style="background:linear-gradient(135deg,#16a34a,#22c55e)">Create Project</button>
-        <button class="btn bg_" onclick="closeAddProject()" style="color:#4ade80;border-color:rgba(34,197,94,.2)">Cancel</button>
+        <button class="btn bp" onclick="addProject()" style="background:linear-gradient(135deg,#728C5A,#899F71)">Create Project</button>
+        <button class="btn bg_" onclick="closeAddProject()" style="color:#899F71;border-color:rgba(137,159,113,.2)">Cancel</button>
       </div>
     </div>
     <!-- Projects grid -->
@@ -1101,31 +1157,31 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <!-- ══ PROFILE ══ -->
   <div class="page" id="pg-profile">
     <div style="max-width:800px;margin:0 auto">
-      <div style="font-size:22px;font-weight:700;color:#dcfce7;margin-bottom:22px">My Profile</div>
-      <div class="card mb20" style="background:linear-gradient(135deg,#0f2a14,#121a13);border-color:rgba(34,197,94,.18)">
+      <div style="font-size:22px;font-weight:700;color:#A5B6AF;margin-bottom:22px">My Profile</div>
+      <div class="card mb20" style="background:linear-gradient(135deg,#0f2a14,#121a13);border-color:rgba(137,159,113,.18)">
         <div class="cb" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
           <div style="position:relative;cursor:pointer" onclick="document.getElementById('avatarInput').click()" title="Change photo">
-            <div id="profileAvatarBig" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;border:3px solid rgba(34,197,94,.4);overflow:hidden;flex-shrink:0"></div>
+            <div id="profileAvatarBig" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;border:3px solid rgba(137,159,113,.4);overflow:hidden;flex-shrink:0"></div>
             <div style="position:absolute;bottom:2px;right:2px;width:26px;height:26px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #0d1410">📷</div>
           </div>
           <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)">
           <div style="flex:1">
-            <div id="profileNameBig" style="font-size:22px;font-weight:700;color:#dcfce7;margin-bottom:3px">—</div>
+            <div id="profileNameBig" style="font-size:22px;font-weight:700;color:#A5B6AF;margin-bottom:3px">—</div>
             <div id="profileRoleBig" style="font-size:12px;font-weight:600;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:6px">—</div>
-            <div id="profileEmailBig" style="font-size:13px;color:#86efac;font-family:var(--fm)">—</div>
+            <div id="profileEmailBig" style="font-size:13px;color:#899F71;font-family:var(--fm)">—</div>
           </div>
-          <span style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600">● Online</span>
+          <span style="background:rgba(137,159,113,.12);color:#22c55e;border:1px solid rgba(137,159,113,.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600">● Online</span>
         </div>
       </div>
       <div class="g2">
         <div class="card">
           <div class="ch"><span class="ct">Edit Profile</span></div>
           <div class="cb">
-            <div class="fg"><label class="fl">Full Name</label><input class="fi" id="prof-name" placeholder="Your name" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-            <div class="fg"><label class="fl">Email</label><input class="fi" id="prof-email" disabled style="background:#0a150b;color:#86efac;border-color:rgba(34,197,94,.1);opacity:.7"></div>
-            <div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="prof-phone" placeholder="+1 (555) 000-0000" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-            <div class="fg"><label class="fl">Bio (optional)</label><textarea class="fi" id="prof-bio" rows="2" placeholder="Short bio..." style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></textarea></div>
-            <button class="btn bp" onclick="saveProfile()" style="width:100%;background:linear-gradient(135deg,#16a34a,#22c55e)">Save Changes</button>
+            <div class="fg"><label class="fl">Full Name</label><input class="fi" id="prof-name" placeholder="Your name" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Email</label><input class="fi" id="prof-email" disabled style="background:#0a150b;color:#899F71;border-color:rgba(137,159,113,.1);opacity:.7"></div>
+            <div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="prof-phone" placeholder="+1 (555) 000-0000" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Bio (optional)</label><textarea class="fi" id="prof-bio" rows="2" placeholder="Short bio..." style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></textarea></div>
+            <button class="btn bp" onclick="saveProfile()" style="width:100%;background:linear-gradient(135deg,#728C5A,#899F71)">Save Changes</button>
             <div id="prof-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
           </div>
         </div>
@@ -1133,9 +1189,9 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
           <div class="ch"><span class="ct">Change Password</span><span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">OPS approval</span></div>
           <div class="cb">
             <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:12px;font-size:12.5px;color:#fde68a;margin-bottom:16px">🔐 Request will be sent to OPS Manager for approval.</div>
-            <div class="fg"><label class="fl">Current Password</label><input class="fi" id="pw-cur" type="password" placeholder="Current password" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-            <div class="fg"><label class="fl">New Password</label><input class="fi" id="pw-new" type="password" placeholder="Min 8 characters" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
-            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" id="pw-conf" type="password" placeholder="Repeat new password" style="background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)"></div>
+            <div class="fg"><label class="fl">Current Password</label><input class="fi" id="pw-cur" type="password" placeholder="Current password" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">New Password</label><input class="fi" id="pw-new" type="password" placeholder="Min 8 characters" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" id="pw-conf" type="password" placeholder="Repeat new password" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
             <button class="btn" onclick="requestPasswordChange()" style="width:100%;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.22);color:#fbbf24;font-family:var(--ff);padding:10px;border-radius:9px;cursor:pointer">Send Request to OPS →</button>
             <div id="pw-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
           </div>
@@ -1146,36 +1202,36 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
 
   <!-- ══ CHAT ══ -->
   <div class="page" id="pg-chat">
-    <div style="display:flex;height:calc(100vh - 110px);min-height:500px;border-radius:16px;overflow:hidden;border:1px solid rgba(34,197,94,.15);box-shadow:0 8px 32px rgba(0,0,0,.4)">
-      <div style="width:260px;background:#0d1410;border-right:1px solid rgba(34,197,94,.1);display:flex;flex-direction:column;flex-shrink:0">
-        <div style="padding:16px 14px 10px;border-bottom:1px solid rgba(34,197,94,.08)">
-          <div style="font-size:14px;font-weight:600;color:#dcfce7;margin-bottom:10px">💬 Team Chat</div>
-          <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.15)">
+    <div style="display:flex;height:calc(100vh - 110px);min-height:500px;border-radius:16px;overflow:hidden;border:1px solid rgba(137,159,113,.15);box-shadow:0 8px 32px rgba(0,0,0,.4)">
+      <div style="width:260px;background:#0D1F13;border-right:1px solid rgba(137,159,113,.1);display:flex;flex-direction:column;flex-shrink:0">
+        <div style="padding:16px 14px 10px;border-bottom:1px solid rgba(137,159,113,.08)">
+          <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:10px">💬 Team Chat</div>
+          <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)">
         </div>
-        <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.07);transition:background .13s;background:rgba(34,197,94,.06)" onmouseenter="this.style.background='rgba(34,197,94,.12)'" onmouseleave="this.style.background='rgba(34,197,94,.06)'">
+        <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(137,159,113,.07);transition:background .13s;background:rgba(137,159,113,.06)" onmouseenter="this.style.background='rgba(137,159,113,.12)'" onmouseleave="this.style.background='rgba(137,159,113,.06)'">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#16a34a,#22c55e);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#728C5A,#899F71);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
             <div>
-              <div style="font-size:13px;font-weight:600;color:#dcfce7">ALGO GROUP Team</div>
-              <div style="font-size:11px;color:#4ade80;opacity:.6" id="groupLastMsg">Group · All members</div>
+              <div style="font-size:13px;font-weight:600;color:#A5B6AF">ALGO GROUP Team</div>
+              <div style="font-size:11px;color:#899F71;opacity:.6" id="groupLastMsg">Group · All members</div>
             </div>
             <div style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55"></div>
           </div>
         </div>
         <div id="contactList" style="flex:1;overflow-y:auto"></div>
       </div>
-      <div style="flex:1;display:flex;flex-direction:column;background:#0a1510">
-        <div id="chatHeader" style="padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.08);display:flex;align-items:center;gap:12px;background:#0d1410;min-height:62px">
+      <div style="flex:1;display:flex;flex-direction:column;background:#0D1F13">
+        <div id="chatHeader" style="padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.08);display:flex;align-items:center;gap:12px;background:#0D1F13;min-height:62px">
           <div style="color:rgba(74,222,128,.45);font-size:14px">← Select a conversation</div>
         </div>
         <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:8px"></div>
-        <div id="chatInputArea" style="display:none;padding:12px 16px;border-top:1px solid rgba(34,197,94,.08);background:#0d1410">
+        <div id="chatInputArea" style="display:none;padding:12px 16px;border-top:1px solid rgba(137,159,113,.08);background:#0D1F13">
           <div id="chatImgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
           <div style="display:flex;gap:8px;align-items:flex-end">
-            <label for="chatFileInput" style="width:38px;height:38px;border-radius:9px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0" title="Attach photo/video">📎</label>
+            <label for="chatFileInput" style="width:38px;height:38px;border-radius:9px;background:rgba(137,159,113,.1);border:1px solid rgba(137,159,113,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0" title="Attach photo/video">📎</label>
             <input type="file" id="chatFileInput" multiple accept="image/*,video/*" style="display:none" onchange="chatAttach(event)">
-            <textarea id="chatTextInp" rows="1" placeholder="Write a message..." style="flex:1;padding:10px 14px;border-radius:14px;border:1px solid rgba(34,197,94,.18);background:#0f1f11;color:#dcfce7;font-family:var(--ff);font-size:13.5px;resize:none;outline:none;max-height:120px;line-height:1.5;overflow-y:auto" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
-            <button onclick="sendChatMsg()" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#22c55e);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 12px rgba(34,197,94,.35);display:flex;align-items:center;justify-content:center">➤</button>
+            <textarea id="chatTextInp" rows="1" placeholder="Write a message..." style="flex:1;padding:10px 14px;border-radius:14px;border:1px solid rgba(137,159,113,.18);background:#142018;color:#A5B6AF;font-family:var(--ff);font-size:13.5px;resize:none;outline:none;max-height:120px;line-height:1.5;overflow-y:auto" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
+            <button onclick="sendChatMsg()" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 12px rgba(137,159,113,.35);display:flex;align-items:center;justify-content:center">➤</button>
           </div>
         </div>
       </div>
@@ -1186,15 +1242,15 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-notifications">
     <div style="max-width:720px;margin:0 auto">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div style="font-size:22px;font-weight:700;color:#dcfce7">🔔 Notifications</div>
-        <button onclick="markAllRead()" class="btn bg_" style="font-size:12px;color:#4ade80;border-color:rgba(34,197,94,.2)">Mark all read</button>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">🔔 Notifications</div>
+        <button onclick="markAllRead()" class="btn bg_" style="font-size:12px;color:#899F71;border-color:rgba(137,159,113,.2)">Mark all read</button>
       </div>
       <div id="broadcastPanel" style="display:none;margin-bottom:16px">
-        <div class="card" style="border-color:rgba(34,197,94,.22)">
+        <div class="card" style="border-color:rgba(137,159,113,.22)">
           <div class="ch"><span class="ct">📢 Broadcast to All Users</span></div>
           <div class="cb" style="display:flex;gap:10px">
-            <input class="fi" id="broadcastMsg" placeholder="Notification message..." style="flex:1;background:#0f1f11;color:#dcfce7;border-color:rgba(34,197,94,.2)">
-            <button class="btn bp" onclick="sendBroadcast()" style="white-space:nowrap;background:linear-gradient(135deg,#16a34a,#22c55e)">📢 Send to All</button>
+            <input class="fi" id="broadcastMsg" placeholder="Notification message..." style="flex:1;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
+            <button class="btn bp" onclick="sendBroadcast()" style="white-space:nowrap;background:linear-gradient(135deg,#728C5A,#899F71)">📢 Send to All</button>
           </div>
         </div>
       </div>
@@ -1203,12 +1259,12 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   </div>
 
   <!-- Notification Dropdown Panel -->
-  <div id="notifPanel" style="display:none;position:fixed;top:68px;right:72px;width:360px;background:#121a13;border:1px solid rgba(34,197,94,.2);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:999;overflow:hidden;max-height:480px;overflow-y:auto">
-    <div style="padding:14px 18px;border-bottom:1px solid rgba(34,197,94,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#121a13">
-      <span style="font-size:13.5px;font-weight:600;color:#dcfce7">Notifications</span>
+  <div id="notifPanel" style="display:none;position:fixed;top:68px;right:72px;width:360px;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:999;overflow:hidden;max-height:480px;overflow-y:auto">
+    <div style="padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#111d14">
+      <span style="font-size:13.5px;font-weight:600;color:#A5B6AF">Notifications</span>
       <div style="display:flex;gap:10px">
-        <button onclick="markAllRead()" style="background:none;border:none;color:#4ade80;font-size:12px;cursor:pointer">Mark all read</button>
-        <button onclick="showPage('notifications');toggleNotifPanel()" style="background:none;border:none;color:#86efac;font-size:12px;cursor:pointer;opacity:.6">View all</button>
+        <button onclick="markAllRead()" style="background:none;border:none;color:#899F71;font-size:12px;cursor:pointer">Mark all read</button>
+        <button onclick="showPage('notifications');toggleNotifPanel()" style="background:none;border:none;color:#899F71;font-size:12px;cursor:pointer;opacity:.6">View all</button>
       </div>
     </div>
     <div id="notifPanelList"></div>
@@ -1246,7 +1302,7 @@ var APP_USERS=[
 var nextUID=7;
 var ROLE_LABELS={ops:'⚙️ OPS',manager:'👔 Support Mgr',sales:'💼 Sales',accounting:'📊 Accounting',media:'📱 Media',safety:'🛡️ Safety'};
 var ROLE_TC={ops:'#22c55e',manager:'#60a5fa',sales:'#fbbf24',accounting:'#34d399',media:'#c084fc',safety:'#f87171'};
-var ROLE_BG={ops:'rgba(34,197,94,.12)',manager:'rgba(59,130,246,.12)',sales:'rgba(251,191,36,.12)',accounting:'rgba(16,185,129,.12)',media:'rgba(168,85,247,.12)',safety:'rgba(239,68,68,.12)'};
+var ROLE_BG={ops:'rgba(137,159,113,.12)',manager:'rgba(59,130,246,.12)',sales:'rgba(251,191,36,.12)',accounting:'rgba(16,185,129,.12)',media:'rgba(168,85,247,.12)',safety:'rgba(239,68,68,.12)'};
 
 function renderUsersTable(){
   var q=(document.getElementById('userSearch')||{value:''}).value.toLowerCase();
@@ -1254,19 +1310,19 @@ function renderUsersTable(){
   var tb=document.getElementById('usersTableBody');if(!tb)return;
   var uc=document.getElementById('userCount');if(uc)uc.textContent=APP_USERS.length;
   tb.innerHTML=filtered.map(function(u){
-    var tc=ROLE_TC[u.role]||'#22c55e',bg=ROLE_BG[u.role]||'rgba(34,197,94,.1)';
+    var tc=ROLE_TC[u.role]||'#22c55e',bg=ROLE_BG[u.role]||'rgba(137,159,113,.1)';
     var isSelf=cu&&cu.email===u.email;
     return '<tr>'
     +'<td><div style="width:36px;height:36px;border-radius:50%;background:'+bg+';border:1.5px solid '+tc+'55;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:'+tc+'">'+u.initials+'</div></td>'
-    +'<td style="font-weight:500;color:#dcfce7">'+u.name+(isSelf?'<span style="font-size:10px;background:rgba(34,197,94,.12);color:#22c55e;border-radius:20px;padding:1px 7px;margin-left:6px">you</span>':'')+'</td>'
-    +'<td style="font-family:var(--fm);font-size:12.5px;color:#86efac">'+u.email+'</td>'
+    +'<td style="font-weight:500;color:#A5B6AF">'+u.name+(isSelf?'<span style="font-size:10px;background:rgba(137,159,113,.12);color:#22c55e;border-radius:20px;padding:1px 7px;margin-left:6px">you</span>':'')+'</td>'
+    +'<td style="font-family:var(--fm);font-size:12.5px;color:#899F71">'+u.email+'</td>'
     +'<td><div style="display:flex;align-items:center;gap:6px">'
-    +'<span id="pw-dot-'+u.id+'" style="font-family:var(--fm);font-size:13px;color:#4ade80;letter-spacing:.08em">••••••••</span>'
+    +'<span id="pw-dot-'+u.id+'" style="font-family:var(--fm);font-size:13px;color:#899F71;letter-spacing:.08em">••••••••</span>'
     +'<span id="pw-real-'+u.id+'" style="display:none;font-family:var(--fm);font-size:12px;color:#fbbf24">'+u.pass+'</span>'
-    +'<button onclick="togglePW('+u.id+')" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);border-radius:5px;color:#4ade80;cursor:pointer;font-size:11px;padding:2px 7px" title="Show">👁</button>'
+    +'<button onclick="togglePW('+u.id+')" style="background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);border-radius:5px;color:#899F71;cursor:pointer;font-size:11px;padding:2px 7px" title="Show">👁</button>'
     +'</div></td>'
     +'<td><span style="background:'+bg+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+ROLE_LABELS[u.role]+'</span></td>'
-    +'<td><span style="background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">● Active</span></td>'
+    +'<td><span style="background:rgba(137,159,113,.1);color:#22c55e;border:1px solid rgba(137,159,113,.2);border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">● Active</span></td>'
     +'<td><div style="display:flex;gap:6px">'
     +'<button onclick="editUser('+u.id+')" style="padding:5px 11px;border-radius:7px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:#60a5fa;font-size:12px;cursor:pointer;font-family:var(--ff)">Edit</button>'
     +(isSelf?'':'<button onclick="removeUser('+u.id+')" style="padding:5px 11px;border-radius:7px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:12px;cursor:pointer;font-family:var(--ff)">Remove</button>')
@@ -1324,7 +1380,7 @@ var PROJECTS=[
 ];
 var nextPID=6;
 var P_STATUS_LABEL={in_progress:'In Progress',planning:'Planning',done:'Done',paused:'Paused'};
-var P_STATUS_C={in_progress:'rgba(59,130,246,.15)',planning:'rgba(251,191,36,.12)',done:'rgba(34,197,94,.12)',paused:'rgba(107,114,128,.12)'};
+var P_STATUS_C={in_progress:'rgba(59,130,246,.15)',planning:'rgba(251,191,36,.12)',done:'rgba(137,159,113,.12)',paused:'rgba(107,114,128,.12)'};
 var P_STATUS_TC={in_progress:'#60a5fa',planning:'#fbbf24',done:'#22c55e',paused:'#9ca3af'};
 var P_PRI_C={high:'#f87171',medium:'#fbbf24',low:'#22c55e'};
 
@@ -1336,25 +1392,25 @@ function renderProjectsGrid(){
     var sc=P_STATUS_C[p.status]||'rgba(107,114,128,.1)',stc=P_STATUS_TC[p.status]||'#9ca3af';
     var pc=P_PRI_C[p.priority]||'#22c55e',rc=ROLE_TC[p.role]||'#22c55e';
     var due=new Date(p.due),diff=Math.ceil((due-today)/(864e5));
-    var dueStr=diff<0?'<span style="color:#f87171;font-weight:600">Overdue '+Math.abs(diff)+'d</span>':diff===0?'<span style="color:#fbbf24;font-weight:600">Due today!</span>':diff<=7?'<span style="color:#fbbf24">'+diff+'d left</span>':'<span style="color:#86efac">'+diff+'d left</span>';
-    return '<div style="background:#121a13;border:1px solid rgba(34,197,94,.12);border-radius:14px;padding:18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.4);transition:all .2s" onmouseenter="this.style.borderColor=\'rgba(34,197,94,.28)\';this.style.transform=\'translateY(-3px)\'" onmouseleave="this.style.borderColor=\'rgba(34,197,94,.12)\';this.style.transform=\'translateY(0)\'">'
+    var dueStr=diff<0?'<span style="color:#f87171;font-weight:600">Overdue '+Math.abs(diff)+'d</span>':diff===0?'<span style="color:#fbbf24;font-weight:600">Due today!</span>':diff<=7?'<span style="color:#fbbf24">'+diff+'d left</span>':'<span style="color:#899F71">'+diff+'d left</span>';
+    return '<div style="background:#111d14;border:1px solid rgba(137,159,113,.12);border-radius:14px;padding:18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.4);transition:all .2s" onmouseenter="this.style.borderColor=\'rgba(137,159,113,.28)\';this.style.transform=\'translateY(-3px)\'" onmouseleave="this.style.borderColor=\'rgba(137,159,113,.12)\';this.style.transform=\'translateY(0)\'">'
     +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">'
     +'<div style="display:flex;align-items:flex-start;gap:8px;flex:1">'
     +'<span style="width:9px;height:9px;border-radius:50%;background:'+pc+';box-shadow:0 0 6px '+pc+'55;flex-shrink:0;margin-top:4px;display:inline-block"></span>'
-    +'<div style="font-size:14px;font-weight:600;color:#dcfce7;line-height:1.35">'+p.name+'</div></div>'
+    +'<div style="font-size:14px;font-weight:600;color:#A5B6AF;line-height:1.35">'+p.name+'</div></div>'
     +'<button onclick="removeProject('+p.id+')" style="background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:18px;line-height:1;flex-shrink:0;padding:0 0 0 10px" onmouseenter="this.style.color=\'#f87171\'" onmouseleave="this.style.color=\'rgba(248,113,113,.4)\'">×</button>'
     +'</div>'
-    +'<div style="font-size:12.5px;color:#86efac;opacity:.65;margin-bottom:12px;line-height:1.45">'+p.desc+'</div>'
+    +'<div style="font-size:12.5px;color:#899F71;opacity:.65;margin-bottom:12px;line-height:1.45">'+p.desc+'</div>'
     +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">'
     +'<span style="background:'+sc+';color:'+stc+';border:1px solid '+stc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+P_STATUS_LABEL[p.status]+'</span>'
-    +'<span style="background:rgba(34,197,94,.07);color:'+rc+';border:1px solid '+rc+'33;border-radius:20px;padding:2px 10px;font-size:11px">'+ROLE_LABELS[p.role]+'</span>'
+    +'<span style="background:rgba(137,159,113,.07);color:'+rc+';border:1px solid '+rc+'33;border-radius:20px;padding:2px 10px;font-size:11px">'+ROLE_LABELS[p.role]+'</span>'
     +'</div>'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(34,197,94,.08);margin-bottom:10px">'
-    +'<div style="font-size:12px;color:#86efac;opacity:.6">👤 '+p.assignee+'</div>'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(137,159,113,.08);margin-bottom:10px">'
+    +'<div style="font-size:12px;color:#899F71;opacity:.6">👤 '+p.assignee+'</div>'
     +'<div style="font-size:11.5px">📅 '+dueStr+'</div>'
     +'</div>'
     +'<div style="display:flex;gap:5px;flex-wrap:wrap">'
-    +Object.keys(P_STATUS_LABEL).map(function(s){var isA=p.status===s;return '<button onclick="setProjStatus('+p.id+',\''+s+'\')" style="padding:3px 9px;border-radius:6px;font-size:10.5px;border:1px solid '+(isA?P_STATUS_TC[s]+'55':'rgba(34,197,94,.12)')+';background:'+(isA?P_STATUS_C[s]:'transparent')+';color:'+(isA?P_STATUS_TC[s]:'rgba(74,222,128,.45)')+';cursor:pointer;font-family:var(--ff);transition:all .14s">'+P_STATUS_LABEL[s]+'</button>';}).join('')
+    +Object.keys(P_STATUS_LABEL).map(function(s){var isA=p.status===s;return '<button onclick="setProjStatus('+p.id+',\''+s+'\')" style="padding:3px 9px;border-radius:6px;font-size:10.5px;border:1px solid '+(isA?P_STATUS_TC[s]+'55':'rgba(137,159,113,.12)')+';background:'+(isA?P_STATUS_C[s]:'transparent')+';color:'+(isA?P_STATUS_TC[s]:'rgba(74,222,128,.45)')+';cursor:pointer;font-family:var(--ff);transition:all .14s">'+P_STATUS_LABEL[s]+'</button>';}).join('')
     +'</div></div>';
   }).join('');
 }
@@ -1470,9 +1526,9 @@ function setupApp(){
   document.getElementById('sName').textContent=cu.name;
   document.getElementById('sEmail').textContent=cu.email;
   initAI('general',r.aiSys,r.aiWelcome);
-  initAI('safety',ROLES.safety.aiSys,'Salom! Men AG Safety AI. DOT compliance, FMCSA violations, DataQ dispute letter yoki hujjat tahlili bo\'yicha yordam bera olaman.');
-  initAI('sales',ROLES.sales.aiSys,'Salom! Men Sales AI. Call scoring, pricing strategy yoki carrier objections bo\'yicha savol bering.');
-  initAI('accounting',ROLES.accounting.aiSys,'Salom! Men Accounting AI. IFTA, settlement, invoice yoki expense masalalarida yordam bera olaman.');
+  initAI('safety',ROLES.safety.aiSys,'Hello! I am AG Safety AI. DOT compliance, FMCSA violations, DataQ dispute letter yoki hujjat tahlili I can help with DOT compliance and safety.');
+  initAI('sales',ROLES.sales.aiSys,'Hello! I am your Sales AI. Ask me about call scoring, pricing strategy, or handling carrier objections.');
+  initAI('accounting',ROLES.accounting.aiSys,'Hello! I am your Accounting AI. Ask me about IFTA, settlements, invoices, or expense management.');
   initAI('knowledge',ROLES.knowledge?ROLES.knowledge.aiSys:r.aiSys,'Hello! I am your Training AI Agent — available 24/7. Ask me about ELD, HOS, Safety, DOT regulations, or anything else.');
   var at=document.getElementById('aiPageTitle');if(at)at.textContent=r.emoji+' '+cu.name.split(' ')[0]+' AI';
   var ap=document.getElementById('app');
@@ -1575,14 +1631,14 @@ function renderKPIops(){
   }).sort(function(a,b){return b.pts-a.pts;});
 
   var shiftColor={Day:'#3b82f6',Night:'#8b5cf6',Main:'#22c55e'};
-  var shiftBg={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(34,197,94,.15)'};
+  var shiftBg={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(137,159,113,.15)'};
 
   // Chart points
   var months=['Jan','Feb','Mar','Apr','May'];
   var chartData=[
-    {id:'D415',col:'#f59e0b',vals:[0,80,220,580,906.50]},
-    {id:'B115',col:'#6366f1',vals:[0,60,180,420,653.75]},
-    {id:'H385',col:'#ec4899',vals:[0,40,140,320,570.25]},
+    {id:'D415',col:'#22c55e',vals:[0,80,220,580,906.50]},
+    {id:'B115',col:'#60a5fa',vals:[0,60,180,420,653.75]},
+    {id:'H385',col:'#fbbf24',vals:[0,40,140,320,570.25]},
   ];
 
   el.innerHTML =
@@ -1800,7 +1856,7 @@ function renderDriverList(){
     +' onmouseenter="this.style.background=\'rgba(142,182,155,.08)\'" onmouseleave="this.style.background=\''+(isSel?'rgba(142,182,155,.12)':'transparent')+'\'">'
     +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
     +'<span style="font-size:12.5px;font-weight:700;color:#DAF1DE;font-family:var(--fm)">'+d.id+'</span>'
-    +(d.speed>0?'<span style="margin-left:auto;background:#0d3320;border:1px solid #1a5c32;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:700;color:#4ade80;font-family:var(--fm)">'+d.speed+' mph</span>':'<span style="margin-left:auto;background:rgba(107,114,128,.12);border:1px solid rgba(107,114,128,.18);border-radius:5px;padding:1px 8px;font-size:11px;color:#9ca3af;font-family:var(--fm)">Stopped</span>')
+    +(d.speed>0?'<span style="margin-left:auto;background:#0d3320;border:1px solid #1a5c32;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:700;color:#899F71;font-family:var(--fm)">'+d.speed+' mph</span>':'<span style="margin-left:auto;background:rgba(107,114,128,.12);border:1px solid rgba(107,114,128,.18);border-radius:5px;padding:1px 8px;font-size:11px;color:#9ca3af;font-family:var(--fm)">Stopped</span>')
     +'</div>'
     +'<div style="font-size:11px;color:rgba(142,182,155,.55);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📍 '+d.loc+'</div>'
     +'<div style="display:flex;align-items:center;gap:6px">'
@@ -2034,9 +2090,9 @@ function renderNotifPanel(){
   if(items.length===0){el.innerHTML='<div style="padding:24px;text-align:center;color:rgba(74,222,128,.4);font-size:13px">No notifications</div>';return;}
   el.innerHTML=items.map(function(n){
     var unread=!n.read.includes(cu&&cu.email);
-    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(34,197,94,.1)">'+n.icon+'</div>'
-    +'<div style="flex:1"><div style="font-size:13px;color:#dcfce7;margin-bottom:2px">'+esc(n.text)+'</div>'
-    +'<div style="font-size:11px;color:#4ade80;opacity:.6">'+n.from+' · '+n.time+'</div></div>'
+    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(137,159,113,.1)">'+n.icon+'</div>'
+    +'<div style="flex:1"><div style="font-size:13px;color:#A5B6AF;margin-bottom:2px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:11px;color:#899F71;opacity:.6">'+n.from+' · '+n.time+'</div></div>'
     +(unread?'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:4px"></div>':'')
     +'</div>';
   }).join('');
@@ -2049,9 +2105,9 @@ function renderNotifPage(){
   if(NOTIFICATIONS.length===0){el.innerHTML='<div style="padding:40px;text-align:center;color:rgba(74,222,128,.4)">No notifications</div>';return;}
   el.innerHTML=NOTIFICATIONS.map(function(n){
     var unread=!n.read.includes(cu&&cu.email);
-    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(34,197,94,.1)">'+n.icon+'</div>'
-    +'<div style="flex:1"><div style="font-size:13.5px;font-weight:'+(unread?'600':'400')+';color:#dcfce7;margin-bottom:3px">'+esc(n.text)+'</div>'
-    +'<div style="font-size:12px;color:#4ade80;opacity:.65">'+n.from+' · '+n.time+'</div></div>'
+    return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(137,159,113,.1)">'+n.icon+'</div>'
+    +'<div style="flex:1"><div style="font-size:13.5px;font-weight:'+(unread?'600':'400')+';color:#A5B6AF;margin-bottom:3px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:12px;color:#899F71;opacity:.65">'+n.from+' · '+n.time+'</div></div>'
     +(unread?'<div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:6px"></div>':'')
     +'</div>';
   }).join('');
@@ -2087,7 +2143,7 @@ function renderProfilePage(){
   }
   setEl('profileNameBig', prof.displayName||cu.name);
   var rolePill=document.getElementById('profileRoleBig');
-  if(rolePill){rolePill.textContent=ROLE_LABELS&&ROLE_LABELS[cu.role]||cu.role;rolePill.style.background='rgba(34,197,94,.12)';rolePill.style.color='#22c55e';rolePill.style.border='1px solid rgba(34,197,94,.2)';}
+  if(rolePill){rolePill.textContent=ROLE_LABELS&&ROLE_LABELS[cu.role]||cu.role;rolePill.style.background='rgba(137,159,113,.12)';rolePill.style.color='#22c55e';rolePill.style.border='1px solid rgba(137,159,113,.2)';}
   setEl('profileEmailBig',cu.email);
   var ni=document.getElementById('prof-name');if(ni)ni.value=prof.displayName||cu.name;
   var ei=document.getElementById('prof-email');if(ei)ei.value=cu.email;
@@ -2210,13 +2266,13 @@ function renderContactList(){
     var lastM=last.length?last[last.length-1]:null;
     var lastTxt=lastM?(lastM.text?lastM.text.slice(0,28)+(lastM.text.length>28?'…':''):(lastM.files&&lastM.files.length?'📎 Attachment':'')):ROLE_LABELS[u.role];
     var isActive=currentChatRoom===room;
-    return '<div onclick="openChat(\''+u.email+'\',\''+u.name+'\',\'\',\''+u.email+'\')" style="padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(34,197,94,.06);transition:background .13s;background:'+(isActive?'rgba(34,197,94,.1)':'transparent')+'" onmouseenter="this.style.background=\'rgba(34,197,94,.09)\'" onmouseleave="this.style.background=\''+(isActive?'rgba(34,197,94,.1)':'transparent')+'\';">'
+    return '<div onclick="openChat(\''+u.email+'\',\''+u.name+'\',\'\',\''+u.email+'\')" style="padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(137,159,113,.06);transition:background .13s;background:'+(isActive?'rgba(137,159,113,.1)':'transparent')+'" onmouseenter="this.style.background=\'rgba(137,159,113,.09)\'" onmouseleave="this.style.background=\''+(isActive?'rgba(137,159,113,.1)':'transparent')+'\';">'
     +'<div style="display:flex;align-items:center;gap:10px">'
     +'<div style="width:38px;height:38px;border-radius:50%;background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';border:1.5px solid '+tc+'44;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+tc+';flex-shrink:0">'
     +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':u.initials)
     +'</div>'
-    +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#dcfce7">'+u.name+'</div>'
-    +'<div style="font-size:11px;color:#86efac;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(lastTxt)+'</div></div>'
+    +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#A5B6AF">'+u.name+'</div>'
+    +'<div style="font-size:11px;color:#899F71;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(lastTxt)+'</div></div>'
     +'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55;flex-shrink:0"></div>'
     +'</div></div>';
   }).join('');
@@ -2237,8 +2293,8 @@ function openChat(room,name,emoji,email){
     hdr.innerHTML='<div style="width:40px;height:40px;border-radius:'+(room==='group'?'12px':'50%')+';background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';display:flex;align-items:center;justify-content:center;font-size:'+(room==='group'?'18px':'13px')+';font-weight:700;color:#fff;overflow:hidden;flex-shrink:0">'
     +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':(emoji||name.slice(0,2).toUpperCase()))
     +'</div>'
-    +'<div><div style="font-size:14px;font-weight:600;color:#dcfce7">'+name+'</div>'
-    +'<div style="font-size:11.5px;color:#4ade80;opacity:.6">'+(room==='group'?APP_USERS.length+' members · Group':'Online')+'</div></div>';
+    +'<div><div style="font-size:14px;font-weight:600;color:#A5B6AF">'+name+'</div>'
+    +'<div style="font-size:11.5px;color:#899F71;opacity:.6">'+(room==='group'?APP_USERS.length+' members · Group':'Online')+'</div></div>';
   }
   var ia=document.getElementById('chatInputArea');if(ia)ia.style.display='block';
   renderChatMessages();
@@ -2287,8 +2343,8 @@ function updateImgPreview(){
   var p=document.getElementById('chatImgPreview');if(!p)return;
   p.innerHTML=chatPendingFiles.map(function(f,i){
     return '<div style="position:relative;display:inline-block">'
-    +(f.type==='video'?'<video src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(34,197,94,.2)"></video>'
-    :'<img src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(34,197,94,.2)">')
+    +(f.type==='video'?'<video src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(137,159,113,.2)"></video>'
+    :'<img src="'+f.data+'" style="height:56px;border-radius:6px;border:1px solid rgba(137,159,113,.2)">')
     +'<button onclick="chatPendingFiles.splice('+i+',1);updateImgPreview()" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>'
     +'</div>';
   }).join('');
