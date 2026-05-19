@@ -281,6 +281,9 @@ html.dark .ibox{color:#b8cca0}
 html.dark .formula-row .fbox{color:#c8ddb0}
 html.dark .decay-bar .db{filter:brightness(.85)}
 html.dark .dip{border-color:rgba(146,183,117,.3)}
+/* KPI Spinner */
+.kpi-spinner{width:36px;height:36px;border-radius:50%;border:3px solid rgba(146,183,117,.15);border-top-color:#92B775;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 /* ─── NOTIFICATION BELL ─── */
 .notif-bell{position:relative;width:38px;height:38px;border-radius:10px;background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
 .notif-bell:hover{background:rgba(137,159,113,.15);transform:scale(1.05)}
@@ -1710,15 +1713,316 @@ function renderKPI(){
   else el.innerHTML='<div style="text-align:center;padding:60px;color:var(--g600);font-size:14px">No KPI available for this role</div>';
   if(role==='sales')initCallTimer();
 }
-// ─── KPI DATA ───
+// ═══ KPI API CONFIG ═══
+var KPI_API_URL = 'https://kpi-dashboard-production-3259.up.railway.app/dashboard';
+var KPI_API_KEY = 'e99a3f2be83743a3a9a10df8d080fd6d1d8e8253dbbf41578dbbc15d4fd97c15';
+var kpiApiData = null;
+var kpiLastFetch = null;
+
+function kpiOPS(){
+  return '<div id="kpiOpsRoot"><div style="display:flex;align-items:center;justify-content:center;height:300px;flex-direction:column;gap:16px"><div class="kpi-spinner"></div><div style="color:#92B775;font-size:13px">Loading KPI data from API...</div></div></div>';
+}
+
+async function renderKPIops(){
+  var el = document.getElementById('kpiOpsRoot');
+  if(!el) return;
+
+  // Show loading
+  el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:260px;flex-direction:column;gap:14px">'
+    + '<div class="kpi-spinner"></div>'
+    + '<div style="color:#92B775;font-size:13px;letter-spacing:.03em">Connecting to KPI API...</div>'
+    + '</div>';
+
+  try {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + KPI_API_KEY,
+      'X-API-Key': KPI_API_KEY,
+    };
+
+    var res = await fetch(KPI_API_URL, { headers: headers });
+
+    if(!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
+
+    var raw = await res.text();
+    var data;
+    try { data = JSON.parse(raw); }
+    catch(e) { throw new Error('Invalid JSON response'); }
+
+    kpiApiData = data;
+    kpiLastFetch = new Date();
+    renderKPIFromData(el, data);
+
+  } catch(err) {
+    el.innerHTML = renderKPIError(err.message);
+  }
+}
+
+function renderKPIError(msg){
+  return '<div style="background:#111d14;border:1px solid rgba(248,113,113,.2);border-radius:14px;padding:28px;text-align:center;margin-bottom:16px">'
+    + '<div style="font-size:28px;margin-bottom:10px">⚠️</div>'
+    + '<div style="font-size:14px;font-weight:600;color:#f87171;margin-bottom:6px">API Connection Failed</div>'
+    + '<div style="font-size:12.5px;color:#899F71;margin-bottom:18px;font-family:var(--fm)">'+escHtml(msg)+'</div>'
+    + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+    + '<button class="btn bp" onclick="renderKPIops()" style="font-size:12.5px">↻ Retry</button>'
+    + '<button class="btn" onclick="showKPIManual()" style="font-size:12.5px;background:rgba(146,183,117,.1);border:1px solid rgba(146,183,117,.2);color:#92B775;border-radius:9px;padding:8px 16px;cursor:pointer;font-family:var(--ff)">📋 Manual Data</button>'
+    + '</div>'
+    + '<div style="margin-top:16px;padding:12px;background:rgba(146,183,117,.06);border-radius:8px;font-size:11.5px;color:#899F71">'
+    + '<div style="margin-bottom:4px;font-weight:500">API Details:</div>'
+    + '<div style="font-family:var(--fm);word-break:break-all;opacity:.7">'+KPI_API_URL+'</div>'
+    + '</div>'
+    + '</div>'
+    + renderKPIFallback();
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function renderKPIFromData(el, data){
+  // Auto-detect data structure
+  var rows = [];
+  var meta = {};
+
+  if(Array.isArray(data)) {
+    rows = data;
+  } else if(data.data && Array.isArray(data.data)) {
+    rows = data.data; meta = data;
+  } else if(data.employees && Array.isArray(data.employees)) {
+    rows = data.employees; meta = data;
+  } else if(data.kpi && Array.isArray(data.kpi)) {
+    rows = data.kpi; meta = data;
+  } else if(data.records && Array.isArray(data.records)) {
+    rows = data.records; meta = data;
+  } else if(data.results && Array.isArray(data.results)) {
+    rows = data.results; meta = data;
+  } else if(typeof data === 'object') {
+    // Single object or unknown structure — display raw
+    renderKPIRaw(el, data);
+    return;
+  }
+
+  if(rows.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:60px;color:#899F71">No data returned from API.</div>';
+    return;
+  }
+
+  // Get all column keys from first row
+  var cols = Object.keys(rows[0]);
+  var numCols = cols.filter(k => typeof rows[0][k] === 'number' || !isNaN(parseFloat(rows[0][k])));
+
+  // Find name/id column
+  var nameCol = cols.find(k => /name|id|employee|user|driver|dispatcher/i.test(k)) || cols[0];
+  var totalCol = cols.find(k => /total|pts|points|score|sum/i.test(k)) || numCols[numCols.length-1];
+  var shiftCol = cols.find(k => /shift|work|schedule/i.test(k));
+
+  // Sort by total
+  if(totalCol) rows = rows.slice().sort(function(a,b){ return parseFloat(b[totalCol]||0) - parseFloat(a[totalCol]||0); });
+
+  // Stats
+  var top3 = rows.slice(0,3);
+  var totalVal = rows.reduce(function(s,r){ return s + parseFloat(r[totalCol]||0); },0);
+  var avgVal = rows.length ? (totalVal/rows.length).toFixed(1) : 0;
+
+  var html = '';
+
+  // ── Header stats ──
+  html += '<div class="sg" style="margin-bottom:18px">';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">👥</span><div class="sv">'+rows.length+'</div><div class="sl">Total Employees</div></div>';
+  if(totalCol) html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">🏆</span><div class="sv">'+(rows[0]?rows[0][nameCol]||'—':'—')+'</div><div class="sl">Top Performer</div></div>';
+  if(totalCol) html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">📊</span><div class="sv">'+avgVal+'</div><div class="sl">Avg Score</div></div>';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">🕐</span><div class="sv" id="kpiLastSync">Just now</div><div class="sl">Last sync</div>'
+    + '<button onclick="renderKPIops()" style="margin-top:6px;background:rgba(146,183,117,.1);border:1px solid rgba(146,183,117,.2);color:#92B775;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;font-family:var(--ff);width:100%">↻ Refresh</button>'
+    + '</div>';
+  html += '</div>';
+
+  // ── Top 3 podium ──
+  if(totalCol && top3.length >= 2) {
+    html += '<div class="g2 mb16">';
+    // Chart placeholder
+    html += '<div class="card"><div class="ch"><span class="ct">Performance Chart</span><span style="font-size:11px;color:#92B775;background:rgba(146,183,117,.1);padding:2px 8px;border-radius:20px">Live</span></div>'
+      + '<div class="cb" style="padding:12px 16px"><div style="display:flex;align-items:flex-end;gap:8px;height:140px" id="kpiApiChart"></div></div></div>';
+
+    // Podium
+    html += '<div class="card"><div class="ch"><span class="ct">🏆 Leaderboard</span></div><div class="cb" style="padding:0">';
+    top3.forEach(function(r,i){
+      var medals=['🥇','🥈','🥉'],bg=['rgba(251,191,36,.1)','rgba(156,163,175,.08)','rgba(205,127,50,.08)'];
+      var bc=['rgba(251,191,36,.3)','rgba(156,163,175,.2)','rgba(205,127,50,.2)'];
+      html += '<div style="padding:14px 18px;border-bottom:1px solid rgba(146,183,117,.08);background:'+bg[i]+';border-left:3px solid '+bc[i]+';display:flex;align-items:center;gap:12px">'
+        + '<span style="font-size:22px">'+medals[i]+'</span>'
+        + '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#c8ddb0">'+escHtml(String(r[nameCol]||'—'))+'</div>'
+        + (shiftCol?'<div style="font-size:11px;color:#92B775">'+escHtml(String(r[shiftCol]||''))+'</div>':'')
+        +'</div>'
+        + (totalCol?'<div style="text-align:right"><div style="font-size:18px;font-weight:700;color:#92B775;font-family:var(--fm)">'+parseFloat(r[totalCol]||0).toFixed(2)+'</div><div style="font-size:10px;color:#899F71">pts</div></div>':'')
+        +'</div>';
+    });
+    html += '</div></div>';
+    html += '</div>';
+  }
+
+  // ── Filters ──
+  var shifts = shiftCol ? [...new Set(rows.map(function(r){return r[shiftCol];}).filter(Boolean))] : [];
+  html += '<div class="card mb16"><div class="cb" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 18px">';
+  html += '<div style="font-size:11px;color:#899F71;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Filter:</div>';
+  if(shifts.length > 0) {
+    html += '<div style="display:flex;gap:4px">';
+    html += '<button onclick="filterKPIRows(\'all\')" id="kpiF_all" style="padding:5px 13px;border-radius:7px;font-size:12px;border:1px solid rgba(146,183,117,.2);background:rgba(146,183,117,.15);color:#92B775;cursor:pointer;font-family:var(--ff)">All</button>';
+    shifts.forEach(function(s){
+      html += '<button onclick="filterKPIRows(\''+escHtml(s)+'\')" id="kpiF_'+escHtml(s)+'" style="padding:5px 13px;border-radius:7px;font-size:12px;border:1px solid rgba(146,183,117,.12);background:transparent;color:#899F71;cursor:pointer;font-family:var(--ff)">'+escHtml(s)+'</button>';
+    });
+    html += '</div>';
+  }
+  html += '<div style="margin-left:auto"><input id="kpiApiSearch" onkeyup="filterKPIRows()" placeholder="Search..." style="padding:6px 12px;border-radius:8px;border:1px solid rgba(146,183,117,.2);background:#162118;color:#c8ddb0;font-family:var(--ff);font-size:12.5px;outline:none;width:160px"></div>';
+  html += '</div></div>';
+
+  // ── Main Table ──
+  html += '<div class="card"><div class="ch"><span class="ct">All Employees</span>'
+    + '<span style="font-size:12px;color:#899F71" id="kpiRowCount">'+rows.length+' entries</span></div>'
+    + '<div style="overflow-x:auto"><table id="kpiApiTable"><thead><tr>';
+
+  html += '<th>#</th>';
+  cols.forEach(function(c){
+    html += '<th>'+escHtml(String(c).replace(/_/g,' ').toUpperCase())+'</th>';
+  });
+  html += '</tr></thead><tbody id="kpiApiTbody">';
+
+  rows.forEach(function(r, i){
+    html += buildKPIRow(r, cols, nameCol, totalCol, shiftCol, i);
+  });
+
+  html += '</tbody></table></div></div>';
+
+  el.innerHTML = html;
+
+  // Draw chart
+  setTimeout(function(){
+    var chartEl = document.getElementById('kpiApiChart');
+    if(!chartEl || !totalCol) return;
+    var max = parseFloat(rows[0][totalCol]||0)||1;
+    rows.slice(0,8).forEach(function(r,i){
+      var v = parseFloat(r[totalCol]||0);
+      var h2 = Math.round((v/max)*128);
+      var pct = Math.round((v/max)*100);
+      var col = i===0?'linear-gradient(180deg,#fbbf24,#92B775)':i===1?'linear-gradient(180deg,#92B775,#2b3f26)':'linear-gradient(180deg,#92B775,#133215)';
+      var col_div = document.createElement('div');
+      col_div.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:4px';
+      col_div.innerHTML='<span style="font-size:9px;color:#899F71;font-family:var(--fm)">'+v+'</span>'
+        +'<div style="width:100%;height:'+h2+'px;background:'+col+';border-radius:4px 4px 0 0;min-height:3px;cursor:pointer;transition:opacity .14s" title="'+escHtml(String(r[nameCol]||i+1))+': '+v+'" onmouseenter="this.style.opacity=\'.75\'" onmouseleave="this.style.opacity=\'1\'"></div>'
+        +'<span style="font-size:9px;color:#899F71;font-family:var(--fm);white-space:nowrap;overflow:hidden;max-width:100%;text-overflow:ellipsis">'+escHtml(String(r[nameCol]||i+1)).slice(0,6)+'</span>';
+      chartEl.appendChild(col_div);
+    });
+    setEl('kpiLastSync', kpiLastFetch ? kpiLastFetch.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : 'Just now');
+  },60);
+
+  // Store for filtering
+  window._kpiRows = rows;
+  window._kpiCols = cols;
+  window._kpiNameCol = nameCol;
+  window._kpiTotalCol = totalCol;
+  window._kpiShiftCol = shiftCol;
+}
+
+function buildKPIRow(r, cols, nameCol, totalCol, shiftCol, i){
+  var rank = i+1;
+  var medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+  var html = '<tr>';
+  html += '<td style="text-align:center;font-size:'+(medal?'17':'12')+'px">'+(medal||rank)+'</td>';
+  cols.forEach(function(c){
+    var v = r[c];
+    var vStr = v===null||v===undefined?'—':escHtml(String(v));
+    var style='';
+    if(c===totalCol) style='font-weight:700;font-family:var(--fm);color:#92B775';
+    else if(c===nameCol) style='font-weight:500;color:#c8ddb0';
+    else if(typeof v === 'number'||(!isNaN(parseFloat(v))&&v!=='')) style='font-family:var(--fm)';
+
+    if(c===shiftCol&&v){
+      var sc={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(34,197,94,.12)'}[v]||'rgba(146,183,117,.1)';
+      var tc={Day:'#60a5fa',Night:'#c084fc',Main:'#22c55e'}[v]||'#92B775';
+      vStr='<span style="background:'+sc+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">'+escHtml(String(v))+'</span>';
+      style='';
+    }
+    html += '<td style="'+style+'">'+vStr+'</td>';
+  });
+  html += '</tr>';
+  return html;
+}
+
+function filterKPIRows(shift){
+  if(!window._kpiRows) return;
+  var rows = window._kpiRows;
+  var q = (document.getElementById('kpiApiSearch')||{value:''}).value.toLowerCase();
+  var nameCol=window._kpiNameCol, totalCol=window._kpiTotalCol, shiftCol=window._kpiShiftCol;
+  var cols=window._kpiCols;
+
+  // Update active filter button
+  if(shift !== undefined){
+    window._kpiActiveShift = shift;
+    document.querySelectorAll('[id^="kpiF_"]').forEach(function(b){
+      var isActive = b.id === 'kpiF_'+shift;
+      b.style.background = isActive ? 'rgba(146,183,117,.18)' : 'transparent';
+      b.style.color = isActive ? '#92B775' : '#899F71';
+      b.style.borderColor = isActive ? 'rgba(146,183,117,.3)' : 'rgba(146,183,117,.12)';
+    });
+  }
+
+  var activeShift = window._kpiActiveShift || 'all';
+  var filtered = rows.filter(function(r){
+    var matchShift = activeShift==='all' || !shiftCol || String(r[shiftCol]||'')===activeShift;
+    var matchQ = !q || String(r[nameCol]||'').toLowerCase().includes(q) || JSON.stringify(r).toLowerCase().includes(q);
+    return matchShift && matchQ;
+  });
+
+  var tbody = document.getElementById('kpiApiTbody');
+  if(tbody) tbody.innerHTML = filtered.map(function(r,i){ return buildKPIRow(r,cols,nameCol,totalCol,shiftCol,i); }).join('');
+  var cnt = document.getElementById('kpiRowCount');
+  if(cnt) cnt.textContent = filtered.length + ' entries';
+}
+
+function renderKPIRaw(el, data){
+  el.innerHTML = '<div class="card"><div class="ch"><span class="ct">📡 API Response</span>'
+    +'<span style="font-size:11px;color:#92B775;background:rgba(146,183,117,.1);padding:2px 8px;border-radius:20px">Raw JSON</span></div>'
+    +'<div class="cb"><pre style="font-family:var(--fm);font-size:11.5px;color:#92B775;overflow-x:auto;white-space:pre-wrap;line-height:1.5;background:#111d14;padding:14px;border-radius:10px;border:1px solid rgba(146,183,117,.1)">'
+    +escHtml(JSON.stringify(data,null,2)).slice(0,4000)
+    +'</pre></div></div>';
+}
+
+function renderKPIFallback(){
+  return '<div style="margin-top:16px;background:rgba(146,183,117,.04);border:1px solid rgba(146,183,117,.12);border-radius:12px;padding:16px">'
+    +'<div style="font-size:12px;font-weight:600;color:#899F71;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em">📋 Manual Data (Offline mode)</div>'
+    + buildManualKPITable()
+    +'</div>';
+}
+
+function buildManualKPITable(){
+  var rows = KPI_DATA;
+  return '<div style="overflow-x:auto"><table style="min-width:900px"><thead><tr>'
+    +'<th>#</th><th>Employee</th><th>Shift</th><th>S</th><th>Cycle</th><th>Break</th><th>BOL</th><th>New</th><th>Extra</th><th>Filled</th><th>Calls</th><th>Minutes</th><th>Total</th><th>Pts</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(d,i){
+      var r=i+1,m=r===1?'🥇':r===2?'🥈':r===3?'🥉':'';
+      var sc={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(34,197,94,.12)'}[d.shift]||'rgba(146,183,117,.1)';
+      var tc={Day:'#60a5fa',Night:'#c084fc',Main:'#22c55e'}[d.shift]||'#92B775';
+      return '<tr><td style="text-align:center;font-size:'+(m?'17':'12')+'px">'+(m||r)+'</td>'
+        +'<td style="font-weight:600;font-family:var(--fm);color:#c8ddb0">'+d.id+'</td>'
+        +'<td><span style="background:'+sc+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">'+d.shift+'</span></td>'
+        +[d.s,d.cy,d.br,d.bol,d.nw,d.ex,d.fi,d.ca,d.mins,d.total].map(function(v){return '<td style="font-family:var(--fm)">'+v+'</td>';}).join('')
+        +'<td style="font-weight:700;font-family:var(--fm);color:#92B775">'+d.pts.toFixed(2)+'</td>'
+        +'</tr>';
+    }).join('')
+    +'</tbody></table></div>';
+}
+
+function showKPIManual(){
+  var el = document.getElementById('kpiOpsRoot');
+  if(el) el.innerHTML = renderKPIFallback();
+}
 var KPI_DATA = [
-  {id:'D415',shift:'Night',s:453,cy:125,br:316,bol:5,nw:1,ex:324,fi:148,pl:0,up:21,ca:254,min:1073,total:1647,pts:906.50},
+  {id:'D415',shift:'Night',s:453,cy:125,br:316,bol:5,nw:1,ex:324,fi:148,pl:0,up:21,ca:254,mins:1073,total:1647,pts:906.50},
   {id:'B115',shift:'Day',  s:407,cy:93, br:280,bol:0,nw:2,ex:274,fi:111,pl:0,up:8, ca:97, min:474, total:1272,pts:653.75},
-  {id:'H385',shift:'Main', s:254,cy:95, br:91, bol:0,nw:2,ex:209,fi:189,pl:0,up:1, ca:167,min:686, total:1008,pts:570.25},
+  {id:'H385',shift:'Main', s:254,cy:95, br:91, bol:0,nw:2,ex:209,fi:189,pl:0,up:1, ca:167,mins:686, total:1008,pts:570.25},
   {id:'L860',shift:'Day',  s:499,cy:86, br:224,bol:0,nw:0,ex:234,fi:48, pl:0,up:10,ca:49, min:161, total:1150,pts:563.25},
   {id:'C465',shift:'Night',s:290,cy:102,br:269,bol:0,nw:0,ex:339,fi:37, pl:0,up:0, ca:56, min:264, total:1093,pts:559.00},
-  {id:'C920',shift:'Main', s:297,cy:111,br:66, bol:0,nw:4,ex:130,fi:221,pl:0,up:0, ca:129,min:472, total:958, pts:518.25},
-  {id:'S145',shift:'Main', s:247,cy:79, br:47, bol:4,nw:4,ex:54, fi:120,pl:0,up:3, ca:126,min:451, total:684, pts:390.75},
+  {id:'C920',shift:'Main', s:297,cy:111,br:66, bol:0,nw:4,ex:130,fi:221,pl:0,up:0, ca:129,mins:472, total:958, pts:518.25},
+  {id:'S145',shift:'Main', s:247,cy:79, br:47, bol:4,nw:4,ex:54, fi:120,pl:0,up:3, ca:126,mins:451, total:684, pts:390.75},
   {id:'N950',shift:'Night',s:237,cy:81, br:67, bol:0,nw:1,ex:101,fi:34, pl:0,up:5, ca:35, min:158, total:561, pts:317.00},
   {id:'A210',shift:'Day',  s:198,cy:64, br:42, bol:2,nw:0,ex:88, fi:72, pl:0,up:2, ca:44, min:122, total:512, pts:288.50},
 ];
