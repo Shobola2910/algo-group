@@ -18,6 +18,20 @@
 .leaflet-popup-close-button{color:#8EB69B!important}
 .leaflet-control-zoom a{background:#0d1f16!important;border-color:rgba(142,182,155,.2)!important;color:#8EB69B!important}
 .leaflet-control-attribution{background:rgba(0,0,0,.4)!important;color:rgba(142,182,155,.4)!important;font-size:9px!important}
+
+/* ─── NIGHT MODE GLOW EDGES ─── */
+html.dark .card{box-shadow:0 0 0 1px rgba(146,183,117,.1),0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(146,183,117,.06)}
+html.dark .card:hover{box-shadow:0 0 0 1px rgba(146,183,117,.2),0 8px 28px rgba(0,0,0,.6),inset 0 1px 0 rgba(146,183,117,.1);border-color:rgba(146,183,117,.25)!important}
+html.dark .sc{box-shadow:0 0 0 1px rgba(146,183,117,.08),0 2px 12px rgba(0,0,0,.4)}
+html.dark .sc:hover{box-shadow:0 0 0 1px rgba(146,183,117,.22),0 6px 22px rgba(0,0,0,.55),inset 0 1px 0 rgba(146,183,117,.08)!important;border-color:rgba(146,183,117,.3)!important;transform:translateY(-3px)}
+html.dark .tabs{box-shadow:0 0 0 1px rgba(146,183,117,.1),0 2px 8px rgba(0,0,0,.3)}
+html.dark .sidebar{box-shadow:2px 0 20px rgba(0,0,0,.5),inset -1px 0 0 rgba(146,183,117,.1)}
+html.dark .topbar{box-shadow:0 1px 0 rgba(146,183,117,.1),0 2px 12px rgba(0,0,0,.3)}
+html.dark .urow{background:rgba(146,183,117,.06);border-color:rgba(146,183,117,.1);box-shadow:0 0 0 1px rgba(146,183,117,.06)}
+html.dark .notif-bell{background:rgba(146,183,117,.07);border-color:rgba(146,183,117,.14)}
+html.dark .ni.active{box-shadow:inset 0 0 0 1px rgba(146,183,117,.2)}
+html.dark .glass-toggle-wrap{box-shadow:0 0 0 1px rgba(146,183,117,.15),0 4px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(146,183,117,.1)}
+html.dark .fab-main{box-shadow:0 0 0 1px rgba(146,183,117,.3),0 6px 24px rgba(146,183,117,.2)}
 </style>
 <style>
 :root{
@@ -31,171 +45,183 @@
   --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sw:220px;--hh:58px;
   --accent:#728C5A;--accent-dim:rgba(114,140,90,.15);--accent-glow:rgba(114,140,90,.3);
 }
-/* ── LIGHT (DAY) MODE ── */
+/* ── DAY MODE ── Green #133215 · Lime #92B775 · Beige #F3E8D3 */
 html:not(.dark){
-  --surf:#EBFADC;--white:#ffffff;
-  --bdr:rgba(114,140,90,.18);--bdr2:rgba(114,140,90,.24);
-  --sh1:0 1px 4px rgba(16,47,21,.08);--sh2:0 6px 22px rgba(16,47,21,.14);
+  --surf:#F3E8D3;--white:#fff;--card:#fff;--card2:#f7f2e8;
+  --bdr:rgba(19,50,21,.14);--bdr2:rgba(146,183,117,.22);
+  --sh1:0 1px 4px rgba(19,50,21,.08);--sh2:0 6px 20px rgba(19,50,21,.13);
 }
-html:not(.dark) body{color:#102F15;background:#EBFADC}
-html:not(.dark) .sidebar{background:#102F15}
-html:not(.dark) .main{background:#EBFADC}
-html:not(.dark) .card{background:#ffffff;border-color:rgba(114,140,90,.22)}
-html:not(.dark) .sc{background:#ffffff;border-color:rgba(114,140,90,.2)}
-html:not(.dark) .sc::before{background:#EAF1B1}
-html:not(.dark) .sv{color:#102F15}
-html:not(.dark) .sl{color:#728C5A}
-html:not(.dark) .ch{border-color:rgba(114,140,90,.2)}
-html:not(.dark) .ct{color:#102F15}
-html:not(.dark) tbody td{color:#102F15}
-html:not(.dark) tbody tr:hover{background:#f4fde8}
-html:not(.dark) thead th{background:#EAF1B1;color:#264d29}
-html:not(.dark) .topbar{background:rgba(235,250,220,.94);border-bottom-color:rgba(114,140,90,.2)}
-html:not(.dark) .pgt{color:#102F15}
-html:not(.dark) .tpill, html:not(.dark) .glass-pill{background:rgba(114,140,90,.12);color:#264d29;border-color:rgba(114,140,90,.25)}
-html:not(.dark) .btn.bg_{color:#264d29;border-color:rgba(114,140,90,.3)}
-html:not(.dark) .btn.bg_:hover{background:#EAF1B1}
-html:not(.dark) .btn.bp{background:#728C5A;color:#fff}
-html:not(.dark) .btn.bp:hover{background:#5a7045}
-html:not(.dark) .ni{color:rgba(235,250,220,.6)}
-html:not(.dark) .ni:hover{background:rgba(235,250,220,.12);color:#EBFADC}
-html:not(.dark) .ni.active{background:rgba(234,241,177,.18);color:#EAF1B1}
-html:not(.dark) .ni.active .nd{background:#EAF1B1;box-shadow:0 0 7px #EAF1B155}
-html:not(.dark) .rpdot{background:#EAF1B1;box-shadow:0 0 6px #EAF1B1}
-html:not(.dark) .lt{color:#EBFADC}
-html:not(.dark) .ld{color:#a8be8c;opacity:.7}
-html:not(.dark) .un{color:#EBFADC}
-html:not(.dark) .ue{color:#a8be8c}
-html:not(.dark) .tabs{background:#fff;border-color:rgba(114,140,90,.2)}
-html:not(.dark) .tab{color:#264d29}
-html:not(.dark) .tab.active{background:#728C5A;color:#fff}
-html:not(.dark) .pb{background:#EAF1B1}
-html:not(.dark) .pf{background:linear-gradient(90deg,#728C5A,#a8be8c)}
-html:not(.dark) .ki{border-color:rgba(114,140,90,.18)}
-html:not(.dark) .kn{color:#102F15}
-html:not(.dark) .tlt{color:#102F15}
-html:not(.dark) .fi,.fi,.fs{border-color:rgba(114,140,90,.25)}
-html:not(.dark) .upl{background:#EAF1B1;border-color:rgba(114,140,90,.3)}
-html:not(.dark) .sck{background:#EAF1B1;border-color:rgba(114,140,90,.2)}
-html:not(.dark) .scn{color:#102F15}
-html:not(.dark) .plc{background:#EAF1B1;border-color:rgba(114,140,90,.18)}
-html:not(.dark) .plcard{background:#fff;border-color:rgba(114,140,90,.15)}
-html:not(.dark) .plcn{color:#102F15}
-html:not(.dark) .modcard{background:#EAF1B1;border-color:rgba(114,140,90,.18)}
-html:not(.dark) .mname{color:#102F15}
-html:not(.dark) .cup{background:rgba(114,140,90,.15);color:#264d29}
-html:not(.dark) .ai-inp,.aiinp{border-color:rgba(114,140,90,.25)}
-html:not(.dark) .am.bot{background:#EAF1B1;color:#102F15;border-color:rgba(114,140,90,.2)}
-html:not(.dark) .aisend{background:#728C5A}
-html:not(.dark) .aisend:hover{background:#5a7045}
-html:not(.dark) .glass-toggle-wrap{background:rgba(255,255,255,.5);border-color:rgba(114,140,90,.3)}
-html:not(.dark) .glass-toggle-thumb{background:linear-gradient(135deg,#728C5A,#8fa870)}
-html:not(.dark) .sbfoot{border-top-color:rgba(235,250,220,.15)}
-html:not(.dark) .notif-bell{background:rgba(235,250,220,.12);border-color:rgba(235,250,220,.2)}
-html:not(.dark) [style*="color:#FFFFFF"]{color:#102F15!important}
-html:not(.dark) [style*="color:#00C853"]{color:#264d29!important}
-html:not(.dark) [style*="color:#00C853"]{color:#728C5A!important}
+html:not(.dark) body{color:#133215;background:#F3E8D3}
+html:not(.dark) .sidebar{background:#133215}
+html:not(.dark) .main{background:#F3E8D3}
+html:not(.dark) .card{background:#fff;border-color:rgba(146,183,117,.22)}
+html:not(.dark) .sc{background:#fff;border-color:rgba(146,183,117,.2)}
+html:not(.dark) .sc::before{background:#92B77520}
+html:not(.dark) .sv{color:#133215;font-weight:600}
+html:not(.dark) .sl{color:#2b3f26;opacity:.9}
+html:not(.dark) .sc-c.cup{background:rgba(146,183,117,.18);color:#2b3f26}
+html:not(.dark) .ch{border-color:rgba(146,183,117,.2)}
+html:not(.dark) .ct{color:#133215;font-weight:600}
+html:not(.dark) tbody td{color:#133215}
+html:not(.dark) tbody tr:hover{background:#f7f2e8}
+html:not(.dark) tbody tr{border-color:rgba(146,183,117,.15)}
+html:not(.dark) thead th{background:#F3E8D3;color:#2b3f26;border-radius:0}
+html:not(.dark) .topbar{background:rgba(243,232,211,.93);border-bottom:1px solid rgba(146,183,117,.2);backdrop-filter:blur(16px)}
+html:not(.dark) .pgt{color:#133215;font-weight:600}
+html:not(.dark) .glass-pill{background:rgba(146,183,117,.15);color:#2b3f26;border-color:rgba(146,183,117,.28)}
+html:not(.dark) .btn.bg_{color:#2b3f26;border-color:rgba(146,183,117,.3)}
+html:not(.dark) .btn.bg_:hover{background:rgba(146,183,117,.12)}
+html:not(.dark) .btn.bp,.bp{background:#133215;color:#fff;box-shadow:0 2px 8px rgba(19,50,21,.25)}
+html:not(.dark) .btn.bp:hover,.bp:hover{background:#19351b}
+/* Sidebar nav day */
+html:not(.dark) .ni{color:rgba(243,232,211,.55)}
+html:not(.dark) .ni:hover{background:rgba(146,183,117,.12);color:#F3E8D3}
+html:not(.dark) .ni.active{background:rgba(146,183,117,.2);color:#fff;font-weight:500}
+html:not(.dark) .ni.active .nd{background:#92B775;box-shadow:0 0 7px #92B775}
+html:not(.dark) .nd{background:rgba(146,183,117,.25)}
+html:not(.dark) .rpdot{background:#92B775;box-shadow:0 0 6px #92B775}
+html:not(.dark) .rpill{background:rgba(146,183,117,.1);border-color:rgba(146,183,117,.18)}
+html:not(.dark) .lt{color:#F3E8D3;font-weight:600}
+html:not(.dark) .ld{color:#92B775;opacity:.8}
+html:not(.dark) .un{color:#F3E8D3}
+html:not(.dark) .ue{color:rgba(146,183,117,.7);font-family:var(--fm)}
+html:not(.dark) .sbfoot{border-top-color:rgba(146,183,117,.1)}
+html:not(.dark) .urow{background:rgba(146,183,117,.08);border-color:rgba(146,183,117,.14)}
+/* Tabs, progress, forms */
+html:not(.dark) .tabs{background:#fff;border-color:rgba(146,183,117,.2)}
+html:not(.dark) .tab{color:#2b3f26}
+html:not(.dark) .tab.active{background:#133215;color:#fff}
+html:not(.dark) .pb{background:rgba(146,183,117,.18)}
+html:not(.dark) .pf{background:linear-gradient(90deg,#133215,#92B775)}
+html:not(.dark) .ki{border-color:rgba(146,183,117,.16)}
+html:not(.dark) .kn{color:#133215;font-weight:500}
+html:not(.dark) .km{color:#2b3f26}
+html:not(.dark) .kv{color:#133215}
+html:not(.dark) .tlt{color:#133215;font-weight:500}
+html:not(.dark) .tlm{color:#2b3f26}
+html:not(.dark) .fi,.html:not(.dark) .fs{background:#fff;color:#133215;border-color:rgba(146,183,117,.28)}
+html:not(.dark) .fi:focus{border-color:#92B775;box-shadow:0 0 0 3px rgba(146,183,117,.15)}
+html:not(.dark) .upl{background:#f7f2e8;border-color:rgba(146,183,117,.3)}
+html:not(.dark) .sck{background:#F3E8D3;border-color:rgba(146,183,117,.2)}
+html:not(.dark) .scn{color:#133215}
+html:not(.dark) .plc{background:#f7f2e8;border-color:rgba(146,183,117,.18)}
+html:not(.dark) .plcard{background:#fff;border-color:rgba(146,183,117,.15)}
+html:not(.dark) .plcn{color:#133215;font-weight:500}
+html:not(.dark) .plcv{color:#2b3f26}
+html:not(.dark) .modcard{background:#f7f2e8;border-color:rgba(146,183,117,.18)}
+html:not(.dark) .mname{color:#133215;font-weight:500}
+html:not(.dark) .ctimer{background:#f7f2e8;border-color:rgba(146,183,117,.2)}
+html:not(.dark) .ctime{color:#133215}
+html:not(.dark) .am.bot{background:#f7f2e8;color:#133215;border-color:rgba(146,183,117,.2)}
+html:not(.dark) .aiinp{background:#fff;color:#133215;border-color:rgba(146,183,117,.25)}
+html:not(.dark) .airow{border-color:rgba(146,183,117,.18)}
+html:not(.dark) .aisend{background:#133215;color:#fff}
+html:not(.dark) .aisend:hover{background:#19351b}
+html:not(.dark) .notif-bell{background:rgba(146,183,117,.12);border-color:rgba(146,183,117,.22);color:#133215}
+html:not(.dark) .topbar-avatar{border-color:rgba(146,183,117,.35)}
+html:not(.dark) .glass-toggle-wrap{background:rgba(255,255,255,.6);border-color:rgba(146,183,117,.3)}
+html:not(.dark) .glass-toggle-thumb{background:linear-gradient(135deg,#92B775,#133215)}
+html:not(.dark) [style*="color:#899F71"]{color:#264d29!important}
+html:not(.dark) [style*="color:#899F71"]{color:#728C5A!important}
 /* Dark mode - default (app starts dark like screenshot) */
 html.dark{
-  /* Image 2: Dark Forest #121212, Sage #00c853, Golden Olive #00C853, Pastel Mint #FFFFFF */
-  --surf:#121212;--white:#111d14;--g50:#142018;
-  --g900:#121212;--g800:#111d14;--g700:#1a2e1d;--g600:#00c853;
-  --g500:#00C853;--g400:#728C5A;--g300:#00C853;--g100:#FFFFFF;
-  --bdr:rgba(137,159,113,.12);--bdr2:rgba(137,159,113,.16);
-  --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
-  --accent:#00C853;
+  /* Night Mode — deep #133215 darks + Lime #92B775 glow + Beige accents */
+  --surf:#0c1f0e;--white:#111a12;--g50:#162118;
+  --bdr:rgba(146,183,117,.12);--bdr2:rgba(146,183,117,.16);
+  --sh1:0 1px 6px rgba(0,0,0,.5);
+  --sh2:0 6px 24px rgba(0,0,0,.6);
+  --glow:0 0 0 1px rgba(146,183,117,.15),0 4px 20px rgba(146,183,117,.08);
 }
 /* ─── DARK MODE ─── */
 html.dark{
-  /* Image 2: Dark Forest #121212, Sage #00c853, Golden Olive #00C853, Pastel Mint #FFFFFF */
-  --surf:#121212;--white:#111d14;--g50:#142018;
-  --g900:#121212;--g800:#111d14;--g700:#1a2e1d;--g600:#00c853;
-  --g500:#00C853;--g400:#728C5A;--g300:#00C853;--g100:#FFFFFF;
-  --bdr:rgba(137,159,113,.12);--bdr2:rgba(137,159,113,.16);
-  --sh1:0 1px 6px rgba(0,0,0,.5);--sh2:0 6px 24px rgba(0,0,0,.6);
-  --accent:#00C853;
+  /* Night Mode — deep #133215 darks + Lime #92B775 glow + Beige accents */
+  --surf:#0c1f0e;--white:#111a12;--g50:#162118;
+  --bdr:rgba(146,183,117,.12);--bdr2:rgba(146,183,117,.16);
+  --sh1:0 1px 6px rgba(0,0,0,.5);
+  --sh2:0 6px 24px rgba(0,0,0,.6);
+  --glow:0 0 0 1px rgba(146,183,117,.15),0 4px 20px rgba(146,183,117,.08);
 }
-html.dark body{color:#FFFFFF}
-html.dark .main{background:#121212}
-html.dark .sc{background:#111d14;border-color:rgba(137,159,113,.16)}
+html.dark body{color:#c8ddb0}
+html.dark .main{background:#0c1f0e}
+html.dark .sc{background:#111d14;border-color:rgba(146,183,117,.16);box-shadow:0 0 0 1px rgba(146,183,117,.08)}
 html.dark .sc::before{opacity:.06}
-html.dark .sv{color:#FFFFFF}
-html.dark .sl{color:#00C853;opacity:.9}
-html.dark .card{background:#111d14;border-color:rgba(137,159,113,.15)}
-html.dark .ch{border-color:rgba(137,159,113,.12)}
-html.dark .ct{color:#FFFFFF}
+html.dark .sv{color:#c8ddb0;font-weight:600}
+html.dark .sl{color:#92B775;opacity:.8}
+html.dark .card{background:#111d14;border-color:rgba(146,183,117,.15);box-shadow:0 0 0 1px rgba(146,183,117,.06),0 4px 16px rgba(0,0,0,.4)}
+html.dark .ch{border-color:rgba(146,183,117,.12)}
+html.dark .ct{color:#c8ddb0;font-weight:600}
 /* Fix all inline color styles in dark mode */
-html.dark [style*="color:var(--g700)"]{color:#00C853!important}
-html.dark [style*="color:var(--g800)"]{color:#FFFFFF!important}
-html.dark [style*="color:var(--g600)"]{color:#00C853!important}
-html.dark [style*="color:var(--g900)"]{color:#FFFFFF!important}
-html.dark svg text{fill:#FFFFFF!important}
-html.dark .topbar{background:rgba(13,31,19,.94);border-bottom-color:rgba(137,159,113,.12)}
-html.dark .pgt{color:#FFFFFF}
-html.dark .tpill{background:rgba(137,159,113,.1);color:#00C853;border-color:rgba(137,159,113,.2)}
-html.dark .btn.bg_{color:#00C853;border-color:rgba(137,159,113,.22)}
-html.dark .btn.bg_:hover{background:rgba(137,159,113,.1)}
-html.dark tbody tr{border-color:rgba(137,159,113,.1)}
-html.dark tbody tr:hover{background:#142018}
-html.dark tbody td{color:#FFFFFF}
-html.dark thead th{background:#142018;color:#00C853}
-html.dark .am.bot{background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.15)}
-html.dark .aiinp{background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.15)}
-html.dark .airow{border-color:rgba(137,159,113,.12)}
-html.dark .fi,.html.dark .fs{background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.15)}
-html.dark .fi,.html.dark select{background:#142018;color:#FFFFFF}
-html.dark .tabs{background:#111d14;border-color:rgba(137,159,113,.14)}
-html.dark .tab{color:#00C853}
-html.dark .tab:hover:not(.active){background:#142018}
-html.dark .pb{background:rgba(137,159,113,.12)}
-html.dark .ki{border-color:rgba(137,159,113,.1)}
-html.dark .kn{color:#FFFFFF}
-html.dark .tl::before{background:rgba(137,159,113,.12)}
-html.dark .tlt{color:#FFFFFF}
-html.dark .upl{background:#142018;border-color:rgba(137,159,113,.22)}
-html.dark .sck{background:#142018;border-color:rgba(137,159,113,.12)}
-html.dark .scn{color:#FFFFFF}
-html.dark .modcard{background:#142018;border-color:rgba(137,159,113,.12)}
-html.dark .mname{color:#FFFFFF}
-html.dark .ctimer{background:#142018;border-color:rgba(137,159,113,.12)}
-html.dark .ctime{color:#FFFFFF}
-html.dark .plc{background:#142018;border-color:rgba(137,159,113,.12)}
-html.dark .plcard{background:#111d14;border-color:rgba(137,159,113,.1)}
-html.dark .plcn{color:#FFFFFF}
-html.dark .ldr{border-color:rgba(137,159,113,.1)}
-html.dark .ck{border-color:rgba(137,159,113,.1)}
-html.dark .smm{border-color:rgba(137,159,113,.1)}
-html.dark .smmn{color:#FFFFFF}
-html.dark .tgmsg{border-color:rgba(137,159,113,.1)}
-html.dark .tgn{color:#FFFFFF}
-html.dark .tgt{color:#00C853}
-html.dark .fbox{background:#111d14;border-color:rgba(137,159,113,.12)}
+html.dark [style*="color:var(--g700)"]{color:#92B775!important}
+html.dark [style*="color:var(--g800)"]{color:#c8ddb0!important}
+html.dark [style*="color:var(--g600)"]{color:#92B775!important}
+html.dark [style*="color:var(--g900)"]{color:#c8ddb0!important}
+html.dark svg text{fill:#c8ddb0!important}
+html.dark .topbar{background:rgba(12,31,14,.94);border-bottom:1px solid rgba(146,183,117,.14);backdrop-filter:blur(16px)}
+html.dark .pgt{color:#c8ddb0;font-weight:600}
+html.dark .tpill,html.dark .glass-pill{background:rgba(146,183,117,.1);color:#92B775;border-color:rgba(146,183,117,.2)}
+html.dark .btn.bg_{color:#92B775;border-color:rgba(146,183,117,.22)}
+html.dark .btn.bg_:hover{background:rgba(146,183,117,.1)}
+html.dark tbody tr{border-color:rgba(146,183,117,.1)}
+html.dark tbody tr:hover{background:#162118}
+html.dark tbody td{color:#b8cca0}
+html.dark thead th{background:#162118;color:#92B775}
+html.dark .am.bot{background:#162118;color:#b8cca0;border-color:rgba(146,183,117,.15)}
+html.dark .aiinp{background:#162118;color:#b8cca0;border-color:rgba(146,183,117,.15)}
+html.dark .airow{border-color:rgba(146,183,117,.12)}
+html.dark .fi,.html.dark .fs{background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)}
+html.dark .fi,.html.dark select{background:#142018;color:#A5B6AF}
+html.dark .tabs{background:#111d14;border-color:rgba(146,183,117,.15)}
+html.dark .tab{color:#92B775}
+html.dark .tab:hover:not(.active){background:#162118}
+html.dark .pb{background:rgba(146,183,117,.12)}
+html.dark .ki{border-color:rgba(146,183,117,.1)}
+html.dark .kn{color:#c8ddb0}
+html.dark .tl::before{background:rgba(146,183,117,.12)}
+html.dark .tlt{color:#c8ddb0}
+html.dark .upl{background:#162118;border-color:rgba(146,183,117,.22)}
+html.dark .sck{background:#162118;border-color:rgba(146,183,117,.12)}
+html.dark .scn{color:#c8ddb0}
+html.dark .modcard{background:#162118;border-color:rgba(146,183,117,.12)}
+html.dark .mname{color:#c8ddb0}
+html.dark .ctimer{background:#162118;border-color:rgba(146,183,117,.12)}
+html.dark .ctime{color:#c8ddb0}
+html.dark .plc{background:#162118;border-color:rgba(146,183,117,.12)}
+html.dark .plcard{background:#111d14;border-color:rgba(146,183,117,.1)}
+html.dark .plcn{color:#c8ddb0}
+html.dark .ldr{border-color:rgba(146,183,117,.1)}
+html.dark .ck{border-color:rgba(146,183,117,.1)}
+html.dark .smm{border-color:rgba(146,183,117,.1)}
+html.dark .smmn{color:#c8ddb0}
+html.dark .tgmsg{border-color:rgba(146,183,117,.1)}
+html.dark .tgn{color:#c8ddb0}
+html.dark .tgt{color:#92B775}
+html.dark .fbox{background:#111d14;border-color:rgba(146,183,117,.12)}
 html.dark .db{opacity:.9}
-html.dark .ibox-green{background:rgba(137,159,113,.12);color:#00C853}
+html.dark .ibox-green{background:rgba(146,183,117,.1);color:#92B775}
 html.dark .ibox-amber{background:rgba(138,82,0,.15);color:#f5d99b}
 html.dark .ibox-red{background:rgba(139,32,32,.15);color:#f5b9b5}
 html.dark .ibox-blue{background:rgba(26,79,138,.15);color:#b3d7f7}
-html.dark .ibox{color:#FFFFFF}
-html.dark .formula-row .fbox{color:#FFFFFF}
+html.dark .ibox{color:#b8cca0}
+html.dark .formula-row .fbox{color:#c8ddb0}
 html.dark .decay-bar .db{filter:brightness(.85)}
-html.dark .dip{border-color:rgba(137,159,113,.3)}
+html.dark .dip{border-color:rgba(146,183,117,.3)}
 /* ─── NOTIFICATION BELL ─── */
 .notif-bell{position:relative;width:38px;height:38px;border-radius:10px;background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
 .notif-bell:hover{background:rgba(137,159,113,.15);transform:scale(1.05)}
 .notif-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#ef4444;color:#fff;border-radius:20px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #0d1410;padding:0 4px;font-family:var(--fm)}
 /* Topbar avatar */
-.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#00C853);border:2px solid rgba(137,159,113,.35);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;transition:all .18s}
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);border:2px solid rgba(137,159,113,.35);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;transition:all .18s}
 .topbar-avatar:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(137,159,113,.25)}
 /* Chat bubbles */
 .msg-bubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55;word-break:break-word;position:relative}
-.msg-bubble.mine{background:linear-gradient(135deg,#728C5A,#00C853);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
-.msg-bubble.theirs{background:#1a2e1d;color:#FFFFFF;border:1px solid rgba(137,159,113,.12);border-bottom-left-radius:4px}
-.msg-bubble.system{background:rgba(137,159,113,.06);color:#00C853;text-align:center;font-size:12px;margin:4px auto;border-radius:20px;padding:5px 16px;max-width:100%}
+.msg-bubble.mine{background:linear-gradient(135deg,#728C5A,#899F71);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
+.msg-bubble.theirs{background:#1a2e1d;color:#A5B6AF;border:1px solid rgba(137,159,113,.12);border-bottom-left-radius:4px}
+.msg-bubble.system{background:rgba(137,159,113,.06);color:#899F71;text-align:center;font-size:12px;margin:4px auto;border-radius:20px;padding:5px 16px;max-width:100%}
 .msg-time{font-size:10px;opacity:.55;margin-top:3px;text-align:right}
 .msg-wrap{display:flex;flex-direction:column}
 .msg-wrap.mine{align-items:flex-end}
 .msg-wrap.theirs{align-items:flex-start}
-.msg-sender{font-size:11px;color:#00C853;font-weight:600;margin-bottom:3px;padding-left:4px}
+.msg-sender{font-size:11px;color:#899F71;font-weight:600;margin-bottom:3px;padding-left:4px}
 /* Notif item */
 .notif-item{padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.07);display:flex;gap:12px;align-items:flex-start;transition:background .13s;cursor:pointer}
 .notif-item:hover{background:rgba(137,159,113,.05)}
@@ -215,7 +241,6 @@ html.dark .dip{border-color:rgba(137,159,113,.3)}
   box-shadow:0 4px 20px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.15);
   transition:all .3s ease;
 }
-html.dark .glass-pill{background:rgba(137,159,113,.1);color:#00C853;border-color:rgba(137,159,113,.18)}
 html.dark .glass-toggle-wrap{
   background:rgba(0,0,0,.3);
   border-color:rgba(137,159,113,.2);
@@ -240,7 +265,7 @@ html.dark .glass-toggle-option{color:var(--g300)}
   pointer-events:none;
 }
 html.dark .glass-toggle-thumb{
-  background:linear-gradient(135deg,#00c853,#728C5A);
+  background:linear-gradient(135deg,#133215,#92B775);
   box-shadow:0 3px 12px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.3),inset 0 1px 0 rgba(142,182,155,.2);
   transform:translateX(34px);
 }
@@ -280,7 +305,7 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 .li{width:100%;padding:11px 14px;border-radius:11px;border:1px solid rgba(142,182,155,.18);background:rgba(255,255,255,.05);color:#fff;font-family:var(--ff);font-size:13.5px;outline:none;transition:all .18s;margin-bottom:14px}
 .li::placeholder{color:rgba(142,182,155,.4)}.li:focus{border-color:rgba(142,182,155,.45);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(142,182,155,.1)}.li.err{border-color:rgba(231,76,60,.5)}
 .lerr{font-size:11.5px;color:#e07070;margin-top:-10px;margin-bottom:12px;display:none}
-.lbtn{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,#00c853,#728C5A);color:#fff;font-family:var(--ff);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(35,83,71,.4)}
+.lbtn{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,#4A5A4A,#728C5A);color:#fff;font-family:var(--ff);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(35,83,71,.4)}
 .lbtn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(35,83,71,.5)}
 
 /* ─── APP ─── */
@@ -288,20 +313,20 @@ body{font-family:var(--ff);background:var(--surf);color:var(--g900);min-height:1
 #app.visible{opacity:1}
 
 /* ─── SIDEBAR ─── */
-.sidebar{width:var(--sw);background:#121212;min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;border-right:1px solid rgba(142,182,155,.07)}
+.sidebar{width:var(--sw);background:#0D1F13;min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;border-right:1px solid rgba(142,182,155,.07)}
 .lwrap{padding:18px 18px 16px;border-bottom:1px solid rgba(137,159,113,.08);display:flex;align-items:center;gap:11px;background:transparent}
 .lt{font-size:14.5px;font-weight:600;color:#fff;letter-spacing:.04em}
 .ld{font-size:9px;color:var(--g300);opacity:.55;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
 .rpill{margin:10px 14px;padding:8px 11px;background:rgba(142,182,155,.07);border:1px solid rgba(142,182,155,.11);border-radius:9px;display:flex;align-items:center;gap:8px}
-.rpdot{width:6px;height:6px;border-radius:50%;background:#00C853;box-shadow:0 0 6px #00C853;flex-shrink:0;animation:dp 2.5s ease-in-out infinite}
+.rpdot{width:6px;height:6px;border-radius:50%;background:#899F71;box-shadow:0 0 6px #899F71;flex-shrink:0;animation:dp 2.5s ease-in-out infinite}
 @keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
 .nwrap{overflow-y:auto;flex:1;padding-bottom:8px}
 .nsec{padding:8px 12px 3px}
 .nsl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(142,182,155,.4);padding:0 9px;margin-bottom:3px;font-weight:500}
 .ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all .15s;margin-bottom:1px;color:rgba(218,241,222,.5);font-size:13px;font-weight:400;border:none;background:none;width:100%;text-align:left}
-.ni:hover{background:rgba(137,159,113,.09);color:#FFFFFF;transform:translateX(2px)}
+.ni:hover{background:rgba(137,159,113,.09);color:#A5B6AF;transform:translateX(2px)}
 .ni.active{background:rgba(137,159,113,.14);color:#fff;font-weight:500}
-.ni.active .nd{background:#00C853;box-shadow:0 0 7px #00C853}
+.ni.active .nd{background:#899F71;box-shadow:0 0 7px #899F71}
 .nd{width:5px;height:5px;border-radius:50%;background:rgba(142,182,155,.2);flex-shrink:0;transition:all .15s}
 .nic{font-size:15px;width:18px;text-align:center;flex-shrink:0}
 .sbfoot{margin-top:auto;padding:13px 12px;border-top:1px solid rgba(142,182,155,.07)}
@@ -351,7 +376,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
 .bpu{background:#f3e8ff;color:#6b21a8;border:1px solid #d8b4fe}
 .bcy{background:#e0f7f7;color:#0e6b6b;border:1px solid #a3d8d8}
 .pb{height:5px;background:var(--g100);border-radius:10px;overflow:hidden}
-.pf{height:100%;background:linear-gradient(90deg,#728C5A,#00C853);border-radius:10px;transition:width .5s}
+.pf{height:100%;background:linear-gradient(90deg,#728C5A,#899F71);border-radius:10px;transition:width .5s}
 .ki{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr2)}.ki:last-child{border-bottom:none}
 .kinf{flex:1}.kn{font-size:13px;font-weight:500;color:var(--g800);margin-bottom:4px}.km{font-size:11px;color:var(--g600);opacity:.72}
 .kv{font-size:14px;font-weight:600;color:var(--g700);font-family:var(--fm);min-width:44px;text-align:right}
@@ -473,7 +498,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
       </svg>
       <div>
         <div style="font-size:20px;font-weight:600;color:#fff;letter-spacing:.04em">ALGO GROUP</div>
-        <div style="font-size:10px;color:#00C853;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
+        <div style="font-size:10px;color:#899F71;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">algogroup.us</div>
       </div>
     </div>
     <label class="ll">Corporate email</label>
@@ -1074,20 +1099,20 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-users">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
-        <div style="font-size:11px;color:#00C853;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
-        <div style="font-size:22px;font-weight:700;color:#FFFFFF">User Management</div>
+        <div style="font-size:11px;color:#899F71;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">User Management</div>
       </div>
-      <button class="btn bp" onclick="openAddUser()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#00C853);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ Add User</button>
+      <button class="btn bp" onclick="openAddUser()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#899F71);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ Add User</button>
     </div>
     <!-- Add user modal -->
     <div id="addUserModal" style="display:none;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
-      <div style="font-size:14px;font-weight:600;color:#FFFFFF;margin-bottom:16px">➕ New User</div>
+      <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:16px">➕ New User</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end">
-        <div><label class="fl">Full Name</label><input class="fi" id="nu-name" placeholder="John Smith" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-        <div><label class="fl">Email (@algogroup.us)</label><input class="fi" id="nu-email" placeholder="john@algogroup.us" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-        <div><label class="fl">Password</label><input class="fi" id="nu-pass" type="password" placeholder="Min 8 chars" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Full Name</label><input class="fi" id="nu-name" placeholder="John Smith" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Email (@algogroup.us)</label><input class="fi" id="nu-email" placeholder="john@algogroup.us" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Password</label><input class="fi" id="nu-pass" type="password" placeholder="Min 8 chars" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
         <div><label class="fl">Role</label>
-          <select id="nu-role" class="fs" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)">
+          <select id="nu-role" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
             <option value="ops">⚙️ OPS</option>
             <option value="manager">👔 Support Manager</option>
             <option value="sales">💼 Sales</option>
@@ -1098,8 +1123,8 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-top:14px">
-        <button class="btn bp" onclick="addUser()" style="background:linear-gradient(135deg,#728C5A,#00C853)">Create User</button>
-        <button class="btn bg_" onclick="closeAddUser()" style="color:#00C853;border-color:rgba(137,159,113,.2)">Cancel</button>
+        <button class="btn bp" onclick="addUser()" style="background:linear-gradient(135deg,#728C5A,#899F71)">Create User</button>
+        <button class="btn bg_" onclick="closeAddUser()" style="color:#899F71;border-color:rgba(137,159,113,.2)">Cancel</button>
       </div>
       <div id="addUserMsg" style="margin-top:10px;font-size:12.5px;display:none"></div>
     </div>
@@ -1107,7 +1132,7 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
     <div class="card">
       <div class="ch">
         <span class="ct">All Users <span id="userCount" style="background:rgba(137,159,113,.12);color:#22c55e;border:1px solid rgba(137,159,113,.2);border-radius:20px;padding:2px 10px;font-size:11px;margin-left:8px">6</span></span>
-        <input class="fi" id="userSearch" placeholder="Search users..." onkeyup="renderUsersTable()" style="width:200px;font-size:12.5px;padding:6px 12px;background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)">
+        <input class="fi" id="userSearch" placeholder="Search users..." onkeyup="renderUsersTable()" style="width:200px;font-size:12.5px;padding:6px 12px;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
       </div>
       <div class="cb" style="padding:0"><div class="tw"><table>
         <thead><tr>
@@ -1122,32 +1147,32 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-projects">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div>
-        <div style="font-size:11px;color:#00C853;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
-        <div style="font-size:22px;font-weight:700;color:#FFFFFF">Projects</div>
+        <div style="font-size:11px;color:#899F71;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Admin · OPS Only</div>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">Projects</div>
       </div>
-      <button class="btn bp" onclick="openAddProject()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#00C853);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ New Project</button>
+      <button class="btn bp" onclick="openAddProject()" style="gap:8px;padding:10px 20px;font-size:13.5px;background:linear-gradient(135deg,#728C5A,#899F71);box-shadow:0 4px 16px rgba(137,159,113,.3)">＋ New Project</button>
     </div>
     <!-- Add project form -->
     <div id="addProjModal" style="display:none;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:14px;padding:22px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
-      <div style="font-size:14px;font-weight:600;color:#FFFFFF;margin-bottom:16px">📁 New Project</div>
+      <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:16px">📁 New Project</div>
       <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px">
-        <div><label class="fl">Project Name</label><input class="fi" id="np-name" placeholder="Q3 Route Optimization" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Project Name</label><input class="fi" id="np-name" placeholder="Q3 Route Optimization" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
         <div><label class="fl">Assigned To</label>
-          <select id="np-user" class="fs" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></select>
+          <select id="np-user" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></select>
         </div>
         <div><label class="fl">Priority</label>
-          <select id="np-priority" class="fs" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)">
+          <select id="np-priority" class="fs" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
             <option value="high">🔴 High</option>
             <option value="medium">🟡 Medium</option>
             <option value="low">🟢 Low</option>
           </select>
         </div>
-        <div><label class="fl">Due Date</label><input class="fi" id="np-date" type="date" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
+        <div><label class="fl">Due Date</label><input class="fi" id="np-date" type="date" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
       </div>
-      <div style="margin-top:12px"><label class="fl">Description</label><textarea class="fi" id="np-desc" rows="2" placeholder="Project description..." style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></textarea></div>
+      <div style="margin-top:12px"><label class="fl">Description</label><textarea class="fi" id="np-desc" rows="2" placeholder="Project description..." style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></textarea></div>
       <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn bp" onclick="addProject()" style="background:linear-gradient(135deg,#728C5A,#00C853)">Create Project</button>
-        <button class="btn bg_" onclick="closeAddProject()" style="color:#00C853;border-color:rgba(137,159,113,.2)">Cancel</button>
+        <button class="btn bp" onclick="addProject()" style="background:linear-gradient(135deg,#728C5A,#899F71)">Create Project</button>
+        <button class="btn bg_" onclick="closeAddProject()" style="color:#899F71;border-color:rgba(137,159,113,.2)">Cancel</button>
       </div>
     </div>
     <!-- Projects grid -->
@@ -1157,18 +1182,18 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <!-- ══ PROFILE ══ -->
   <div class="page" id="pg-profile">
     <div style="max-width:800px;margin:0 auto">
-      <div style="font-size:22px;font-weight:700;color:#FFFFFF;margin-bottom:22px">My Profile</div>
+      <div style="font-size:22px;font-weight:700;color:#A5B6AF;margin-bottom:22px">My Profile</div>
       <div class="card mb20" style="background:linear-gradient(135deg,#0f2a14,#121a13);border-color:rgba(137,159,113,.18)">
         <div class="cb" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
           <div style="position:relative;cursor:pointer" onclick="document.getElementById('avatarInput').click()" title="Change photo">
-            <div id="profileAvatarBig" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#00C853);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;border:3px solid rgba(137,159,113,.4);overflow:hidden;flex-shrink:0"></div>
+            <div id="profileAvatarBig" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;border:3px solid rgba(137,159,113,.4);overflow:hidden;flex-shrink:0"></div>
             <div style="position:absolute;bottom:2px;right:2px;width:26px;height:26px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #0d1410">📷</div>
           </div>
           <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)">
           <div style="flex:1">
-            <div id="profileNameBig" style="font-size:22px;font-weight:700;color:#FFFFFF;margin-bottom:3px">—</div>
+            <div id="profileNameBig" style="font-size:22px;font-weight:700;color:#A5B6AF;margin-bottom:3px">—</div>
             <div id="profileRoleBig" style="font-size:12px;font-weight:600;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:6px">—</div>
-            <div id="profileEmailBig" style="font-size:13px;color:#00C853;font-family:var(--fm)">—</div>
+            <div id="profileEmailBig" style="font-size:13px;color:#899F71;font-family:var(--fm)">—</div>
           </div>
           <span style="background:rgba(137,159,113,.12);color:#22c55e;border:1px solid rgba(137,159,113,.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600">● Online</span>
         </div>
@@ -1177,11 +1202,11 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
         <div class="card">
           <div class="ch"><span class="ct">Edit Profile</span></div>
           <div class="cb">
-            <div class="fg"><label class="fl">Full Name</label><input class="fi" id="prof-name" placeholder="Your name" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-            <div class="fg"><label class="fl">Email</label><input class="fi" id="prof-email" disabled style="background:#0a150b;color:#00C853;border-color:rgba(137,159,113,.1);opacity:.7"></div>
-            <div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="prof-phone" placeholder="+1 (555) 000-0000" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-            <div class="fg"><label class="fl">Bio (optional)</label><textarea class="fi" id="prof-bio" rows="2" placeholder="Short bio..." style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></textarea></div>
-            <button class="btn bp" onclick="saveProfile()" style="width:100%;background:linear-gradient(135deg,#728C5A,#00C853)">Save Changes</button>
+            <div class="fg"><label class="fl">Full Name</label><input class="fi" id="prof-name" placeholder="Your name" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Email</label><input class="fi" id="prof-email" disabled style="background:#0a150b;color:#899F71;border-color:rgba(137,159,113,.1);opacity:.7"></div>
+            <div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="prof-phone" placeholder="+1 (555) 000-0000" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Bio (optional)</label><textarea class="fi" id="prof-bio" rows="2" placeholder="Short bio..." style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></textarea></div>
+            <button class="btn bp" onclick="saveProfile()" style="width:100%;background:linear-gradient(135deg,#728C5A,#899F71)">Save Changes</button>
             <div id="prof-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
           </div>
         </div>
@@ -1189,9 +1214,9 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
           <div class="ch"><span class="ct">Change Password</span><span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.2)">OPS approval</span></div>
           <div class="cb">
             <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:12px;font-size:12.5px;color:#fde68a;margin-bottom:16px">🔐 Request will be sent to OPS Manager for approval.</div>
-            <div class="fg"><label class="fl">Current Password</label><input class="fi" id="pw-cur" type="password" placeholder="Current password" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-            <div class="fg"><label class="fl">New Password</label><input class="fi" id="pw-new" type="password" placeholder="Min 8 characters" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
-            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" id="pw-conf" type="password" placeholder="Repeat new password" style="background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Current Password</label><input class="fi" id="pw-cur" type="password" placeholder="Current password" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">New Password</label><input class="fi" id="pw-new" type="password" placeholder="Min 8 characters" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" id="pw-conf" type="password" placeholder="Repeat new password" style="background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)"></div>
             <button class="btn" onclick="requestPasswordChange()" style="width:100%;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.22);color:#fbbf24;font-family:var(--ff);padding:10px;border-radius:9px;cursor:pointer">Send Request to OPS →</button>
             <div id="pw-msg" style="text-align:center;font-size:12.5px;margin-top:8px;display:none"></div>
           </div>
@@ -1203,35 +1228,35 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <!-- ══ CHAT ══ -->
   <div class="page" id="pg-chat">
     <div style="display:flex;height:calc(100vh - 110px);min-height:500px;border-radius:16px;overflow:hidden;border:1px solid rgba(137,159,113,.15);box-shadow:0 8px 32px rgba(0,0,0,.4)">
-      <div style="width:260px;background:#121212;border-right:1px solid rgba(137,159,113,.1);display:flex;flex-direction:column;flex-shrink:0">
+      <div style="width:260px;background:#0D1F13;border-right:1px solid rgba(137,159,113,.1);display:flex;flex-direction:column;flex-shrink:0">
         <div style="padding:16px 14px 10px;border-bottom:1px solid rgba(137,159,113,.08)">
-          <div style="font-size:14px;font-weight:600;color:#FFFFFF;margin-bottom:10px">💬 Team Chat</div>
-          <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.15)">
+          <div style="font-size:14px;font-weight:600;color:#A5B6AF;margin-bottom:10px">💬 Team Chat</div>
+          <input id="chatSearch" class="fi" placeholder="Search..." onkeyup="renderContactList()" style="font-size:12.5px;padding:7px 12px;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.15)">
         </div>
         <div onclick="openChat('group','ALGO GROUP Team','👥')" id="groupBtn" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(137,159,113,.07);transition:background .13s;background:rgba(137,159,113,.06)" onmouseenter="this.style.background='rgba(137,159,113,.12)'" onmouseleave="this.style.background='rgba(137,159,113,.06)'">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#728C5A,#00C853);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
+            <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#728C5A,#899F71);display:flex;align-items:center;justify-content:center;font-size:18px">👥</div>
             <div>
-              <div style="font-size:13px;font-weight:600;color:#FFFFFF">ALGO GROUP Team</div>
-              <div style="font-size:11px;color:#00C853;opacity:.6" id="groupLastMsg">Group · All members</div>
+              <div style="font-size:13px;font-weight:600;color:#A5B6AF">ALGO GROUP Team</div>
+              <div style="font-size:11px;color:#899F71;opacity:.6" id="groupLastMsg">Group · All members</div>
             </div>
             <div style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55"></div>
           </div>
         </div>
         <div id="contactList" style="flex:1;overflow-y:auto"></div>
       </div>
-      <div style="flex:1;display:flex;flex-direction:column;background:#121212">
-        <div id="chatHeader" style="padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.08);display:flex;align-items:center;gap:12px;background:#121212;min-height:62px">
+      <div style="flex:1;display:flex;flex-direction:column;background:#0D1F13">
+        <div id="chatHeader" style="padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.08);display:flex;align-items:center;gap:12px;background:#0D1F13;min-height:62px">
           <div style="color:rgba(74,222,128,.45);font-size:14px">← Select a conversation</div>
         </div>
         <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:8px"></div>
-        <div id="chatInputArea" style="display:none;padding:12px 16px;border-top:1px solid rgba(137,159,113,.08);background:#121212">
+        <div id="chatInputArea" style="display:none;padding:12px 16px;border-top:1px solid rgba(137,159,113,.08);background:#0D1F13">
           <div id="chatImgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
           <div style="display:flex;gap:8px;align-items:flex-end">
             <label for="chatFileInput" style="width:38px;height:38px;border-radius:9px;background:rgba(137,159,113,.1);border:1px solid rgba(137,159,113,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0" title="Attach photo/video">📎</label>
             <input type="file" id="chatFileInput" multiple accept="image/*,video/*" style="display:none" onchange="chatAttach(event)">
-            <textarea id="chatTextInp" rows="1" placeholder="Write a message..." style="flex:1;padding:10px 14px;border-radius:14px;border:1px solid rgba(137,159,113,.18);background:#142018;color:#FFFFFF;font-family:var(--ff);font-size:13.5px;resize:none;outline:none;max-height:120px;line-height:1.5;overflow-y:auto" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
-            <button onclick="sendChatMsg()" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#00C853);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 12px rgba(137,159,113,.35);display:flex;align-items:center;justify-content:center">➤</button>
+            <textarea id="chatTextInp" rows="1" placeholder="Write a message..." style="flex:1;padding:10px 14px;border-radius:14px;border:1px solid rgba(137,159,113,.18);background:#142018;color:#A5B6AF;font-family:var(--ff);font-size:13.5px;resize:none;outline:none;max-height:120px;line-height:1.5;overflow-y:auto" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
+            <button onclick="sendChatMsg()" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#728C5A,#899F71);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 12px rgba(137,159,113,.35);display:flex;align-items:center;justify-content:center">➤</button>
           </div>
         </div>
       </div>
@@ -1242,15 +1267,15 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <div class="page" id="pg-notifications">
     <div style="max-width:720px;margin:0 auto">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div style="font-size:22px;font-weight:700;color:#FFFFFF">🔔 Notifications</div>
-        <button onclick="markAllRead()" class="btn bg_" style="font-size:12px;color:#00C853;border-color:rgba(137,159,113,.2)">Mark all read</button>
+        <div style="font-size:22px;font-weight:700;color:#A5B6AF">🔔 Notifications</div>
+        <button onclick="markAllRead()" class="btn bg_" style="font-size:12px;color:#899F71;border-color:rgba(137,159,113,.2)">Mark all read</button>
       </div>
       <div id="broadcastPanel" style="display:none;margin-bottom:16px">
         <div class="card" style="border-color:rgba(137,159,113,.22)">
           <div class="ch"><span class="ct">📢 Broadcast to All Users</span></div>
           <div class="cb" style="display:flex;gap:10px">
-            <input class="fi" id="broadcastMsg" placeholder="Notification message..." style="flex:1;background:#142018;color:#FFFFFF;border-color:rgba(137,159,113,.2)">
-            <button class="btn bp" onclick="sendBroadcast()" style="white-space:nowrap;background:linear-gradient(135deg,#728C5A,#00C853)">📢 Send to All</button>
+            <input class="fi" id="broadcastMsg" placeholder="Notification message..." style="flex:1;background:#142018;color:#A5B6AF;border-color:rgba(137,159,113,.2)">
+            <button class="btn bp" onclick="sendBroadcast()" style="white-space:nowrap;background:linear-gradient(135deg,#728C5A,#899F71)">📢 Send to All</button>
           </div>
         </div>
       </div>
@@ -1261,10 +1286,10 @@ tbody td{padding:11px 13px;font-size:13px;color:var(--g800)}
   <!-- Notification Dropdown Panel -->
   <div id="notifPanel" style="display:none;position:fixed;top:68px;right:72px;width:360px;background:#111d14;border:1px solid rgba(137,159,113,.2);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:999;overflow:hidden;max-height:480px;overflow-y:auto">
     <div style="padding:14px 18px;border-bottom:1px solid rgba(137,159,113,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#111d14">
-      <span style="font-size:13.5px;font-weight:600;color:#FFFFFF">Notifications</span>
+      <span style="font-size:13.5px;font-weight:600;color:#A5B6AF">Notifications</span>
       <div style="display:flex;gap:10px">
-        <button onclick="markAllRead()" style="background:none;border:none;color:#00C853;font-size:12px;cursor:pointer">Mark all read</button>
-        <button onclick="showPage('notifications');toggleNotifPanel()" style="background:none;border:none;color:#00C853;font-size:12px;cursor:pointer;opacity:.6">View all</button>
+        <button onclick="markAllRead()" style="background:none;border:none;color:#899F71;font-size:12px;cursor:pointer">Mark all read</button>
+        <button onclick="showPage('notifications');toggleNotifPanel()" style="background:none;border:none;color:#899F71;font-size:12px;cursor:pointer;opacity:.6">View all</button>
       </div>
     </div>
     <div id="notifPanelList"></div>
@@ -1314,12 +1339,12 @@ function renderUsersTable(){
     var isSelf=cu&&cu.email===u.email;
     return '<tr>'
     +'<td><div style="width:36px;height:36px;border-radius:50%;background:'+bg+';border:1.5px solid '+tc+'55;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:'+tc+'">'+u.initials+'</div></td>'
-    +'<td style="font-weight:500;color:#FFFFFF">'+u.name+(isSelf?'<span style="font-size:10px;background:rgba(137,159,113,.12);color:#22c55e;border-radius:20px;padding:1px 7px;margin-left:6px">you</span>':'')+'</td>'
-    +'<td style="font-family:var(--fm);font-size:12.5px;color:#00C853">'+u.email+'</td>'
+    +'<td style="font-weight:500;color:#A5B6AF">'+u.name+(isSelf?'<span style="font-size:10px;background:rgba(137,159,113,.12);color:#22c55e;border-radius:20px;padding:1px 7px;margin-left:6px">you</span>':'')+'</td>'
+    +'<td style="font-family:var(--fm);font-size:12.5px;color:#899F71">'+u.email+'</td>'
     +'<td><div style="display:flex;align-items:center;gap:6px">'
-    +'<span id="pw-dot-'+u.id+'" style="font-family:var(--fm);font-size:13px;color:#00C853;letter-spacing:.08em">••••••••</span>'
+    +'<span id="pw-dot-'+u.id+'" style="font-family:var(--fm);font-size:13px;color:#899F71;letter-spacing:.08em">••••••••</span>'
     +'<span id="pw-real-'+u.id+'" style="display:none;font-family:var(--fm);font-size:12px;color:#fbbf24">'+u.pass+'</span>'
-    +'<button onclick="togglePW('+u.id+')" style="background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);border-radius:5px;color:#00C853;cursor:pointer;font-size:11px;padding:2px 7px" title="Show">👁</button>'
+    +'<button onclick="togglePW('+u.id+')" style="background:rgba(137,159,113,.08);border:1px solid rgba(137,159,113,.15);border-radius:5px;color:#899F71;cursor:pointer;font-size:11px;padding:2px 7px" title="Show">👁</button>'
     +'</div></td>'
     +'<td><span style="background:'+bg+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+ROLE_LABELS[u.role]+'</span></td>'
     +'<td><span style="background:rgba(137,159,113,.1);color:#22c55e;border:1px solid rgba(137,159,113,.2);border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">● Active</span></td>'
@@ -1392,21 +1417,21 @@ function renderProjectsGrid(){
     var sc=P_STATUS_C[p.status]||'rgba(107,114,128,.1)',stc=P_STATUS_TC[p.status]||'#9ca3af';
     var pc=P_PRI_C[p.priority]||'#22c55e',rc=ROLE_TC[p.role]||'#22c55e';
     var due=new Date(p.due),diff=Math.ceil((due-today)/(864e5));
-    var dueStr=diff<0?'<span style="color:#f87171;font-weight:600">Overdue '+Math.abs(diff)+'d</span>':diff===0?'<span style="color:#fbbf24;font-weight:600">Due today!</span>':diff<=7?'<span style="color:#fbbf24">'+diff+'d left</span>':'<span style="color:#00C853">'+diff+'d left</span>';
+    var dueStr=diff<0?'<span style="color:#f87171;font-weight:600">Overdue '+Math.abs(diff)+'d</span>':diff===0?'<span style="color:#fbbf24;font-weight:600">Due today!</span>':diff<=7?'<span style="color:#fbbf24">'+diff+'d left</span>':'<span style="color:#899F71">'+diff+'d left</span>';
     return '<div style="background:#111d14;border:1px solid rgba(137,159,113,.12);border-radius:14px;padding:18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.4);transition:all .2s" onmouseenter="this.style.borderColor=\'rgba(137,159,113,.28)\';this.style.transform=\'translateY(-3px)\'" onmouseleave="this.style.borderColor=\'rgba(137,159,113,.12)\';this.style.transform=\'translateY(0)\'">'
     +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">'
     +'<div style="display:flex;align-items:flex-start;gap:8px;flex:1">'
     +'<span style="width:9px;height:9px;border-radius:50%;background:'+pc+';box-shadow:0 0 6px '+pc+'55;flex-shrink:0;margin-top:4px;display:inline-block"></span>'
-    +'<div style="font-size:14px;font-weight:600;color:#FFFFFF;line-height:1.35">'+p.name+'</div></div>'
+    +'<div style="font-size:14px;font-weight:600;color:#A5B6AF;line-height:1.35">'+p.name+'</div></div>'
     +'<button onclick="removeProject('+p.id+')" style="background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:18px;line-height:1;flex-shrink:0;padding:0 0 0 10px" onmouseenter="this.style.color=\'#f87171\'" onmouseleave="this.style.color=\'rgba(248,113,113,.4)\'">×</button>'
     +'</div>'
-    +'<div style="font-size:12.5px;color:#00C853;opacity:.65;margin-bottom:12px;line-height:1.45">'+p.desc+'</div>'
+    +'<div style="font-size:12.5px;color:#899F71;opacity:.65;margin-bottom:12px;line-height:1.45">'+p.desc+'</div>'
     +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">'
     +'<span style="background:'+sc+';color:'+stc+';border:1px solid '+stc+'33;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+P_STATUS_LABEL[p.status]+'</span>'
     +'<span style="background:rgba(137,159,113,.07);color:'+rc+';border:1px solid '+rc+'33;border-radius:20px;padding:2px 10px;font-size:11px">'+ROLE_LABELS[p.role]+'</span>'
     +'</div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(137,159,113,.08);margin-bottom:10px">'
-    +'<div style="font-size:12px;color:#00C853;opacity:.6">👤 '+p.assignee+'</div>'
+    +'<div style="font-size:12px;color:#899F71;opacity:.6">👤 '+p.assignee+'</div>'
     +'<div style="font-size:11.5px">📅 '+dueStr+'</div>'
     +'</div>'
     +'<div style="display:flex;gap:5px;flex-wrap:wrap">'
@@ -1856,7 +1881,7 @@ function renderDriverList(){
     +' onmouseenter="this.style.background=\'rgba(142,182,155,.08)\'" onmouseleave="this.style.background=\''+(isSel?'rgba(142,182,155,.12)':'transparent')+'\'">'
     +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
     +'<span style="font-size:12.5px;font-weight:700;color:#DAF1DE;font-family:var(--fm)">'+d.id+'</span>'
-    +(d.speed>0?'<span style="margin-left:auto;background:#0d3320;border:1px solid #1a5c32;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:700;color:#00C853;font-family:var(--fm)">'+d.speed+' mph</span>':'<span style="margin-left:auto;background:rgba(107,114,128,.12);border:1px solid rgba(107,114,128,.18);border-radius:5px;padding:1px 8px;font-size:11px;color:#9ca3af;font-family:var(--fm)">Stopped</span>')
+    +(d.speed>0?'<span style="margin-left:auto;background:#0d3320;border:1px solid #1a5c32;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:700;color:#899F71;font-family:var(--fm)">'+d.speed+' mph</span>':'<span style="margin-left:auto;background:rgba(107,114,128,.12);border:1px solid rgba(107,114,128,.18);border-radius:5px;padding:1px 8px;font-size:11px;color:#9ca3af;font-family:var(--fm)">Stopped</span>')
     +'</div>'
     +'<div style="font-size:11px;color:rgba(142,182,155,.55);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📍 '+d.loc+'</div>'
     +'<div style="display:flex;align-items:center;gap:6px">'
@@ -2091,8 +2116,8 @@ function renderNotifPanel(){
   el.innerHTML=items.map(function(n){
     var unread=!n.read.includes(cu&&cu.email);
     return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(137,159,113,.1)">'+n.icon+'</div>'
-    +'<div style="flex:1"><div style="font-size:13px;color:#FFFFFF;margin-bottom:2px">'+esc(n.text)+'</div>'
-    +'<div style="font-size:11px;color:#00C853;opacity:.6">'+n.from+' · '+n.time+'</div></div>'
+    +'<div style="flex:1"><div style="font-size:13px;color:#A5B6AF;margin-bottom:2px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:11px;color:#899F71;opacity:.6">'+n.from+' · '+n.time+'</div></div>'
     +(unread?'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:4px"></div>':'')
     +'</div>';
   }).join('');
@@ -2106,8 +2131,8 @@ function renderNotifPage(){
   el.innerHTML=NOTIFICATIONS.map(function(n){
     var unread=!n.read.includes(cu&&cu.email);
     return '<div class="notif-item'+(unread?' unread':'')+'"><div class="notif-icon" style="background:rgba(137,159,113,.1)">'+n.icon+'</div>'
-    +'<div style="flex:1"><div style="font-size:13.5px;font-weight:'+(unread?'600':'400')+';color:#FFFFFF;margin-bottom:3px">'+esc(n.text)+'</div>'
-    +'<div style="font-size:12px;color:#00C853;opacity:.65">'+n.from+' · '+n.time+'</div></div>'
+    +'<div style="flex:1"><div style="font-size:13.5px;font-weight:'+(unread?'600':'400')+';color:#A5B6AF;margin-bottom:3px">'+esc(n.text)+'</div>'
+    +'<div style="font-size:12px;color:#899F71;opacity:.65">'+n.from+' · '+n.time+'</div></div>'
     +(unread?'<div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;margin-top:6px"></div>':'')
     +'</div>';
   }).join('');
@@ -2271,8 +2296,8 @@ function renderContactList(){
     +'<div style="width:38px;height:38px;border-radius:50%;background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';border:1.5px solid '+tc+'44;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+tc+';flex-shrink:0">'
     +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':u.initials)
     +'</div>'
-    +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#FFFFFF">'+u.name+'</div>'
-    +'<div style="font-size:11px;color:#00C853;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(lastTxt)+'</div></div>'
+    +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#A5B6AF">'+u.name+'</div>'
+    +'<div style="font-size:11px;color:#899F71;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(lastTxt)+'</div></div>'
     +'<div style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e55;flex-shrink:0"></div>'
     +'</div></div>';
   }).join('');
@@ -2293,8 +2318,8 @@ function openChat(room,name,emoji,email){
     hdr.innerHTML='<div style="width:40px;height:40px;border-radius:'+(room==='group'?'12px':'50%')+';background:'+(prof.avatar?'transparent':'linear-gradient(135deg,'+tc+'55,'+tc+')')+';display:flex;align-items:center;justify-content:center;font-size:'+(room==='group'?'18px':'13px')+';font-weight:700;color:#fff;overflow:hidden;flex-shrink:0">'
     +(prof.avatar?'<img src="'+prof.avatar+'" style="width:100%;height:100%;object-fit:cover">':(emoji||name.slice(0,2).toUpperCase()))
     +'</div>'
-    +'<div><div style="font-size:14px;font-weight:600;color:#FFFFFF">'+name+'</div>'
-    +'<div style="font-size:11.5px;color:#00C853;opacity:.6">'+(room==='group'?APP_USERS.length+' members · Group':'Online')+'</div></div>';
+    +'<div><div style="font-size:14px;font-weight:600;color:#A5B6AF">'+name+'</div>'
+    +'<div style="font-size:11.5px;color:#899F71;opacity:.6">'+(room==='group'?APP_USERS.length+' members · Group':'Online')+'</div></div>';
   }
   var ia=document.getElementById('chatInputArea');if(ia)ia.style.display='block';
   renderChatMessages();
