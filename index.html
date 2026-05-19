@@ -32,6 +32,82 @@ html.dark .notif-bell{background:rgba(146,183,117,.07);border-color:rgba(146,183
 html.dark .ni.active{box-shadow:inset 0 0 0 1px rgba(146,183,117,.2)}
 html.dark .glass-toggle-wrap{box-shadow:0 0 0 1px rgba(146,183,117,.15),0 4px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(146,183,117,.1)}
 html.dark .fab-main{box-shadow:0 0 0 1px rgba(146,183,117,.3),0 6px 24px rgba(146,183,117,.2)}
+
+/* ═══ NEON ICONS ═══ */
+.ni{position:relative}
+.neon-icon{
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(146,183,117,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 8px rgba(146,183,117,.1);
+  filter:drop-shadow(0 0 3px rgba(146,183,117,.3));
+  animation:iconFloat 3s ease-in-out infinite;
+}
+.neon-icon::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(146,183,117,.15),transparent 70%);
+  border-radius:inherit;pointer-events:none;
+}
+.ni:hover .neon-icon{
+  transform:scale(1.18) translateY(-2px);
+  box-shadow:0 0 14px rgba(146,183,117,.5),0 0 28px rgba(146,183,117,.2);
+  border-color:rgba(146,183,117,.5);
+  filter:drop-shadow(0 0 6px rgba(146,183,117,.7));
+  background:rgba(146,183,117,.12);
+}
+.ni.active .neon-icon{
+  background:rgba(146,183,117,.15);
+  border-color:rgba(146,183,117,.5);
+  box-shadow:0 0 12px rgba(146,183,117,.4),0 0 24px rgba(146,183,117,.15);
+  filter:drop-shadow(0 0 5px rgba(146,183,117,.6));
+  animation:iconActive 2s ease-in-out infinite;
+}
+@keyframes iconFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-2px)}
+}
+@keyframes iconActive{
+  0%,100%{box-shadow:0 0 12px rgba(146,183,117,.4),0 0 24px rgba(146,183,117,.15);filter:drop-shadow(0 0 5px rgba(146,183,117,.6))}
+  50%{box-shadow:0 0 18px rgba(146,183,117,.7),0 0 36px rgba(146,183,117,.25);filter:drop-shadow(0 0 9px rgba(146,183,117,.9))}
+}
+/* Stagger animations */
+.ni:nth-child(1) .neon-icon{animation-delay:0s}
+.ni:nth-child(2) .neon-icon{animation-delay:.3s}
+.ni:nth-child(3) .neon-icon{animation-delay:.6s}
+.ni:nth-child(4) .neon-icon{animation-delay:.9s}
+.ni:nth-child(5) .neon-icon{animation-delay:1.2s}
+.ni:nth-child(6) .neon-icon{animation-delay:1.5s}
+.ni:nth-child(7) .neon-icon{animation-delay:.2s}
+.ni:nth-child(8) .neon-icon{animation-delay:.5s}
+
+/* Day mode icons – sage tones */
+html:not(.dark) .neon-icon{
+  background:rgba(19,50,21,.08);
+  border-color:rgba(19,50,21,.18);
+  filter:drop-shadow(0 0 2px rgba(19,50,21,.2));
+  box-shadow:0 0 6px rgba(19,50,21,.08);
+  animation:iconFloatDay 3s ease-in-out infinite;
+}
+html:not(.dark) .ni:hover .neon-icon{
+  background:rgba(19,50,21,.15);
+  border-color:rgba(19,50,21,.35);
+  box-shadow:0 0 10px rgba(19,50,21,.2);
+  filter:drop-shadow(0 0 4px rgba(19,50,21,.4));
+}
+html:not(.dark) .ni.active .neon-icon{
+  background:rgba(146,183,117,.2);
+  border-color:rgba(146,183,117,.5);
+  box-shadow:0 0 10px rgba(146,183,117,.3);
+}
+@keyframes iconFloatDay{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-2px)}
+}
+
 </style>
 <style>
 :root{
@@ -1541,7 +1617,11 @@ function setupApp(){
   var html='';
   r.nav.forEach(function(sec){
     html+='<div class="nsec"><div class="nsl">'+sec.s+'</div>';
-    sec.items.forEach(function(it){html+='<button class="ni" onclick="showPage(\''+it.id+'\')" id="nav-'+it.id+'"><span class="nd"></span><span class="nic">'+it.i+'</span>'+it.l+'</button>';});
+    sec.items.forEach(function(it){
+  var iconMap={'dashboard':'📊','ai':'🤖','eld':'🛰️','kpi':'📈','safety':'🛡️','sales':'💼','accounting':'💰','knowledge':'🎓','media':'📱','users':'👥','projects':'📁','chat':'💬','profile':'👤','notifications':'🔔'};
+  var icon=iconMap[it.id]||it.i||'◉';
+  html+='<button class="ni" onclick="showPage(\''+it.id+'\')" id="nav-'+it.id+'"><span class="nd"></span><span class="neon-icon">'+icon+'</span><span style="flex:1">'+it.l+'</span></button>';
+});
     html+='</div>';
   });
   document.getElementById('navWrap').innerHTML=html;
