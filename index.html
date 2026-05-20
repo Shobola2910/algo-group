@@ -1707,7 +1707,7 @@ function setKnowTab(t,btn){
 // ═══ KPI ═══
 function renderKPI(){
   var role=cu.role,el=document.getElementById('kpiContent');
-  if(role==='ops'){el.innerHTML=kpiOPS();setTimeout(renderKPIops,30);}
+  if(role==='ops'){el.innerHTML=kpiOPS();setTimeout(function(){renderKPIops().catch(function(){renderKPIDisplay(document.getElementById('kpiOpsRoot'),KPI_DATA);});},30);}
   else if(role==='manager')el.innerHTML=kpiMGR();
   else if(role==='sales')el.innerHTML=kpiSales();
   else el.innerHTML='<div style="text-align:center;padding:60px;color:var(--g600);font-size:14px">No KPI available for this role</div>';
@@ -1727,36 +1727,71 @@ async function renderKPIops(){
   var el = document.getElementById('kpiOpsRoot');
   if(!el) return;
 
-  // Show loading
   el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:260px;flex-direction:column;gap:14px">'
     + '<div class="kpi-spinner"></div>'
-    + '<div style="color:#92B775;font-size:13px;letter-spacing:.03em">Connecting to KPI API...</div>'
+    + '<div style="color:#92B775;font-size:13px;letter-spacing:.03em">Loading KPI data...</div>'
     + '</div>';
 
   try {
-    var headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + KPI_API_KEY,
-      'X-API-Key': KPI_API_KEY,
-    };
+    var res = await fetch(KPI_API_URL, {
+      credentials: 'include',
+      headers: {
+        'Authorization': 'Bearer ' + KPI_API_KEY,
+        'X-API-Key': KPI_API_KEY,
+        'Accept': 'text/html,application/json,*/*',
+      }
+    });
 
-    var res = await fetch(KPI_API_URL, { headers: headers });
-
-    if(!res.ok) throw new Error('HTTP ' + res.status + ': ' + res.statusText);
-
+    if(!res.ok) throw new Error('HTTP ' + res.status);
     var raw = await res.text();
-    var data;
-    try { data = JSON.parse(raw); }
-    catch(e) { throw new Error('Invalid JSON response'); }
 
-    kpiApiData = data;
-    kpiLastFetch = new Date();
-    renderKPIFromData(el, data);
+    // Try JSON
+    try {
+      var jsonData = JSON.parse(raw);
+      kpiApiData = jsonData;
+      kpiLastFetch = new Date();
+      renderKPIFromData(el, jsonData);
+      return;
+    } catch(e) {}
+
+    // Parse HTML table
+    var parsed = parseKPIHtml(raw);
+    if(parsed && parsed.length > 0){
+      KPI_DATA = parsed;
+      kpiApiData = parsed;
+      kpiLastFetch = new Date();
+      renderKPIDisplay(el, parsed);
+    } else {
+      throw new Error('No data');
+    }
 
   } catch(err) {
-    el.innerHTML = renderKPIError(err.message);
+    // Use static KPI_DATA (already has real values)
+    renderKPIDisplay(el, KPI_DATA);
   }
+}
+
+function parseKPIHtml(html){
+  try {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(html, 'text/html');
+    var rows = doc.querySelectorAll('tbody tr');
+    var result = [];
+    rows.forEach(function(tr){
+      var cells = Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.trim();});
+      if(cells.length >= 15 && cells[1] && /^[A-Z]\d+/.test(cells[1])){
+        result.push({
+          id:cells[1], shift:cells[2],
+          s:+cells[3]||0, cy:+cells[4]||0, br:+cells[5]||0,
+          bol:+cells[6]||0, nw:+cells[7]||0, ex:+cells[8]||0,
+          fi:+cells[9]||0, pl:+cells[10]||0, up:+cells[11]||0,
+          ca:+cells[12]||0, mins:+cells[13]||0,
+          total:+cells[14]||0, pts:parseFloat(cells[15])||0
+        });
+      }
+    });
+    return result;
+  } catch(e){ return null; }
 }
 
 function renderKPIError(msg){
@@ -1778,7 +1813,168 @@ function renderKPIError(msg){
 
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function renderKPIFromData(el, data){
+
+// Parse HTML table from KPI dashboard
+function parseKPIHtml(htmlStr){
+  try {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlStr, 'text/html');
+    var rows = doc.querySelectorAll('table tr');
+    var result = [];
+    rows.forEach(function(row){
+      var cells = row.querySelectorAll('td');
+      if(cells.length < 14) return;
+      var shift = cells[2] ? cells[2].textContent.trim() : '';
+      if(!shift || !['Night','Day','Main'].includes(shift)) return;
+      var emp = cells[1] ? cells[1].textContent.trim() : '';
+      if(!emp) return;
+      var nums = [];
+      for(var i=3;i<cells.length;i++){
+        nums.push(parseFloat(cells[i].textContent.trim())||0);
+      }
+      result.push({
+        id: emp,
+        shift: shift,
+        s:    nums[0]||0,
+        cy:   nums[1]||0,
+        br:   nums[2]||0,
+        bol:  nums[3]||0,
+        nw:   nums[4]||0,
+        ex:   nums[5]||0,
+        fi:   nums[6]||0,
+        pl:   nums[7]||0,
+        up:   nums[8]||0,
+        ca:   nums[9]||0,
+        mins: nums[10]||0,
+        total:nums[11]||0,
+        pts:  nums[12]||0,
+      });
+    });
+    return result;
+  } catch(e) {
+    return null;
+  }
+}
+
+function renderKPIDisplay(el, rows){
+  if(!rows||rows.length===0){el.innerHTML='<div style="text-align:center;padding:60px;color:#899F71">No data.</div>';return;}
+
+  rows = rows.slice().sort(function(a,b){return b.pts-a.pts;});
+  var top3 = rows.slice(0,3);
+  var avg = (rows.reduce(function(s,r){return s+r.pts;},0)/rows.length).toFixed(2);
+
+  // ── Stats ──
+  var html = '<div class="sg" style="margin-bottom:18px">';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">👥</span><div class="sv">'+rows.length+'</div><div class="sl">Dispatchers</div></div>';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">🥇</span><div class="sv">'+(top3[0]?top3[0].id:'—')+'</div><div class="sl">Top Performer</div><span class="sc-c cup">'+( top3[0]?top3[0].pts+' pts':'')+'</span></div>';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">📊</span><div class="sv">'+avg+'</div><div class="sl">Avg Score</div></div>';
+  html += '<div class="sc"><span style="font-size:18px;display:block;margin-bottom:8px">⏱️</span><div class="sv" id="kpiLastSync">'+(kpiLastFetch?kpiLastFetch.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'Cached')+'</div><div class="sl">Last sync</div>'
+    +'<button onclick="renderKPIops()" style="margin-top:5px;width:100%;background:rgba(146,183,117,.08);border:1px solid rgba(146,183,117,.18);color:#92B775;border-radius:6px;padding:3px 8px;font-size:10.5px;cursor:pointer;font-family:var(--ff)">↻ Refresh</button>'
+    +'</div>';
+  html += '</div>';
+
+  // ── Chart + Podium ──
+  html += '<div class="g2 mb16">';
+  html += '<div class="card"><div class="ch"><span class="ct">Points Chart</span><span style="font-size:11px;color:#92B775;background:rgba(146,183,117,.1);padding:2px 8px;border-radius:20px">'+(kpiLastFetch?'Live':'Cached')+'</span></div>'
+    +'<div class="cb"><div style="display:flex;align-items:flex-end;gap:6px;height:140px" id="kpiChartBars"></div>'
+    +'<div style="display:flex;justify-content:space-around;margin-top:5px" id="kpiChartLabels"></div></div></div>';
+
+  html += '<div class="card"><div class="ch"><span class="ct">🏆 Leaderboard</span></div><div class="cb" style="padding:0">';
+  var medals=['🥇','🥈','🥉'],podBg=['rgba(251,191,36,.08)','rgba(156,163,175,.06)','rgba(205,127,50,.06)'];
+  var podBc=['rgba(251,191,36,.25)','rgba(156,163,175,.18)','rgba(205,127,50,.18)'];
+  top3.forEach(function(r,i){
+    var sc={Day:'#60a5fa',Night:'#c084fc',Main:'#22c55e'}[r.shift]||'#92B775';
+    html += '<div style="padding:13px 18px;border-bottom:1px solid rgba(146,183,117,.08);background:'+podBg[i]+';border-left:3px solid '+podBc[i]+';display:flex;align-items:center;gap:12px">'
+      +'<span style="font-size:22px">'+medals[i]+'</span>'
+      +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#c8ddb0">'+r.id+'</div>'
+      +'<span style="background:rgba(146,183,117,.1);color:'+sc+';border:1px solid '+sc+'33;border-radius:20px;padding:1px 8px;font-size:10px">'+r.shift+'</span></div>'
+      +'<div style="text-align:right"><div style="font-size:18px;font-weight:700;color:#92B775;font-family:var(--fm)">'+r.pts.toFixed(2)+'</div><div style="font-size:10px;color:#899F71">pts</div></div>'
+      +'</div>';
+  });
+  html += '</div></div></div>';
+
+  // ── Filters ──
+  html += '<div class="card mb16"><div class="cb" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 18px">';
+  html += '<div style="font-size:10px;color:#899F71;font-weight:600;text-transform:uppercase;letter-spacing:.08em">Shift:</div>';
+  var filterBtns = ['All','Day','Main','Night'];
+  filterBtns.forEach(function(s){
+    var isAll = s==='All';
+    html += '<button id="kpiF_'+(isAll?'all':s)+'" onclick="filterKPIDisplay(\''+(isAll?'all':s)+'\')" '
+      +'style="padding:4px 12px;border-radius:7px;font-size:12px;border:1px solid rgba(146,183,117,.2);background:'+(isAll?'rgba(146,183,117,.15)':'transparent')+';color:'+(isAll?'#92B775':'#899F71')+';cursor:pointer;font-family:var(--ff)">'+s+'</button>';
+  });
+  html += '<div style="margin-left:auto"><input id="kpiSearch2" onkeyup="filterKPIDisplay()" placeholder="Search..." style="padding:6px 12px;border-radius:8px;border:1px solid rgba(146,183,117,.18);background:#162118;color:#c8ddb0;font-family:var(--ff);font-size:12.5px;outline:none;width:150px"></div>';
+  html += '</div></div>';
+
+  // ── Table ──
+  html += '<div class="card"><div class="ch"><span class="ct">TOTALS</span><span style="font-size:12px;color:#899F71" id="kpiCount2">'+rows.length+' entries</span></div>'
+    +'<div style="overflow-x:auto"><table style="min-width:1050px"><thead><tr>'
+    +'<th>Rank</th><th>Employee</th><th>Work Shift</th>'
+    +'<th>Shift</th><th>Cycle</th><th>Break</th><th>BOL</th><th>New</th><th>Extra</th><th>Filled</th>'
+    +'<th>Paperlog</th><th>Update</th><th>Calls</th><th>Minutes</th>'
+    +'<th style="color:#92B775">Total</th><th style="color:#92B775">Total (Pts)</th>'
+    +'</tr></thead><tbody id="kpiTbody2">';
+
+  rows.forEach(function(r,i){
+    html += buildKPIRow2(r, i);
+  });
+
+  html += '</tbody></table></div></div>';
+  el.innerHTML = html;
+
+  // Draw chart
+  setTimeout(function(){
+    var bars = document.getElementById('kpiChartBars');
+    var lbls = document.getElementById('kpiChartLabels');
+    if(!bars) return;
+    var maxPts = rows[0].pts||1;
+    rows.slice(0,9).forEach(function(r,i){
+      var h2 = Math.max(4, Math.round((r.pts/maxPts)*132));
+      var col = i===0?'linear-gradient(180deg,#fbbf24,#92B775)':i===1?'linear-gradient(180deg,#92B775,#2b3f26)':'linear-gradient(180deg,#899F71,#133215)';
+      var b = document.createElement('div');
+      b.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:3px';
+      b.innerHTML='<span style="font-size:9px;color:#899F71;font-family:var(--fm)">'+r.pts+'</span>'
+        +'<div style="width:100%;height:'+h2+'px;background:'+col+';border-radius:4px 4px 0 0;cursor:pointer" title="'+r.id+': '+r.pts+' pts"></div>';
+      bars.appendChild(b);
+      if(lbls){var l=document.createElement('span');l.style.cssText='font-size:9px;color:#899F71;font-family:var(--fm);flex:1;text-align:center';l.textContent=r.id;lbls.appendChild(l);}
+    });
+  },50);
+
+  window._kpiRows2 = rows;
+  window._kpiActiveShift2 = 'all';
+}
+
+function buildKPIRow2(r,i){
+  var rank=i+1, medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+  var sc={Day:'#60a5fa',Night:'#c084fc',Main:'#22c55e'}[r.shift]||'#92B775';
+  var sb={Day:'rgba(59,130,246,.13)',Night:'rgba(139,92,246,.13)',Main:'rgba(34,197,94,.11)'}[r.shift]||'rgba(146,183,117,.1)';
+  return '<tr>'
+    +'<td style="text-align:center;font-size:'+(medal?'17':'12')+'px">'+(medal||rank)+'</td>'
+    +'<td style="font-weight:600;font-family:var(--fm);color:#c8ddb0">'+r.id+'</td>'
+    +'<td><span style="background:'+sb+';color:'+sc+';border:1px solid '+sc+'33;border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">'+r.shift+'</span></td>'
+    +[r.s,r.cy,r.br,r.bol,r.nw,r.ex,r.fi,r.pl,r.up,r.ca,r.mins,r.total].map(function(v){return '<td style="font-family:var(--fm)">'+v+'</td>';}).join('')
+    +'<td style="font-weight:700;font-family:var(--fm);color:#92B775">'+r.pts.toFixed(2)+'</td>'
+    +'</tr>';
+}
+
+function filterKPIDisplay(shift){
+  if(shift!==undefined) window._kpiActiveShift2=shift;
+  var active=window._kpiActiveShift2||'all';
+  var q=(document.getElementById('kpiSearch2')||{value:''}).value.toLowerCase();
+  document.querySelectorAll('[id^="kpiF_"]').forEach(function(b){
+    var isA=b.id==='kpiF_'+active;
+    b.style.background=isA?'rgba(146,183,117,.15)':'transparent';
+    b.style.color=isA?'#92B775':'#899F71';
+  });
+  var rows=(window._kpiRows2||KPI_DATA).filter(function(r){
+    var ms=active==='all'||r.shift===active;
+    var mq=!q||r.id.toLowerCase().includes(q)||r.shift.toLowerCase().includes(q);
+    return ms&&mq;
+  });
+  var tb=document.getElementById('kpiTbody2');
+  if(tb)tb.innerHTML=rows.map(buildKPIRow2).join('');
+  var cnt=document.getElementById('kpiCount2');
+  if(cnt)cnt.textContent=rows.length+' entries';
+}
   // Auto-detect data structure
   var rows = [];
   var meta = {};
@@ -1992,20 +2188,30 @@ function renderKPIFallback(){
     +'</div>';
 }
 
+function calcPts(d){
+  return d.s*0.5 + d.cy*1.0 + d.br*0.25 + d.bol*0.5 + d.nw*1.0 + d.ex*0.5
+       + d.fi*0.25 + d.pl*1.0 + d.up*0.25 + d.ca*0.0 + (d.mins/6)*1.5;
+}
 function buildManualKPITable(){
   var rows = KPI_DATA;
-  return '<div style="overflow-x:auto"><table style="min-width:900px"><thead><tr>'
-    +'<th>#</th><th>Employee</th><th>Shift</th><th>S</th><th>Cycle</th><th>Break</th><th>BOL</th><th>New</th><th>Extra</th><th>Filled</th><th>Calls</th><th>Minutes</th><th>Total</th><th>Pts</th>'
+  return '<div style="overflow-x:auto"><table style="min-width:1100px"><thead><tr>'
+    +'<th>Rank</th><th>Employee</th><th>Work Shift</th><th>Shift</th><th>Cycle</th><th>Break</th>'
+    +'<th>BOL</th><th>New</th><th>Extra</th><th>Filled</th><th>Paperlog</th><th>Update</th>'
+    +'<th>Calls</th><th>Minutes</th><th>Total</th><th>Total (Pts)</th>'
     +'</tr></thead><tbody>'
     +rows.map(function(d,i){
       var r=i+1,m=r===1?'🥇':r===2?'🥈':r===3?'🥉':'';
       var sc={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(34,197,94,.12)'}[d.shift]||'rgba(146,183,117,.1)';
       var tc={Day:'#60a5fa',Night:'#c084fc',Main:'#22c55e'}[d.shift]||'#92B775';
-      return '<tr><td style="text-align:center;font-size:'+(m?'17':'12')+'px">'+(m||r)+'</td>'
+      var pts=d.pts||calcPts(d);
+      return '<tr>'
+        +'<td style="text-align:center;font-size:'+(m?'17':'12')+'px">'+(m||r)+'</td>'
         +'<td style="font-weight:600;font-family:var(--fm);color:#c8ddb0">'+d.id+'</td>'
         +'<td><span style="background:'+sc+';color:'+tc+';border:1px solid '+tc+'33;border-radius:20px;padding:2px 9px;font-size:10.5px;font-weight:600">'+d.shift+'</span></td>'
-        +[d.s,d.cy,d.br,d.bol,d.nw,d.ex,d.fi,d.ca,d.mins,d.total].map(function(v){return '<td style="font-family:var(--fm)">'+v+'</td>';}).join('')
-        +'<td style="font-weight:700;font-family:var(--fm);color:#92B775">'+d.pts.toFixed(2)+'</td>'
+        +[d.s,d.cy,d.br,d.bol,d.nw,d.ex,d.fi,d.pl,d.up,d.ca,d.mins,d.total].map(function(v){
+          return '<td style="font-family:var(--fm);text-align:center">'+v+'</td>';
+        }).join('')
+        +'<td style="font-weight:700;font-family:var(--fm);color:#92B775;text-align:center">'+pts.toFixed(2)+'</td>'
         +'</tr>';
     }).join('')
     +'</tbody></table></div>';
@@ -2045,9 +2251,9 @@ function renderKPIops(){
   // Chart points
   var months=['Jan','Feb','Mar','Apr','May'];
   var chartData=[
-    {id:'D415',col:'#22c55e',vals:[0,80,220,580,906.50]},
-    {id:'B115',col:'#60a5fa',vals:[0,60,180,420,653.75]},
-    {id:'H385',col:'#fbbf24',vals:[0,40,140,320,570.25]},
+    {id:'D415',col:'#22c55e',vals:[0,120,380,720,1000.75]},
+    {id:'B115',col:'#60a5fa',vals:[0,90,280,520,702.75]},
+    {id:'H385',col:'#fbbf24',vals:[0,70,220,450,620.25]},
   ];
 
   el.innerHTML =
