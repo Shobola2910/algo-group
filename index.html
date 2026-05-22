@@ -1601,11 +1601,11 @@ function doLogin(){
   document.getElementById('pErr').style.display='none';
   document.getElementById('lEmail').classList.remove('err');
   document.getElementById('lPass').classList.remove('err');
-  if(!em||!em.includes('@')){document.getElementById('eErr').style.display='block';document.getElementById('lEmail').classList.add('err');return;}
+  if(!em||!em.includes('@')){document.getElementById('eErr').textContent='Please enter a valid email';document.getElementById('eErr').style.display='block';document.getElementById('lEmail').classList.add('err');return;}
   var user=USERS.find(function(u){return u.email===em&&u.pass===pw;});
-  if(!user){document.getElementById('pErr').style.display='block';document.getElementById('lPass').classList.add('err');return;}
+  if(!user){document.getElementById('pErr').textContent='Incorrect email or password';document.getElementById('pErr').style.display='block';document.getElementById('lPass').classList.add('err');return;}
   cu=user;
-  try{setupApp();}catch(e){console.error(e);alert('Violation: '+e.message);}
+  try{setupApp();}catch(e){console.error(e);console.error('setupApp error:',e);alert('Login error: '+e.message);}
 }
 function doLogout(){
   cu=null;
@@ -1616,6 +1616,7 @@ function doLogout(){
 }
 
 function setupApp(){
+  if(!ROLES||!ROLES[cu.role]){alert('Role not found: '+cu.role);return;}
   var r=ROLES[cu.role];
   var html='';
   r.nav.forEach(function(sec){
@@ -1630,7 +1631,7 @@ function setupApp(){
   document.getElementById('navWrap').innerHTML=html;
   document.getElementById('sRoleL').textContent=r.label;
   document.getElementById('sAvt').textContent=cu.initials;
-  document.getElementById('sAvt').style.background=cu.color;
+  document.getElementById('sAvt').style.background=cu.color||'linear-gradient(135deg,#133215,#92B775)';
   document.getElementById('sName').textContent=cu.name;
   document.getElementById('sEmail').textContent=cu.email;
   initAI('general',r.aiSys,r.aiWelcome);
