@@ -1707,7 +1707,7 @@ function setKnowTab(t,btn){
 // ═══ KPI ═══
 function renderKPI(){
   var role=cu.role,el=document.getElementById('kpiContent');
-  if(role==='ops'){el.innerHTML=kpiOPS();setTimeout(function(){renderKPIops().catch(function(){renderKPIDisplay(document.getElementById('kpiOpsRoot'),KPI_DATA);});},30);}
+  if(role==='ops'){el.innerHTML=kpiOPS();setTimeout(function(){try{renderKPIops();}catch(e){renderKPIDisplay(document.getElementById('kpiOpsRoot'),KPI_DATA);}},30);}
   else if(role==='manager')el.innerHTML=kpiMGR();
   else if(role==='sales')el.innerHTML=kpiSales();
   else el.innerHTML='<div style="text-align:center;padding:60px;color:var(--g600);font-size:14px">No KPI available for this role</div>';
@@ -1812,49 +1812,6 @@ function renderKPIError(msg){
 }
 
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-
-// Parse HTML table from KPI dashboard
-function parseKPIHtml(htmlStr){
-  try {
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(htmlStr, 'text/html');
-    var rows = doc.querySelectorAll('table tr');
-    var result = [];
-    rows.forEach(function(row){
-      var cells = row.querySelectorAll('td');
-      if(cells.length < 14) return;
-      var shift = cells[2] ? cells[2].textContent.trim() : '';
-      if(!shift || !['Night','Day','Main'].includes(shift)) return;
-      var emp = cells[1] ? cells[1].textContent.trim() : '';
-      if(!emp) return;
-      var nums = [];
-      for(var i=3;i<cells.length;i++){
-        nums.push(parseFloat(cells[i].textContent.trim())||0);
-      }
-      result.push({
-        id: emp,
-        shift: shift,
-        s:    nums[0]||0,
-        cy:   nums[1]||0,
-        br:   nums[2]||0,
-        bol:  nums[3]||0,
-        nw:   nums[4]||0,
-        ex:   nums[5]||0,
-        fi:   nums[6]||0,
-        pl:   nums[7]||0,
-        up:   nums[8]||0,
-        ca:   nums[9]||0,
-        mins: nums[10]||0,
-        total:nums[11]||0,
-        pts:  nums[12]||0,
-      });
-    });
-    return result;
-  } catch(e) {
-    return null;
-  }
-}
 
 function renderKPIDisplay(el, rows){
   if(!rows||rows.length===0){el.innerHTML='<div style="text-align:center;padding:60px;color:#899F71">No data.</div>';return;}
@@ -1975,6 +1932,8 @@ function filterKPIDisplay(shift){
   var cnt=document.getElementById('kpiCount2');
   if(cnt)cnt.textContent=rows.length+' entries';
 }
+
+function renderKPIFromData(el, data){
   // Auto-detect data structure
   var rows = [];
   var meta = {};
@@ -2234,167 +2193,6 @@ var KPI_DATA = [
 ];
 var kpiRankBy='all',kpiRange='month',kpiShift='all',kpiFiltered=KPI_DATA.slice();
 
-function kpiOPS(){
-  return '<div id="kpiOpsRoot"></div>';
-}
-function renderKPIops(){
-  var el=document.getElementById('kpiOpsRoot');if(!el)return;
-  // Filter
-  kpiFiltered=KPI_DATA.filter(function(d){
-    if(kpiShift!=='all'&&d.shift.toLowerCase()!==kpiShift.toLowerCase())return false;
-    return true;
-  }).sort(function(a,b){return b.pts-a.pts;});
-
-  var shiftColor={Day:'#3b82f6',Night:'#8b5cf6',Main:'#22c55e'};
-  var shiftBg={Day:'rgba(59,130,246,.15)',Night:'rgba(139,92,246,.15)',Main:'rgba(137,159,113,.15)'};
-
-  // Chart points
-  var months=['Jan','Feb','Mar','Apr','May'];
-  var chartData=[
-    {id:'D415',col:'#22c55e',vals:[0,120,380,720,1000.75]},
-    {id:'B115',col:'#60a5fa',vals:[0,90,280,520,702.75]},
-    {id:'H385',col:'#fbbf24',vals:[0,70,220,450,620.25]},
-  ];
-
-  el.innerHTML =
-  // TOP SECTION: chart + leaderboard
-  '<div style="display:grid;grid-template-columns:1fr 320px;gap:0;border-radius:14px;overflow:hidden;border:1px solid var(--bdr2);box-shadow:var(--sh2);margin-bottom:18px;background:var(--white)">'
-  // Chart
-  +'<div style="padding:20px 24px 16px;border-right:1px solid var(--bdr2)">'
-  +'<div style="font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Total Points Over Time</div>'
-  +'<div style="position:relative;height:180px">'
-  +'<canvas id="kpiChart" width="700" height="180" style="width:100%;height:100%"></canvas>'
-  +'</div>'
-  +'<div style="display:flex;gap:16px;margin-top:10px">'
-  +chartData.map(function(c){return '<div style="display:flex;align-items:center;gap:5px"><span style="width:24px;height:3px;background:'+c.col+';border-radius:2px;display:inline-block"></span><span style="font-size:11.5px;color:var(--g600)">'+c.id+'</span></div>';}).join('')
-  +'</div>'
-  +'</div>'
-  // Leaderboard
-  +'<div style="background:var(--white)">'
-  +'<div style="padding:16px 18px 10px;font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--bdr2)">Leaderboard</div>'
-  +kpiFiltered.slice(0,3).map(function(d,i){
-    var medals=['🥇','🥈','🥉'],bg=['linear-gradient(90deg,rgba(251,191,36,.12),transparent)','linear-gradient(90deg,rgba(156,163,175,.1),transparent)','linear-gradient(90deg,rgba(205,127,50,.1),transparent)'];
-    var bc=['rgba(251,191,36,.3)','rgba(156,163,175,.25)','rgba(205,127,50,.25)'];
-    return '<div style="padding:14px 18px;border-bottom:1px solid var(--bdr2);background:'+bg[i]+';border-left:3px solid '+bc[i]+'">'
-    +'<div style="display:flex;align-items:center;gap:8px">'
-    +'<span style="font-size:20px">'+medals[i]+'</span>'
-    +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--g800)">'+d.id+'</div>'
-    +'<div style="font-size:11px;color:var(--g600)">'+(i===0?'1st':i===1?'2nd':'3rd')+' place</div></div>'
-    +'<div style="text-align:right"><div style="font-size:18px;font-weight:700;color:var(--g800);font-family:var(--fm)">'+d.pts.toFixed(2)+'</div>'
-    +'<div style="font-size:10px;color:var(--g600)">PTS</div></div>'
-    +'</div></div>';
-  }).join('')
-  +'</div>'
-  +'</div>'
-
-  // FILTERS
-  +'<div style="background:var(--white);border:1px solid var(--bdr2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:var(--sh1)">'
-  +'<div>'
-  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Rank By</div>'
-  +'<select class="fs" onchange="kpiRankBy=this.value;renderKPIops()" style="width:130px;font-size:12.5px">'
-  +'<option value="all">All Tasks</option>'
-  +'<option value="pts">Total Points</option>'
-  +'<option value="calls">Calls</option>'
-  +'<option value="min">Minutes</option>'
-  +'</select></div>'
-  +'<div>'
-  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Range</div>'
-  +'<select class="fs" onchange="kpiRange=this.value;renderKPIops()" style="width:150px;font-size:12.5px">'
-  +'<option value="month">Current Month</option>'
-  +'<option value="week">Current Week</option>'
-  +'<option value="quarter">Quarter</option>'
-  +'<option value="year">Year to Date</option>'
-  +'</select></div>'
-  +'<div>'
-  +'<div style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g600);margin-bottom:6px">Work Shift</div>'
-  +'<div style="display:flex;gap:2px;background:var(--g50);border:1px solid var(--bdr2);border-radius:8px;padding:3px">'
-  +['All','Day','Main','Night'].map(function(s){var active=kpiShift===(s==='All'?'all':s);return '<button onclick="kpiShift=\''+(s==='All'?'all':s)+'\';renderKPIops()" style="padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;border:none;cursor:pointer;font-family:var(--ff);background:'+(active?'var(--g600)':'transparent')+';color:'+(active?'#fff':'var(--g600)')+'">'+s+'</button>';}).join('')
-  +'</div></div>'
-  +'<div style="margin-left:auto"><button onclick="kpiShift=\'all\';kpiRankBy=\'all\';renderKPIops()" style="padding:7px 16px;border-radius:8px;font-size:12.5px;border:1px solid var(--bdr);background:transparent;color:var(--g700);cursor:pointer;font-family:var(--ff)">Reset</button></div>'
-  +'</div>'
-
-  // TABLE
-  +'<div class="card"><div class="ch"><span class="ct" style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border:2px solid var(--g400);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--g600)">≡</span> TOTALS</span>'
-  +'<span style="font-size:12px;color:var(--g600)">Showing 1–'+kpiFiltered.length+' of '+kpiFiltered.length+' entries</span>'
-  +'</div>'
-  +'<div style="overflow-x:auto"><table style="min-width:1100px">'
-  +'<thead><tr>'
-  +'<th style="width:50px">Rank</th>'
-  +'<th>Employee</th>'
-  +'<th>Work Shift</th>'
-  +'<th>Shift</th><th>Cycle</th><th>Break</th>'
-  +'<th>BOL</th><th>New</th><th>Extra</th><th>Filled</th>'
-  +'<th>Paperlog</th><th>Update</th><th>Calls</th><th>Minutes</th>'
-  +'<th style="font-weight:700">Total</th>'
-  +'<th style="font-weight:700;color:var(--g600)">Total (Pts)</th>'
-  +'</tr></thead><tbody>'
-  +kpiFiltered.map(function(d,i){
-    var rank=i+1;
-    var medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
-    var sc=shiftColor[d.shift]||'#888',sb=shiftBg[d.shift]||'rgba(100,100,100,.12)';
-    var isTop=rank<=3;
-    return '<tr style="'+(isTop?'background:rgba(142,182,155,.03)':'')+'">'
-    +'<td style="text-align:center"><span style="font-size:'+(medal?'18px':'13px')+';font-weight:700;color:var(--g700)">'+(medal||rank)+'</span></td>'
-    +'<td style="font-weight:600;color:var(--g800);font-family:var(--fm)">'+d.id+'</td>'
-    +'<td><span style="background:'+sb+';color:'+sc+';border:1px solid '+sc+'44;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600">'+d.shift+'</span></td>'
-    +'<td style="font-family:var(--fm)">'+d.s+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.cy+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.br+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.bol+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.nw+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.ex+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.fi+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.pl+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.up+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.ca+'</td>'
-    +'<td style="font-family:var(--fm)">'+d.min+'</td>'
-    +'<td style="font-weight:700;font-family:var(--fm);color:var(--g800)">'+d.total+'</td>'
-    +'<td style="font-weight:700;font-family:var(--fm);color:var(--g600)">'+d.pts.toFixed(2)+'</td>'
-    +'</tr>';
-  }).join('')
-  +'</tbody></table></div></div>';
-
-  // Draw chart
-  setTimeout(function(){
-    var canvas=document.getElementById('kpiChart');
-    if(!canvas)return;
-    var W=canvas.offsetWidth||700,H=180;
-    canvas.width=W*2;canvas.height=H*2;
-    canvas.style.width=W+'px';canvas.style.height=H+'px';
-    var ctx=canvas.getContext('2d');ctx.scale(2,2);
-    ctx.clearRect(0,0,W,H);
-    // Grid
-    var maxV=1000,pad={t:10,r:10,b:30,l:44};
-    var cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
-    // Y axis labels
-    ctx.font='10px DM Mono,monospace';ctx.fillStyle='rgba(142,182,155,.5)';ctx.textAlign='right';
-    [0,2000,4000,6000,8000].forEach(function(v){
-      var y=pad.t+ch-(v/8000)*ch;
-      ctx.fillText(v===0?'0':v>=1000?(v/1000)+'k':v,pad.l-6,y+3);
-      ctx.strokeStyle='rgba(142,182,155,.06)';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
-    });
-    // X labels
-    ctx.textAlign='center';ctx.fillStyle='rgba(142,182,155,.5)';
-    months.forEach(function(m,i){ctx.fillText(m,pad.l+(i/(months.length-1))*cw,H-pad.b+14);});
-    // Lines
-    chartData.forEach(function(series){
-      ctx.beginPath();
-      series.vals.forEach(function(v,i){
-        var x=pad.l+(i/(months.length-1))*cw;
-        var y=pad.t+ch-(v/8000)*ch;
-        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      });
-      ctx.strokeStyle=series.col;ctx.lineWidth=2;ctx.lineJoin='round';ctx.stroke();
-      // Dots
-      series.vals.forEach(function(v,i){
-        var x=pad.l+(i/(months.length-1))*cw,y=pad.t+ch-(v/8000)*ch;
-        ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);
-        ctx.fillStyle=series.col;ctx.fill();
-        ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
-      });
-    });
-  },60);
-}
 function kpiMGR(){return '<div class="sg"><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📨</span><div class="sv" data-count="284">0</div><div class="sl">Telegram messages</div><span class="sc-c cup">↑ 12%</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⚡</span><div class="sv">8.4 min</div><div class="sl">Avg response time</div><span class="sc-c cup">↓ 1.2 min</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">👥</span><div class="sv" data-count="23">0</div><div class="sl">Active members</div><span class="sc-c cup">↑ 3</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">✅</span><div class="sv">94.2%</div><div class="sl">Response rate</div><span class="sc-c cup">↑ 2.1%</span></div></div><div class="g2"><div class="card"><div class="ch"><span class="ct">🤖 Telegram Bot Connection</span><span id="tgSt" class="badge bn">Disconnected</span></div><div class="cb"><div class="fg"><label class="fl">Bot Token</label><input class="fi" id="tgTok" type="password" placeholder="7xxxxxxxxxx:AAxx..."></div><div class="fg"><label class="fl">Group Chat ID</label><input class="fi" id="tgCid" placeholder="-100xxxxxxxxxx"></div><div style="display:flex;gap:8px"><button class="btn bp bsm" onclick="connTG()" style="flex:1">Connect →</button><button class="btn bg_ bsm" onclick="disconnTG()">Disconnect</button></div><div id="tgInf" style="display:none;margin-top:10px"><span class="badge bg">✓ Telegram ulangan</span></div></div></div><div class="card"><div class="ch"><span class="ct">Member responses</span><button class="btn bg_ bsm" onclick="refTG()">↻</button></div><div class="cb" id="tgMsgs"><div class="tgmsg"><div class="tgav">JM</div><div style="flex:1"><div class="tgn">J. Martinez</div><div class="tgt">Yuk yetkazildi. Keyingi reys uchun tayyor.</div></div><div class="tgtime">14:32</div></div><div class="tgmsg"><div class="tgav">RJ</div><div style="flex:1"><div class="tgn">R. Johnson</div><div class="tgt">Chicago — 45 min delay. Traffic.</div></div><div class="tgtime">14:18</div></div><div class="tgmsg"><div class="tgav">KW</div><div style="flex:1"><div class="tgn">K. Williams</div><div class="tgt">Fuel dolgan. Receipt yuborildi.</div></div><div class="tgtime">13:55</div></div></div></div></div>';}
 function kpiSales(){return '<div class="sg"><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">📞</span><div class="sv" data-count="47">0</div><div class="sl">Calls Today</div><span class="sc-c cup">↑ 8</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">⏱️</span><div class="sv">4.2 min</div><div class="sl">Avg call duration</div></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">💰</span><div class="sv">$3.80</div><div class="sl">Revenue / call min</div><span class="sc-c cup">↑ $0.40</span></div><div class="sc"><span style="font-size:18px;display:block;margin-bottom:9px">🎯</span><div class="sv">38%</div><div class="sl">Conversion</div><span class="sc-c cup">↑ 3%</span></div></div><div class="g2"><div class="card"><div class="ch"><span class="ct">📞 Call Timer — Per-Minute KPI</span></div><div class="cb"><div class="ctimer"><div class="ctime" id="callDisp">00:00</div><div style="font-size:12px;color:var(--g600);margin-top:6px" id="callSt">Ready</div><div style="display:flex;gap:10px;justify-content:center;margin-top:16px"><button class="btn bp" onclick="togCall()" id="callBtn">▶ Start</button><button class="btn bg_" onclick="rstCall()">↺ Reset</button><button class="btn bg_" id="logBtn" style="display:none" onclick="lgCall()">📋 Log call</button></div></div></div></div><div class="card"><div class="ch"><span class="ct">Call journal</span></div><div class="cb" style="padding:0"><table><thead><tr><th>Time</th><th>Client</th><th>Duration</th><th>Result</th></tr></thead><tbody id="callLog"><tr><td style="font-family:var(--fm);font-size:11px">09:14</td><td>Prime Freight</td><td>6:32</td><td><span class="badge bg">Deal ✓</span></td></tr><tr><td style="font-family:var(--fm);font-size:11px">10:02</td><td>Global Cargo</td><td>3:18</td><td><span class="badge bn">Follow up</span></td></tr><tr><td style="font-family:var(--fm);font-size:11px">11:30</td><td>FastLoad Inc</td><td>8:45</td><td><span class="badge bg">Deal ✓</span></td></tr></tbody></table></div></div></div>';}
 
